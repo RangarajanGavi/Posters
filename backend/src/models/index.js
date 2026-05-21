@@ -193,6 +193,28 @@ Post.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 User.hasMany(Analytics, { foreignKey: 'userId', as: 'analytics', onDelete: 'CASCADE' });
 Analytics.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 
+// New Models
+const Subscription = require('./Subscription');
+const AdAccount = require('./AdAccount');
+const AdCampaign = require('./AdCampaign');
+const AIGeneration = require('./AIGeneration');
+
+// New Associations
+User.hasOne(Subscription, { foreignKey: 'userId', as: 'subscription', onDelete: 'CASCADE' });
+Subscription.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+
+User.hasMany(AdAccount, { foreignKey: 'userId', as: 'adAccounts', onDelete: 'CASCADE' });
+AdAccount.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+
+AdAccount.hasMany(AdCampaign, { foreignKey: 'adAccountId', as: 'campaigns', onDelete: 'CASCADE' });
+AdCampaign.belongsTo(AdAccount, { foreignKey: 'adAccountId', as: 'adAccount' });
+
+User.hasMany(AdCampaign, { foreignKey: 'userId', as: 'adCampaigns', onDelete: 'CASCADE' });
+AdCampaign.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+
+User.hasMany(AIGeneration, { foreignKey: 'userId', as: 'aiGenerations', onDelete: 'CASCADE' });
+AIGeneration.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+
 // Sync models
 const syncDatabase = async () => {
   try {
@@ -204,4 +226,4 @@ const syncDatabase = async () => {
   }
 };
 
-module.exports = { User, Platform, Post, Analytics, sequelize, syncDatabase };
+module.exports = { User, Platform, Post, Analytics, Subscription, AdAccount, AdCampaign, AIGeneration, sequelize, syncDatabase };

@@ -8,8 +8,14 @@ const authRoutes = require('./src/routes/auth.routes');
 const platformRoutes = require('./src/routes/platforms.routes');
 const postRoutes = require('./src/routes/posts.routes');
 const analyticsRoutes = require('./src/routes/analytics.routes');
+const subscriptionRoutes = require('./src/routes/subscription.routes');
+const adsRoutes = require('./src/routes/ads.routes');
+const aiRoutes = require('./src/routes/ai.routes');
 
 const app = express();
+
+// Stripe webhook needs raw body - must come before json middleware
+app.use('/api/subscriptions/webhook', express.raw({ type: 'application/json' }));
 
 // Middleware
 app.use(cors({
@@ -25,6 +31,9 @@ app.use('/api/auth', authRoutes);
 app.use('/api/platforms', platformRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/analytics', analyticsRoutes);
+app.use('/api/subscriptions', subscriptionRoutes);
+app.use('/api/ads', adsRoutes);
+app.use('/api/ai', aiRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

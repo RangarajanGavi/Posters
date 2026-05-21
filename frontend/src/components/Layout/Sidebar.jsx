@@ -7,7 +7,10 @@ import {
   BarChart3,
   Share2,
   TrendingUp,
-  LogOut
+  LogOut,
+  Wand2,
+  Target,
+  CreditCard
 } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext.jsx'
 
@@ -15,8 +18,11 @@ const navItems = [
   { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
   { to: '/calendar', icon: CalendarDays, label: 'Calendar' },
   { to: '/compose', icon: PlusSquare, label: 'New Post' },
+  { to: '/ai-studio', icon: Wand2, label: 'AI Studio' },
+  { to: '/ads', icon: Target, label: 'Ad Manager' },
   { to: '/analytics', icon: BarChart3, label: 'Analytics' },
-  { to: '/platforms', icon: Share2, label: 'Platforms' }
+  { to: '/platforms', icon: Share2, label: 'Platforms' },
+  { to: '/subscription', icon: CreditCard, label: 'Subscription' }
 ]
 
 const Sidebar = () => {
