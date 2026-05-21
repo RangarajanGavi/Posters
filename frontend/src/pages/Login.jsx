@@ -31,84 +31,100 @@ const Login = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        {/* Logo */}
-        <div className="text-center">
-          <div className="flex justify-center">
-            <div className="p-3 bg-primary-600 rounded-xl">
-              <TrendingUp className="w-8 h-8 text-white" />
-            </div>
+    <div className="min-h-screen flex">
+      {/* Left branding panel */}
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-slate-900 via-blue-950 to-violet-950 flex-col justify-between p-12">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-400 to-violet-500 flex items-center justify-center">
+            <TrendingUp className="w-5 h-5 text-white" />
           </div>
-          <h2 className="mt-4 text-3xl font-bold text-gray-900">Welcome back</h2>
-          <p className="mt-2 text-sm text-gray-600">
-            Sign in to your Metricool account
-          </p>
+          <span className="text-white font-bold text-xl">Metricool</span>
         </div>
+        <div className="space-y-8">
+          <div>
+            <h2 className="text-4xl font-bold text-white leading-tight">Schedule smarter.<br />Grow faster.</h2>
+            <p className="mt-4 text-blue-200/70 text-lg">The all-in-one platform for social media management, analytics, and AI-powered content creation.</p>
+          </div>
+          <div className="space-y-4">
+            {['Schedule posts across all platforms', 'AI-generated content & images', 'Advanced analytics & reporting'].map(f => (
+              <div key={f} className="flex items-center gap-3 text-white/80">
+                <div className="w-5 h-5 rounded-full bg-blue-500/30 flex items-center justify-center flex-shrink-0">
+                  <svg className="w-3 h-3 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
+                  </svg>
+                </div>
+                <span className="text-sm">{f}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <p className="text-white/30 text-sm">Trusted by 50,000+ creators worldwide</p>
+      </div>
 
-        {/* Form */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
-          {error && (
-            <div className="mb-4 flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
-              <AlertCircle className="w-4 h-4 flex-shrink-0" />
-              {error}
-            </div>
-          )}
-
+      {/* Right form panel */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white">
+        <div className="w-full max-w-sm space-y-8">
+          <div>
+            <h2 className="text-3xl font-bold text-slate-900">Welcome back</h2>
+            <p className="mt-2 text-slate-500">Sign in to your account to continue</p>
+          </div>
           <form onSubmit={handleSubmit} className="space-y-5">
+            {error && (
+              <div className="flex items-center gap-2 p-3.5 bg-red-50 border border-red-100 rounded-xl text-red-600 text-sm">
+                <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                {error}
+              </div>
+            )}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1.5">
-                Email address
-              </label>
+              <label className="block text-sm font-semibold text-slate-700 mb-1.5">Email address</label>
               <input
-                id="email"
                 type="email"
                 required
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-3.5 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-shadow"
+                onChange={e => setEmail(e.target.value)}
+                className="input"
                 placeholder="you@example.com"
               />
             </div>
-
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1.5">
-                Password
-              </label>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="block text-sm font-semibold text-slate-700">Password</label>
+                <a href="#" className="text-xs text-blue-600 hover:text-blue-700 font-medium">Forgot password?</a>
+              </div>
               <div className="relative">
                 <input
-                  id="password"
                   type={showPassword ? 'text' : 'password'}
                   required
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-3.5 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-shadow pr-10"
+                  onChange={e => setPassword(e.target.value)}
+                  className="input pr-10"
                   placeholder="••••••••"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
             </div>
-
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2.5 px-4 bg-primary-600 text-white font-medium rounded-lg text-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="btn-primary w-full justify-center py-3 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none"
             >
-              {loading ? 'Signing in...' : 'Sign in'}
+              {loading ? (
+                <span className="flex items-center gap-2">
+                  <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                  Signing in...
+                </span>
+              ) : 'Sign in'}
             </button>
           </form>
-
-          <p className="mt-6 text-center text-sm text-gray-600">
+          <p className="text-center text-sm text-slate-500">
             Don&apos;t have an account?{' '}
-            <Link to="/register" className="text-primary-600 hover:text-primary-700 font-medium">
-              Sign up
-            </Link>
+            <Link to="/register" className="text-blue-600 hover:text-blue-700 font-semibold">Create account</Link>
           </p>
         </div>
       </div>

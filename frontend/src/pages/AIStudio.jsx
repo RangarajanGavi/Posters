@@ -7,7 +7,7 @@ import {
 } from 'lucide-react'
 
 const Toast = ({ message, type, onClose }) => (
-  <div className={`fixed bottom-6 right-6 z-50 px-5 py-3 rounded-lg shadow-lg text-white text-sm font-medium flex items-center gap-3 ${type === 'success' ? 'bg-green-600' : 'bg-red-600'}`}>
+  <div className={`fixed bottom-6 right-6 z-50 px-5 py-3 rounded-xl shadow-lg text-white text-sm font-semibold flex items-center gap-3 ${type === 'success' ? 'bg-emerald-600' : 'bg-red-600'}`}>
     {message}
     <button onClick={onClose}><X className="w-4 h-4" /></button>
   </div>
@@ -29,13 +29,29 @@ const CopyButton = ({ text, id }) => {
   return (
     <button
       onClick={() => copy(text, id)}
-      className="p-1.5 text-gray-400 hover:text-white transition-colors"
+      className="p-1.5 text-slate-400 hover:text-slate-600 transition-colors rounded-lg hover:bg-slate-100"
       title="Copy"
     >
-      {copied === id ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4" />}
+      {copied === id ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
     </button>
   )
 }
+
+const SectionLabel = ({ children }) => (
+  <label className="block text-sm font-semibold text-slate-700 mb-1.5">{children}</label>
+)
+
+const FieldInput = ({ className = '', ...props }) => (
+  <input className={`input ${className}`} {...props} />
+)
+
+const FieldSelect = ({ children, className = '', ...props }) => (
+  <select className={`input ${className}`} {...props}>{children}</select>
+)
+
+const FieldTextarea = ({ className = '', ...props }) => (
+  <textarea className={`input resize-none ${className}`} {...props} />
+)
 
 // Story Generator Tab
 const StoryGenerator = ({ showToast }) => {
@@ -62,68 +78,64 @@ const StoryGenerator = ({ showToast }) => {
   return (
     <div className="space-y-5">
       <div>
-        <h2 className="text-xl font-bold text-white mb-1">Story Generator</h2>
-        <p className="text-gray-400 text-sm">Create engaging social media posts powered by AI</p>
+        <h2 className="text-xl font-bold text-slate-900 mb-1">Story Generator</h2>
+        <p className="text-slate-500 text-sm">Create engaging social media posts powered by AI</p>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-1">Platform</label>
-          <select
+          <SectionLabel>Platform</SectionLabel>
+          <FieldSelect
             value={form.platform} onChange={e => setForm(p => ({ ...p, platform: e.target.value }))}
-            className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-purple-500"
           >
             {['instagram', 'facebook', 'twitter', 'linkedin', 'tiktok'].map(p => (
               <option key={p} value={p} className="capitalize">{p.charAt(0).toUpperCase() + p.slice(1)}</option>
             ))}
-          </select>
+          </FieldSelect>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-1">Tone</label>
-          <select
+          <SectionLabel>Tone</SectionLabel>
+          <FieldSelect
             value={form.tone} onChange={e => setForm(p => ({ ...p, tone: e.target.value }))}
-            className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-purple-500"
           >
             {['professional', 'casual', 'funny', 'inspirational', 'educational'].map(t => (
               <option key={t} value={t} className="capitalize">{t.charAt(0).toUpperCase() + t.slice(1)}</option>
             ))}
-          </select>
+          </FieldSelect>
         </div>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-300 mb-1">Topic *</label>
-        <input
+        <SectionLabel>Topic *</SectionLabel>
+        <FieldInput
           type="text" value={form.topic} onChange={e => setForm(p => ({ ...p, topic: e.target.value }))}
-          className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-purple-500"
           placeholder="New product launch, industry news, tips..."
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-300 mb-1">Brand/Company Name</label>
-        <input
+        <SectionLabel>Brand / Company Name</SectionLabel>
+        <FieldInput
           type="text" value={form.brand} onChange={e => setForm(p => ({ ...p, brand: e.target.value }))}
-          className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-purple-500"
           placeholder="Your brand name"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-300 mb-1">Length: {form.length} words</label>
+        <SectionLabel>Length: {form.length} words</SectionLabel>
         <input
           type="range" min="50" max="200" step="50" value={form.length}
           onChange={e => setForm(p => ({ ...p, length: parseInt(e.target.value) }))}
-          className="w-full accent-purple-500"
+          className="w-full accent-blue-600"
         />
-        <div className="flex justify-between text-xs text-gray-500 mt-1">
+        <div className="flex justify-between text-xs text-slate-400 mt-1">
           {[50, 100, 150, 200].map(v => <span key={v}>{v}</span>)}
         </div>
       </div>
 
       <button
         onClick={handleGenerate} disabled={loading}
-        className="flex items-center justify-center gap-2 w-full py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold rounded-lg transition-all disabled:opacity-60"
+        className="btn-primary w-full justify-center py-3 disabled:opacity-60 disabled:transform-none"
       >
         {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Sparkles className="w-5 h-5" />}
         {loading ? 'Generating...' : 'Generate Story'}
@@ -131,36 +143,36 @@ const StoryGenerator = ({ showToast }) => {
 
       {loading && (
         <div className="animate-pulse space-y-3">
-          <div className="h-4 bg-gray-700 rounded w-3/4" />
-          <div className="h-4 bg-gray-700 rounded w-full" />
-          <div className="h-4 bg-gray-700 rounded w-5/6" />
+          <div className="h-4 bg-slate-100 rounded-xl w-3/4" />
+          <div className="h-4 bg-slate-100 rounded-xl w-full" />
+          <div className="h-4 bg-slate-100 rounded-xl w-5/6" />
         </div>
       )}
 
       {result && !loading && (
-        <div className="bg-gray-700/50 border border-gray-600 rounded-xl p-5">
+        <div className="card p-5 bg-gradient-to-br from-slate-50 to-white">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-sm font-semibold text-purple-400">Generated Story</span>
+            <span className="text-sm font-semibold text-blue-600">Generated Story</span>
             <CopyButton text={result.text} id="story" />
           </div>
-          <p className="text-gray-200 text-sm leading-relaxed whitespace-pre-wrap">{result.text}</p>
+          <p className="text-slate-700 text-sm leading-relaxed whitespace-pre-wrap">{result.text}</p>
           {result.hashtags && result.hashtags.length > 0 && (
             <div className="flex flex-wrap gap-2 mt-3">
               {result.hashtags.map((tag, i) => (
-                <span key={i} className="px-2 py-1 bg-purple-600/20 text-purple-400 text-xs rounded-full">{tag}</span>
+                <span key={i} className="badge bg-blue-50 text-blue-600">{tag}</span>
               ))}
             </div>
           )}
           <div className="flex gap-3 mt-4">
             <button
               onClick={() => navigate('/compose', { state: { prefillContent: result.text } })}
-              className="flex-1 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm rounded-lg transition-colors"
+              className="btn-primary flex-1 justify-center"
             >
               Use in Post
             </button>
             <button
               onClick={handleGenerate}
-              className="flex-1 py-2 bg-gray-600 hover:bg-gray-500 text-white text-sm rounded-lg transition-colors"
+              className="btn-secondary flex-1 justify-center"
             >
               Regenerate
             </button>
@@ -201,52 +213,51 @@ const ImageCreator = ({ showToast }) => {
   return (
     <div className="space-y-5">
       <div>
-        <h2 className="text-xl font-bold text-white mb-1">Image Creator</h2>
-        <p className="text-gray-400 text-sm">Generate stunning visuals with DALL-E 3</p>
+        <h2 className="text-xl font-bold text-slate-900 mb-1">Image Creator</h2>
+        <p className="text-slate-500 text-sm">Generate stunning visuals with DALL-E 3</p>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-300 mb-1">Image Description *</label>
-        <textarea
+        <SectionLabel>Image Description *</SectionLabel>
+        <FieldTextarea
           value={form.prompt} onChange={e => setForm(p => ({ ...p, prompt: e.target.value }))}
-          className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-purple-500 resize-none"
           rows={4} placeholder="Describe the image you want..."
         />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-1">Style</label>
-          <select
+          <SectionLabel>Style</SectionLabel>
+          <FieldSelect
             value={form.style} onChange={e => setForm(p => ({ ...p, style: e.target.value }))}
-            className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-purple-500"
           >
             <option value="vivid">Vivid</option>
             <option value="natural">Natural</option>
-          </select>
+          </FieldSelect>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-1">Size</label>
-          <select
+          <SectionLabel>Size</SectionLabel>
+          <FieldSelect
             value={form.size} onChange={e => setForm(p => ({ ...p, size: e.target.value }))}
-            className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-purple-500"
           >
             <option value="1024x1024">1024x1024 (Square)</option>
             <option value="1792x1024">1792x1024 (Landscape)</option>
             <option value="1024x1792">1024x1792 (Portrait)</option>
-          </select>
+          </FieldSelect>
         </div>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-300 mb-2">Platform Presets</label>
+        <SectionLabel>Platform Presets</SectionLabel>
         <div className="flex flex-wrap gap-2">
           {PRESETS.map(p => (
             <button
               key={p.label}
               onClick={() => setForm(prev => ({ ...prev, size: p.size }))}
-              className={`px-3 py-1.5 text-xs rounded-lg transition-colors ${
-                form.size === p.size ? 'bg-purple-600 text-white' : 'bg-gray-700 text-gray-400 hover:bg-gray-600'
+              className={`px-3 py-1.5 text-xs font-medium rounded-xl transition-all ${
+                form.size === p.size
+                  ? 'bg-gradient-to-r from-blue-600 to-violet-600 text-white shadow-sm'
+                  : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
               }`}
             >
               {p.label}
@@ -257,33 +268,35 @@ const ImageCreator = ({ showToast }) => {
 
       <button
         onClick={handleGenerate} disabled={loading}
-        className="flex items-center justify-center gap-2 w-full py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold rounded-lg transition-all disabled:opacity-60"
+        className="btn-primary w-full justify-center py-3 disabled:opacity-60 disabled:transform-none"
       >
         {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Image className="w-5 h-5" />}
         {loading ? 'Generating...' : 'Generate Image'}
       </button>
 
       {loading && (
-        <div className="aspect-square bg-gray-700 rounded-xl animate-pulse flex items-center justify-center">
-          <Sparkles className="w-8 h-8 text-gray-500" />
+        <div className="aspect-square bg-gradient-to-br from-slate-100 to-slate-50 rounded-2xl animate-pulse flex items-center justify-center">
+          <Sparkles className="w-8 h-8 text-slate-300" />
         </div>
       )}
 
       {result && !loading && (
         <div className="space-y-3">
-          <img
-            src={result.imageUrl} alt="Generated"
-            className="w-full rounded-xl border border-gray-600 object-cover"
-          />
+          <div className="rounded-2xl overflow-hidden border border-slate-100 shadow-sm">
+            <img
+              src={result.imageUrl} alt="Generated"
+              className="w-full object-cover"
+            />
+          </div>
           {result.isMock && (
-            <p className="text-xs text-amber-400 text-center">
+            <p className="text-xs text-amber-500 text-center font-medium">
               Demo mode — using Picsum placeholder. Add OPENAI_API_KEY for real DALL-E 3 generation.
             </p>
           )}
           <div className="flex gap-3">
             <a
               href={result.imageUrl} download="ai-generated-image.png" target="_blank" rel="noreferrer"
-              className="flex-1 flex items-center justify-center gap-2 py-2 bg-gray-700 hover:bg-gray-600 text-white text-sm rounded-lg transition-colors"
+              className="btn-secondary flex-1 justify-center"
             >
               <Download className="w-4 h-4" /> Download
             </a>
@@ -291,7 +304,7 @@ const ImageCreator = ({ showToast }) => {
         </div>
       )}
 
-      <p className="text-xs text-gray-500 text-center">
+      <p className="text-xs text-slate-400 text-center">
         Powered by DALL-E 3. Add OPENAI_API_KEY for real generation; demo mode uses Picsum placeholders.
       </p>
     </div>
@@ -332,59 +345,55 @@ const VideoCreator = ({ showToast }) => {
   return (
     <div className="space-y-5">
       <div>
-        <h2 className="text-xl font-bold text-white mb-1">Video Creator</h2>
-        <p className="text-gray-400 text-sm">Generate structured video scripts with AI</p>
+        <h2 className="text-xl font-bold text-slate-900 mb-1">Video Creator</h2>
+        <p className="text-slate-500 text-sm">Generate structured video scripts with AI</p>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-1">Platform</label>
-          <select
+          <SectionLabel>Platform</SectionLabel>
+          <FieldSelect
             value={form.platform} onChange={e => setForm(p => ({ ...p, platform: e.target.value }))}
-            className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-purple-500"
           >
             {['YouTube', 'Instagram Reels', 'TikTok', 'Facebook'].map(p => (
               <option key={p} value={p}>{p}</option>
             ))}
-          </select>
+          </FieldSelect>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-1">Duration</label>
-          <select
+          <SectionLabel>Duration</SectionLabel>
+          <FieldSelect
             value={form.duration} onChange={e => setForm(p => ({ ...p, duration: e.target.value }))}
-            className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-purple-500"
           >
             {[['15', '15 seconds'], ['30', '30 seconds'], ['60', '60 seconds'], ['180', '3 minutes']].map(([v, l]) => (
               <option key={v} value={v}>{l}</option>
             ))}
-          </select>
+          </FieldSelect>
         </div>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-300 mb-1">Topic *</label>
-        <input
+        <SectionLabel>Topic *</SectionLabel>
+        <FieldInput
           type="text" value={form.topic} onChange={e => setForm(p => ({ ...p, topic: e.target.value }))}
-          className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-purple-500"
           placeholder="Product demo, tutorial, brand story..."
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-300 mb-1">Style</label>
-        <select
+        <SectionLabel>Style</SectionLabel>
+        <FieldSelect
           value={form.style} onChange={e => setForm(p => ({ ...p, style: e.target.value }))}
-          className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-purple-500"
         >
           {['educational', 'entertaining', 'promotional', 'storytelling'].map(s => (
             <option key={s} value={s} className="capitalize">{s.charAt(0).toUpperCase() + s.slice(1)}</option>
           ))}
-        </select>
+        </FieldSelect>
       </div>
 
       <button
         onClick={handleGenerate} disabled={loading}
-        className="flex items-center justify-center gap-2 w-full py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold rounded-lg transition-all disabled:opacity-60"
+        className="btn-primary w-full justify-center py-3 disabled:opacity-60 disabled:transform-none"
       >
         {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Video className="w-5 h-5" />}
         {loading ? 'Generating...' : 'Generate Script'}
@@ -392,57 +401,50 @@ const VideoCreator = ({ showToast }) => {
 
       {result && !loading && (
         <div className="space-y-4">
-          <div className="bg-gray-700/50 border border-gray-600 rounded-xl p-5">
+          <div className="card p-5 bg-gradient-to-br from-slate-50 to-white">
             <div className="flex items-center justify-between mb-3">
-              <span className="text-sm font-semibold text-purple-400">Video Script</span>
+              <span className="text-sm font-semibold text-violet-600">Video Script</span>
               <CopyButton text={result.script} id="script" />
             </div>
-            <pre className="text-gray-200 text-sm leading-relaxed whitespace-pre-wrap font-sans">{result.script}</pre>
+            <pre className="text-slate-700 text-sm leading-relaxed whitespace-pre-wrap font-sans">{result.script}</pre>
           </div>
 
           {result.scenes && result.scenes.length > 0 && (
-            <div className="bg-gray-700/50 border border-gray-600 rounded-xl p-5">
-              <h3 className="text-sm font-semibold text-purple-400 mb-3">Scene Breakdown</h3>
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-gray-600">
-                    <th className="text-left py-2 text-xs text-gray-400 pr-4">Time</th>
-                    <th className="text-left py-2 text-xs text-gray-400 pr-4">Scene</th>
-                    <th className="text-left py-2 text-xs text-gray-400">Voiceover</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-700">
-                  {result.scenes.map((scene, i) => (
-                    <tr key={i}>
-                      <td className="py-2 pr-4 text-gray-400 text-xs whitespace-nowrap">{scene.time}</td>
-                      <td className="py-2 pr-4 text-gray-300 text-xs">{scene.description}</td>
-                      <td className="py-2 text-gray-300 text-xs">{scene.voiceover}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className="card p-5">
+              <h3 className="text-sm font-semibold text-violet-600 mb-3">Scene Breakdown</h3>
+              <div className="space-y-3">
+                {result.scenes.map((scene, i) => (
+                  <div key={i} className="flex gap-3 p-3 rounded-xl bg-slate-50 border-l-2 border-violet-300">
+                    <span className="text-xs font-bold text-violet-500 whitespace-nowrap flex-shrink-0 pt-0.5">{scene.time}</span>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm text-slate-700 font-medium">{scene.description}</p>
+                      <p className="text-xs text-slate-500 mt-1 italic">&quot;{scene.voiceover}&quot;</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
 
           {/* Mock Video Editor */}
-          <div className="bg-gray-900 border border-gray-700 rounded-xl overflow-hidden">
-            <div className="p-3 border-b border-gray-700 flex items-center justify-between">
-              <span className="text-xs font-semibold text-gray-400">Video Editor (Preview)</span>
-              <span className="text-xs text-gray-600">Mock UI — Requires RunwayML/Sora integration</span>
+          <div className="card overflow-hidden">
+            <div className="p-3 border-b border-slate-100 flex items-center justify-between">
+              <span className="text-xs font-semibold text-slate-600">Video Editor (Preview)</span>
+              <span className="text-xs text-slate-400">Mock UI — Requires RunwayML/Sora integration</span>
             </div>
-            <div className="bg-black aspect-video flex items-center justify-center">
+            <div className="bg-slate-900 aspect-video flex items-center justify-center">
               <div className="text-center">
-                <Video className="w-12 h-12 text-gray-700 mx-auto mb-2" />
-                <p className="text-gray-600 text-sm">Video preview area</p>
+                <Video className="w-12 h-12 text-slate-700 mx-auto mb-2" />
+                <p className="text-slate-600 text-sm">Video preview area</p>
               </div>
             </div>
-            <div className="p-3 bg-gray-800 border-t border-gray-700">
-              <div className="h-8 bg-gray-700 rounded-lg mb-3 relative overflow-hidden">
-                <div className="absolute left-0 top-0 bottom-0 w-1/3 bg-purple-600/30 border-r-2 border-purple-500" />
+            <div className="p-3 bg-slate-50 border-t border-slate-100">
+              <div className="h-8 bg-slate-200 rounded-lg mb-3 relative overflow-hidden">
+                <div className="absolute left-0 top-0 bottom-0 w-1/3 bg-violet-300/50 border-r-2 border-violet-500" />
               </div>
               <div className="flex gap-2">
                 {['Add Clip', 'Add Text', 'Add Music'].map(label => (
-                  <button key={label} className="px-3 py-1.5 bg-gray-700 hover:bg-gray-600 text-gray-300 text-xs rounded-lg transition-colors">
+                  <button key={label} className="btn-secondary text-xs px-3 py-1.5">
                     {label}
                   </button>
                 ))}
@@ -450,13 +452,13 @@ const VideoCreator = ({ showToast }) => {
             </div>
           </div>
 
-          <p className="text-xs text-gray-500 text-center">
-            Video generation requires integration with RunwayML or Sora API. Script generation is live.
+          <p className="text-xs text-slate-400 text-center">
+            Video generation requires RunwayML or Sora API. Script generation is live.
           </p>
 
           <button
             onClick={handleExport}
-            className="flex items-center justify-center gap-2 w-full py-2 bg-gray-700 hover:bg-gray-600 text-white text-sm rounded-lg transition-colors"
+            className="btn-secondary w-full justify-center"
           >
             <Download className="w-4 h-4" /> Export Script
           </button>
@@ -489,67 +491,62 @@ const AdCopyTab = ({ showToast }) => {
   return (
     <div className="space-y-5">
       <div>
-        <h2 className="text-xl font-bold text-white mb-1">Ad Copy Generator</h2>
-        <p className="text-gray-400 text-sm">Generate high-converting ad copy with AI</p>
+        <h2 className="text-xl font-bold text-slate-900 mb-1">Ad Copy Generator</h2>
+        <p className="text-slate-500 text-sm">Generate high-converting ad copy with AI</p>
       </div>
 
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-1">Product/Service *</label>
-          <input
+          <SectionLabel>Product / Service *</SectionLabel>
+          <FieldInput
             type="text" value={form.product} onChange={e => setForm(p => ({ ...p, product: e.target.value }))}
-            className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-purple-500"
             placeholder="SaaS tool, physical product, service..."
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-1">Target Audience</label>
-          <input
+          <SectionLabel>Target Audience</SectionLabel>
+          <FieldInput
             type="text" value={form.audience} onChange={e => setForm(p => ({ ...p, audience: e.target.value }))}
-            className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-purple-500"
             placeholder="Small business owners, fitness enthusiasts..."
           />
         </div>
         <div className="grid grid-cols-3 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-1">Objective</label>
-            <select
+            <SectionLabel>Objective</SectionLabel>
+            <FieldSelect
               value={form.objective} onChange={e => setForm(p => ({ ...p, objective: e.target.value }))}
-              className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-purple-500"
             >
               {['awareness', 'traffic', 'leads', 'conversions', 'sales'].map(o => (
                 <option key={o} value={o} className="capitalize">{o.charAt(0).toUpperCase() + o.slice(1)}</option>
               ))}
-            </select>
+            </FieldSelect>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-1">Platform</label>
-            <select
+            <SectionLabel>Platform</SectionLabel>
+            <FieldSelect
               value={form.platform} onChange={e => setForm(p => ({ ...p, platform: e.target.value }))}
-              className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-purple-500"
             >
               {['facebook', 'google', 'linkedin', 'tiktok', 'twitter'].map(p => (
                 <option key={p} value={p} className="capitalize">{p.charAt(0).toUpperCase() + p.slice(1)}</option>
               ))}
-            </select>
+            </FieldSelect>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-1">Tone</label>
-            <select
+            <SectionLabel>Tone</SectionLabel>
+            <FieldSelect
               value={form.tone} onChange={e => setForm(p => ({ ...p, tone: e.target.value }))}
-              className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-purple-500"
             >
               {['professional', 'casual', 'urgent', 'friendly', 'bold'].map(t => (
                 <option key={t} value={t} className="capitalize">{t.charAt(0).toUpperCase() + t.slice(1)}</option>
               ))}
-            </select>
+            </FieldSelect>
           </div>
         </div>
       </div>
 
       <button
         onClick={handleGenerate} disabled={loading}
-        className="flex items-center justify-center gap-2 w-full py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold rounded-lg transition-all disabled:opacity-60"
+        className="btn-primary w-full justify-center py-3 disabled:opacity-60 disabled:transform-none"
       >
         {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Megaphone className="w-5 h-5" />}
         {loading ? 'Generating...' : 'Generate Ad Copy'}
@@ -562,19 +559,19 @@ const AdCopyTab = ({ showToast }) => {
             { label: 'Body', value: result.body, id: 'body' },
             { label: 'Call to Action', value: result.callToAction, id: 'cta' }
           ].map(field => (
-            <div key={field.id} className="bg-gray-700/50 border border-gray-600 rounded-xl p-4">
+            <div key={field.id} className="card p-4 bg-gradient-to-br from-slate-50 to-white">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-semibold text-purple-400 uppercase">{field.label}</span>
-                <button onClick={() => copy(field.value, field.id)} className="p-1 text-gray-400 hover:text-white">
-                  {copied === field.id ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4" />}
+                <span className="text-xs font-bold text-orange-500 uppercase tracking-wider">{field.label}</span>
+                <button onClick={() => copy(field.value, field.id)} className="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100">
+                  {copied === field.id ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
                 </button>
               </div>
-              <p className="text-gray-200 text-sm">{field.value}</p>
+              <p className="text-slate-700 text-sm font-medium">{field.value}</p>
             </div>
           ))}
           <button
             onClick={() => showToast('Use the Ad Manager to create a campaign with this copy!', 'success')}
-            className="w-full py-2 bg-orange-600 hover:bg-orange-700 text-white text-sm rounded-lg transition-colors"
+            className="btn-primary w-full justify-center"
           >
             Use in Campaign
           </button>
@@ -619,43 +616,43 @@ const EditContentTab = ({ showToast }) => {
   return (
     <div className="space-y-5">
       <div>
-        <h2 className="text-xl font-bold text-white mb-1">Edit Content</h2>
-        <p className="text-gray-400 text-sm">Polish and refine your content with AI assistance</p>
+        <h2 className="text-xl font-bold text-slate-900 mb-1">Edit Content</h2>
+        <p className="text-slate-500 text-sm">Polish and refine your content with AI assistance</p>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-300 mb-1">Original Content</label>
-        <textarea
+        <SectionLabel>Original Content</SectionLabel>
+        <FieldTextarea
           value={content} onChange={e => setContent(e.target.value)}
-          className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-purple-500 resize-none"
           rows={5} placeholder="Paste your content here..."
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-300 mb-2">Instruction</label>
+        <SectionLabel>Instruction</SectionLabel>
         <div className="flex flex-wrap gap-2 mb-2">
           {QUICK_INSTRUCTIONS.map(qi => (
             <button
               key={qi} onClick={() => setInstruction(qi)}
-              className={`px-3 py-1 text-xs rounded-full transition-colors ${
-                instruction === qi ? 'bg-purple-600 text-white' : 'bg-gray-700 text-gray-400 hover:bg-gray-600'
+              className={`px-3 py-1 text-xs font-medium rounded-full transition-all ${
+                instruction === qi
+                  ? 'bg-gradient-to-r from-blue-600 to-violet-600 text-white shadow-sm'
+                  : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
               }`}
             >
               {qi}
             </button>
           ))}
         </div>
-        <input
+        <FieldInput
           type="text" value={instruction} onChange={e => setInstruction(e.target.value)}
-          className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-purple-500"
           placeholder="Custom instruction..."
         />
       </div>
 
       <button
         onClick={handleEdit} disabled={loading}
-        className="flex items-center justify-center gap-2 w-full py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold rounded-lg transition-all disabled:opacity-60"
+        className="btn-primary w-full justify-center py-3 disabled:opacity-60 disabled:transform-none"
       >
         {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Edit3 className="w-5 h-5" />}
         {loading ? 'Editing...' : 'Edit with AI'}
@@ -664,32 +661,32 @@ const EditContentTab = ({ showToast }) => {
       {result && !loading && (
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
-            <div className="bg-red-900/20 border border-red-800/30 rounded-xl p-4">
-              <p className="text-xs font-semibold text-red-400 mb-2">BEFORE</p>
-              <p className="text-gray-300 text-sm whitespace-pre-wrap">{content}</p>
+            <div className="card p-4 border-l-4 border-red-300 bg-red-50/50">
+              <p className="text-xs font-bold text-red-500 mb-2 uppercase tracking-wider">Before</p>
+              <p className="text-slate-600 text-sm whitespace-pre-wrap">{content}</p>
             </div>
-            <div className="bg-green-900/20 border border-green-800/30 rounded-xl p-4">
-              <p className="text-xs font-semibold text-green-400 mb-2">AFTER</p>
-              <p className="text-gray-300 text-sm whitespace-pre-wrap">{result}</p>
+            <div className="card p-4 border-l-4 border-emerald-400 bg-emerald-50/50">
+              <p className="text-xs font-bold text-emerald-600 mb-2 uppercase tracking-wider">After</p>
+              <p className="text-slate-700 text-sm whitespace-pre-wrap">{result}</p>
             </div>
           </div>
           {!accepted ? (
             <div className="flex gap-3">
               <button
                 onClick={() => { setContent(result); setResult(null); setAccepted(true); showToast('Content updated!') }}
-                className="flex-1 py-2 bg-green-600 hover:bg-green-700 text-white text-sm rounded-lg transition-colors"
+                className="btn-primary flex-1 justify-center"
               >
                 Accept
               </button>
               <button
                 onClick={() => setResult(null)}
-                className="flex-1 py-2 bg-gray-700 hover:bg-gray-600 text-white text-sm rounded-lg transition-colors"
+                className="btn-secondary flex-1 justify-center"
               >
                 Reject
               </button>
             </div>
           ) : (
-            <p className="text-center text-green-400 text-sm">Content accepted and updated!</p>
+            <p className="text-center text-emerald-600 text-sm font-semibold">Content accepted and updated!</p>
           )}
         </div>
       )}
@@ -719,26 +716,28 @@ const HistoryTab = ({ showToast }) => {
   useEffect(() => { fetchHistory() }, [fetchHistory])
 
   const typeStyles = {
-    story: 'bg-purple-600/20 text-purple-400',
-    image: 'bg-pink-600/20 text-pink-400',
-    video_script: 'bg-blue-600/20 text-blue-400',
-    ad_copy: 'bg-orange-600/20 text-orange-400'
+    story: 'badge bg-violet-50 text-violet-600',
+    image: 'badge bg-pink-50 text-pink-600',
+    video_script: 'badge bg-blue-50 text-blue-600',
+    ad_copy: 'badge bg-orange-50 text-orange-600'
   }
 
   return (
     <div className="space-y-5">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-bold text-white mb-1">Generation History</h2>
-          <p className="text-gray-400 text-sm">Your past AI generations</p>
+          <h2 className="text-xl font-bold text-slate-900 mb-1">Generation History</h2>
+          <p className="text-slate-500 text-sm">Your past AI generations</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-1.5 bg-slate-100 rounded-xl p-1">
           {['', 'story', 'image', 'video_script', 'ad_copy'].map(type => (
             <button
               key={type}
               onClick={() => setFilter(type)}
-              className={`px-3 py-1.5 text-xs rounded-lg transition-colors ${
-                filter === type ? 'bg-purple-600 text-white' : 'bg-gray-700 text-gray-400 hover:bg-gray-600'
+              className={`px-3 py-1 text-xs font-semibold rounded-lg transition-all ${
+                filter === type
+                  ? 'bg-white text-slate-900 shadow-sm'
+                  : 'text-slate-500 hover:text-slate-700'
               }`}
             >
               {type === '' ? 'All' : type.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase())}
@@ -749,29 +748,29 @@ const HistoryTab = ({ showToast }) => {
 
       {loading ? (
         <div className="space-y-2">
-          {[1, 2, 3].map(i => <div key={i} className="h-16 bg-gray-700 rounded-xl animate-pulse" />)}
+          {[1, 2, 3].map(i => <div key={i} className="h-16 bg-slate-100 rounded-xl animate-pulse" />)}
         </div>
       ) : history.length === 0 ? (
-        <div className="text-center py-16 bg-gray-800 rounded-xl border border-gray-700">
-          <Clock className="w-12 h-12 text-gray-600 mx-auto mb-3" />
-          <p className="text-gray-400">No generations yet. Start creating!</p>
+        <div className="text-center py-16 card">
+          <Clock className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+          <p className="text-slate-400">No generations yet. Start creating!</p>
         </div>
       ) : (
         <div className="space-y-2">
           {history.map(item => (
-            <div key={item.id} className="bg-gray-800 border border-gray-700 rounded-xl p-4 flex items-start gap-4">
-              <span className={`px-2 py-1 rounded-full text-xs font-medium flex-shrink-0 ${typeStyles[item.type]}`}>
+            <div key={item.id} className="card p-4 flex items-start gap-4 hover:shadow-card-hover transition-all">
+              <span className={typeStyles[item.type] || 'badge bg-slate-100 text-slate-500'}>
                 {item.type.replace('_', ' ')}
               </span>
               <div className="flex-1 min-w-0">
-                <p className="text-gray-300 text-sm truncate">{item.prompt}</p>
-                {item.platform && <p className="text-gray-500 text-xs mt-0.5">Platform: {item.platform}</p>}
+                <p className="text-slate-700 text-sm truncate font-medium">{item.prompt}</p>
+                {item.platform && <p className="text-slate-400 text-xs mt-0.5">Platform: {item.platform}</p>}
               </div>
               <div className="flex items-center gap-3 flex-shrink-0">
                 {item.usedInPost && (
-                  <span className="px-2 py-1 bg-green-600/20 text-green-400 text-xs rounded-full">Used</span>
+                  <span className="badge bg-emerald-50 text-emerald-600">Used</span>
                 )}
-                <span className="text-gray-500 text-xs">{new Date(item.createdAt).toLocaleDateString()}</span>
+                <span className="text-slate-400 text-xs">{new Date(item.createdAt).toLocaleDateString()}</span>
               </div>
             </div>
           ))}
@@ -813,27 +812,27 @@ const AIStudio = () => {
   }
 
   return (
-    <div className="flex h-full">
+    <div className="flex h-full gap-5 animate-fade-in">
       {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
 
       {/* Vertical tab nav */}
-      <div className="w-52 flex-shrink-0 bg-gray-800 border-r border-gray-700 p-3 space-y-1">
-        <div className="px-3 py-3 mb-2">
-          <div className="flex items-center gap-2">
-            <div className="p-1.5 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg">
+      <div className="w-52 flex-shrink-0 card p-3 space-y-1 self-start">
+        <div className="px-3 py-3 mb-1">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center shadow-sm">
               <Wand2 className="w-4 h-4 text-white" />
             </div>
-            <span className="text-white font-bold text-sm">AI Studio</span>
+            <span className="text-slate-900 font-bold text-sm">AI Studio</span>
           </div>
         </div>
         {tabs.map(({ key, label, icon: Icon }) => (
           <button
             key={key}
             onClick={() => setActiveTab(key)}
-            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors text-left ${
+            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-left ${
               activeTab === key
-                ? 'bg-gradient-to-r from-purple-600/30 to-pink-600/30 text-purple-300 border border-purple-600/20'
-                : 'text-gray-400 hover:text-white hover:bg-gray-700'
+                ? 'bg-gradient-to-r from-blue-600 to-violet-600 text-white shadow-lg shadow-blue-500/20'
+                : 'text-slate-500 hover:text-slate-700 hover:bg-slate-100'
             }`}
           >
             <Icon className="w-4 h-4 flex-shrink-0" />
@@ -843,7 +842,7 @@ const AIStudio = () => {
       </div>
 
       {/* Content area */}
-      <div className="flex-1 overflow-y-auto p-8">
+      <div className="flex-1 overflow-y-auto">
         <div className="max-w-2xl">
           {renderTab()}
         </div>

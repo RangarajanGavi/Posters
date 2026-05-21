@@ -1,31 +1,41 @@
 import React from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { PlusCircle, Bell } from 'lucide-react'
+import { PlusCircle, Bell, Search } from 'lucide-react'
 
 const pageTitles = {
-  '/dashboard': 'Dashboard',
-  '/calendar': 'Content Calendar',
-  '/compose': 'Compose Post',
-  '/analytics': 'Analytics',
-  '/platforms': 'Connected Platforms'
+  '/dashboard': { title: 'Dashboard', sub: 'Welcome back' },
+  '/calendar': { title: 'Content Calendar', sub: 'Plan your content' },
+  '/compose': { title: 'Compose Post', sub: 'Create & schedule' },
+  '/analytics': { title: 'Analytics', sub: 'Track performance' },
+  '/platforms': { title: 'Platforms', sub: 'Manage connections' },
+  '/ai-studio': { title: 'AI Studio', sub: 'Create with AI' },
+  '/ads': { title: 'Ad Manager', sub: 'Run campaigns' },
+  '/subscription': { title: 'Subscription', sub: 'Manage your plan' },
 }
 
 const Header = () => {
   const location = useLocation()
   const navigate = useNavigate()
-  const title = pageTitles[location.pathname] || 'Metricool'
+  const page = pageTitles[location.pathname] || { title: 'Metricool', sub: '' }
 
   return (
-    <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-      <h1 className="text-xl font-semibold text-gray-900">{title}</h1>
-      <div className="flex items-center gap-3">
-        <button className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors">
-          <Bell className="w-5 h-5" />
+    <header className="bg-white/80 backdrop-blur-md border-b border-slate-100 sticky top-0 z-10 px-6 py-3.5 flex items-center justify-between">
+      <div>
+        <h1 className="text-lg font-bold text-slate-900 leading-tight">{page.title}</h1>
+        <p className="text-xs text-slate-400 font-medium">{page.sub}</p>
+      </div>
+      <div className="flex items-center gap-2">
+        <button className="p-2.5 text-slate-400 hover:text-slate-600 rounded-xl hover:bg-slate-100 transition-all">
+          <Search className="w-4 h-4" />
+        </button>
+        <button className="relative p-2.5 text-slate-400 hover:text-slate-600 rounded-xl hover:bg-slate-100 transition-all">
+          <Bell className="w-4 h-4" />
+          <span className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-blue-500"></span>
         </button>
         {location.pathname !== '/compose' && (
           <button
             onClick={() => navigate('/compose')}
-            className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 transition-colors"
+            className="btn-primary"
           >
             <PlusCircle className="w-4 h-4" />
             New Post

@@ -1,30 +1,30 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import axios from '../api/axios'
 import {
-  Target, Plus, Trash2, Play, Pause, ChevronDown,
+  Target, Plus, Trash2, Play, Pause,
   X, Loader2, TrendingUp, MousePointer, DollarSign, Eye
 } from 'lucide-react'
 
 const PLATFORMS = [
-  { key: 'facebook', label: 'Facebook Ads', color: 'blue', bg: 'bg-blue-600', textColor: 'text-blue-400', icon: '📘' },
-  { key: 'google', label: 'Google Ads', color: 'red', bg: 'bg-red-600', textColor: 'text-red-400', icon: '🔴' },
-  { key: 'linkedin', label: 'LinkedIn Ads', color: 'indigo', bg: 'bg-indigo-600', textColor: 'text-indigo-400', icon: '💼' },
-  { key: 'tiktok', label: 'TikTok Ads', color: 'black', bg: 'bg-gray-900', textColor: 'text-gray-300', icon: '🎵' },
-  { key: 'twitter', label: 'Twitter/X Ads', color: 'sky', bg: 'bg-sky-500', textColor: 'text-sky-400', icon: '🐦' }
+  { key: 'facebook', label: 'Facebook Ads', color: '#1877F2', bg: 'bg-blue-600', lightBg: 'bg-blue-50', textColor: 'text-blue-600', icon: '📘' },
+  { key: 'google', label: 'Google Ads', color: '#EA4335', bg: 'bg-red-600', lightBg: 'bg-red-50', textColor: 'text-red-600', icon: '🔴' },
+  { key: 'linkedin', label: 'LinkedIn Ads', color: '#0A66C2', bg: 'bg-indigo-600', lightBg: 'bg-indigo-50', textColor: 'text-indigo-600', icon: '💼' },
+  { key: 'tiktok', label: 'TikTok Ads', color: '#010101', bg: 'bg-slate-900', lightBg: 'bg-slate-100', textColor: 'text-slate-700', icon: '🎵' },
+  { key: 'twitter', label: 'Twitter/X Ads', color: '#1DA1F2', bg: 'bg-sky-500', lightBg: 'bg-sky-50', textColor: 'text-sky-600', icon: '🐦' }
 ]
 
 const OBJECTIVES = ['awareness', 'traffic', 'engagement', 'leads', 'conversions', 'sales']
 const CTA_OPTIONS = ['Learn More', 'Shop Now', 'Sign Up', 'Get Quote', 'Download', 'Book Now', 'Contact Us']
 
-const statusStyles = {
-  draft: 'bg-gray-600/20 text-gray-400 border border-gray-600/30',
-  active: 'bg-green-600/20 text-green-400 border border-green-600/30',
-  paused: 'bg-yellow-600/20 text-yellow-400 border border-yellow-600/30',
-  completed: 'bg-blue-600/20 text-blue-400 border border-blue-600/30'
+const statusConfig = {
+  draft: { label: 'Draft', className: 'badge bg-slate-100 text-slate-500' },
+  active: { label: 'Active', className: 'badge bg-emerald-50 text-emerald-600' },
+  paused: { label: 'Paused', className: 'badge bg-amber-50 text-amber-600' },
+  completed: { label: 'Completed', className: 'badge bg-blue-50 text-blue-600' }
 }
 
 const Toast = ({ message, type, onClose }) => (
-  <div className={`fixed bottom-6 right-6 z-50 px-5 py-3 rounded-lg shadow-lg text-white text-sm font-medium flex items-center gap-3 ${type === 'success' ? 'bg-green-600' : 'bg-red-600'}`}>
+  <div className={`fixed bottom-6 right-6 z-50 px-5 py-3 rounded-xl shadow-lg text-white text-sm font-semibold flex items-center gap-3 ${type === 'success' ? 'bg-emerald-600' : 'bg-red-600'}`}>
     {message}
     <button onClick={onClose}><X className="w-4 h-4" /></button>
   </div>
@@ -111,31 +111,33 @@ const CampaignModal = ({ accounts, onClose, onSave }) => {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
-      <div className="bg-gray-800 rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+      <div className="card w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6 mx-4">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-white">New Campaign</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-white"><X className="w-5 h-5" /></button>
+          <h2 className="text-xl font-bold text-slate-900">New Campaign</h2>
+          <button onClick={onClose} className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-xl transition-colors">
+            <X className="w-5 h-5" />
+          </button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-1">Campaign Name</label>
+            <label className="block text-sm font-semibold text-slate-700 mb-1.5">Campaign Name</label>
             <input
               type="text" required value={form.name}
               onChange={e => updateForm('name', e.target.value)}
-              className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-orange-500"
+              className="input"
               placeholder="My Awesome Campaign"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-1">Ad Account</label>
+              <label className="block text-sm font-semibold text-slate-700 mb-1.5">Ad Account</label>
               <select
                 required value={form.adAccountId}
                 onChange={e => updateForm('adAccountId', e.target.value)}
-                className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-orange-500"
+                className="input"
               >
                 <option value="">Select account...</option>
                 {accounts.filter(a => a.isConnected).map(a => (
@@ -144,10 +146,10 @@ const CampaignModal = ({ accounts, onClose, onSave }) => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-1">Objective</label>
+              <label className="block text-sm font-semibold text-slate-700 mb-1.5">Objective</label>
               <select
                 value={form.objective} onChange={e => updateForm('objective', e.target.value)}
-                className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-orange-500 capitalize"
+                className="input capitalize"
               >
                 {OBJECTIVES.map(o => <option key={o} value={o} className="capitalize">{o}</option>)}
               </select>
@@ -156,20 +158,20 @@ const CampaignModal = ({ accounts, onClose, onSave }) => {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-1">Daily Budget ($)</label>
+              <label className="block text-sm font-semibold text-slate-700 mb-1.5">Daily Budget ($)</label>
               <input
                 type="number" min="1" value={form.dailyBudget}
                 onChange={e => updateForm('dailyBudget', e.target.value)}
-                className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-orange-500"
+                className="input"
                 placeholder="50"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-1">Total Budget ($)</label>
+              <label className="block text-sm font-semibold text-slate-700 mb-1.5">Total Budget ($)</label>
               <input
                 type="number" min="1" value={form.totalBudget}
                 onChange={e => updateForm('totalBudget', e.target.value)}
-                className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-orange-500"
+                className="input"
                 placeholder="1000"
               />
             </div>
@@ -177,28 +179,28 @@ const CampaignModal = ({ accounts, onClose, onSave }) => {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-1">Start Date</label>
+              <label className="block text-sm font-semibold text-slate-700 mb-1.5">Start Date</label>
               <input
                 type="date" required value={form.startDate}
                 onChange={e => updateForm('startDate', e.target.value)}
-                className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-orange-500"
+                className="input"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-1">End Date (optional)</label>
+              <label className="block text-sm font-semibold text-slate-700 mb-1.5">End Date <span className="text-slate-400 font-normal">(optional)</span></label>
               <input
                 type="date" value={form.endDate}
                 onChange={e => updateForm('endDate', e.target.value)}
-                className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-orange-500"
+                className="input"
               />
             </div>
           </div>
 
-          <div className="border border-gray-700 rounded-lg p-4">
-            <h3 className="text-sm font-semibold text-gray-300 mb-3">Targeting</h3>
+          <div className="card p-4 bg-slate-50 border-slate-100">
+            <h3 className="text-sm font-semibold text-slate-700 mb-3">Targeting</h3>
             <div className="grid grid-cols-2 gap-4 mb-3">
               <div>
-                <label className="block text-xs text-gray-400 mb-1">Min Age: {form.targeting.ageMin}</label>
+                <label className="block text-xs font-medium text-slate-500 mb-1">Min Age: {form.targeting.ageMin}</label>
                 <input
                   type="range" min="13" max="65" value={form.targeting.ageMin}
                   onChange={e => updateForm('targeting.ageMin', e.target.value)}
@@ -206,7 +208,7 @@ const CampaignModal = ({ accounts, onClose, onSave }) => {
                 />
               </div>
               <div>
-                <label className="block text-xs text-gray-400 mb-1">Max Age: {form.targeting.ageMax}</label>
+                <label className="block text-xs font-medium text-slate-500 mb-1">Max Age: {form.targeting.ageMax}</label>
                 <input
                   type="range" min="13" max="65" value={form.targeting.ageMax}
                   onChange={e => updateForm('targeting.ageMax', e.target.value)}
@@ -216,32 +218,32 @@ const CampaignModal = ({ accounts, onClose, onSave }) => {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs text-gray-400 mb-1">Locations (comma-separated)</label>
+                <label className="block text-xs font-medium text-slate-500 mb-1">Locations (comma-separated)</label>
                 <input
                   type="text" value={form.targeting.locations}
                   onChange={e => updateForm('targeting.locations', e.target.value)}
-                  className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-1.5 text-white text-sm focus:outline-none focus:border-orange-500"
+                  className="input text-xs py-2"
                   placeholder="US, UK, Canada"
                 />
               </div>
               <div>
-                <label className="block text-xs text-gray-400 mb-1">Interests (comma-separated)</label>
+                <label className="block text-xs font-medium text-slate-500 mb-1">Interests (comma-separated)</label>
                 <input
                   type="text" value={form.targeting.interests}
                   onChange={e => updateForm('targeting.interests', e.target.value)}
-                  className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-1.5 text-white text-sm focus:outline-none focus:border-orange-500"
+                  className="input text-xs py-2"
                   placeholder="technology, fitness"
                 />
               </div>
             </div>
           </div>
 
-          <div className="border border-gray-700 rounded-lg p-4">
+          <div className="card p-4 bg-slate-50 border-slate-100">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-semibold text-gray-300">Creative</h3>
+              <h3 className="text-sm font-semibold text-slate-700">Creative</h3>
               <button
                 type="button" onClick={handleGenerateCopy} disabled={generatingCopy}
-                className="flex items-center gap-2 px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white text-xs rounded-lg transition-colors disabled:opacity-60"
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-blue-600 to-violet-600 text-white text-xs font-semibold rounded-xl transition-colors disabled:opacity-60"
               >
                 {generatingCopy ? <Loader2 className="w-3 h-3 animate-spin" /> : '✨'}
                 Generate with AI
@@ -251,25 +253,25 @@ const CampaignModal = ({ accounts, onClose, onSave }) => {
               <input
                 type="text" value={form.creative.headline}
                 onChange={e => updateForm('creative.headline', e.target.value)}
-                className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white text-sm focus:outline-none focus:border-orange-500"
+                className="input"
                 placeholder="Headline"
               />
               <textarea
                 value={form.creative.body}
                 onChange={e => updateForm('creative.body', e.target.value)}
-                className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white text-sm focus:outline-none focus:border-orange-500 resize-none"
+                className="input resize-none"
                 rows={3} placeholder="Ad copy body..."
               />
               <input
                 type="text" value={form.creative.imageUrl}
                 onChange={e => updateForm('creative.imageUrl', e.target.value)}
-                className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white text-sm focus:outline-none focus:border-orange-500"
+                className="input"
                 placeholder="Image URL (optional)"
               />
               <select
                 value={form.creative.callToAction}
                 onChange={e => updateForm('creative.callToAction', e.target.value)}
-                className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white text-sm focus:outline-none focus:border-orange-500"
+                className="input"
               >
                 {CTA_OPTIONS.map(c => <option key={c} value={c}>{c}</option>)}
               </select>
@@ -277,16 +279,16 @@ const CampaignModal = ({ accounts, onClose, onSave }) => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">Run on Platforms</label>
+            <label className="block text-sm font-semibold text-slate-700 mb-2">Run on Platforms</label>
             <div className="flex flex-wrap gap-2">
               {PLATFORMS.map(p => (
                 <button
                   key={p.key} type="button"
                   onClick={() => togglePlatform(p.key)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
                     form.platforms.includes(p.key)
-                      ? `${p.bg} text-white`
-                      : 'bg-gray-700 text-gray-400 hover:bg-gray-600'
+                      ? `${p.bg} text-white shadow-sm`
+                      : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
                   }`}
                 >
                   {p.icon} {p.label}
@@ -296,12 +298,12 @@ const CampaignModal = ({ accounts, onClose, onSave }) => {
           </div>
 
           <div className="flex justify-end gap-3 pt-2">
-            <button type="button" onClick={onClose} className="px-4 py-2 text-sm text-gray-400 hover:text-white transition-colors">
+            <button type="button" onClick={onClose} className="btn-secondary">
               Cancel
             </button>
             <button
               type="submit" disabled={saving}
-              className="flex items-center gap-2 px-5 py-2 bg-orange-600 hover:bg-orange-700 text-white text-sm rounded-lg transition-colors disabled:opacity-60"
+              className="btn-primary disabled:opacity-60 disabled:transform-none"
             >
               {saving && <Loader2 className="w-4 h-4 animate-spin" />}
               Create Campaign
@@ -430,7 +432,7 @@ const AdManager = () => {
   }
 
   return (
-    <div className="p-6">
+    <div className="animate-fade-in">
       {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
       {showCampaignModal && (
         <CampaignModal
@@ -440,23 +442,16 @@ const AdManager = () => {
         />
       )}
 
-      <div className="flex items-center gap-3 mb-6">
-        <div className="p-2 bg-orange-600/20 rounded-lg">
-          <Target className="w-6 h-6 text-orange-400" />
-        </div>
-        <div>
-          <h1 className="text-2xl font-bold text-white">Ad Manager</h1>
-          <p className="text-gray-400 text-sm">Manage your advertising across all platforms</p>
-        </div>
-      </div>
-
-      <div className="flex gap-1 mb-6 bg-gray-800 rounded-lg p-1 w-fit">
+      {/* Tabs */}
+      <div className="flex items-center gap-1.5 mb-6 bg-slate-100 rounded-xl p-1 w-fit">
         {['accounts', 'campaigns'].map(tab => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`px-5 py-2 rounded-md text-sm font-medium transition-colors capitalize ${
-              activeTab === tab ? 'bg-orange-600 text-white' : 'text-gray-400 hover:text-white'
+            className={`px-5 py-2 rounded-xl text-sm font-semibold transition-all capitalize ${
+              activeTab === tab
+                ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-sm shadow-orange-500/20'
+                : 'text-slate-500 hover:text-slate-700'
             }`}
           >
             {tab === 'accounts' ? 'Ad Accounts' : 'Campaigns'}
@@ -467,7 +462,7 @@ const AdManager = () => {
       {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {[1, 2, 3, 4, 5].map(i => (
-            <div key={i} className="h-40 bg-gray-800 rounded-xl animate-pulse" />
+            <div key={i} className="h-40 bg-slate-100 rounded-2xl animate-pulse" />
           ))}
         </div>
       ) : activeTab === 'accounts' ? (
@@ -478,33 +473,36 @@ const AdManager = () => {
             const isConnected = account?.isConnected
 
             return (
-              <div key={platform.key} className={`bg-gray-800 rounded-xl p-5 border ${isConnected ? 'border-gray-700' : 'border-gray-700/50'}`}>
+              <div key={platform.key} className="card p-5 hover:shadow-card-hover transition-all duration-200">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 ${platform.bg} rounded-lg flex items-center justify-center text-lg`}>
+                    <div className={`w-10 h-10 rounded-xl ${platform.bg} flex items-center justify-center text-lg flex-shrink-0`}>
                       {platform.icon}
                     </div>
                     <div>
-                      <h3 className="text-white font-semibold text-sm">{platform.label}</h3>
+                      <h3 className="text-slate-900 font-semibold text-sm">{platform.label}</h3>
                       {isConnected && account && (
-                        <p className="text-gray-400 text-xs">{account.accountName}</p>
+                        <p className="text-slate-400 text-xs">{account.accountName}</p>
                       )}
                     </div>
                   </div>
-                  <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-400' : 'bg-gray-600'}`} />
+                  <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-emerald-500' : 'bg-slate-300'}`} />
                 </div>
 
                 {isConnected && stats && (
-                  <div className="grid grid-cols-2 gap-3 mb-4">
+                  <div className="grid grid-cols-2 gap-2 mb-4">
                     {[
-                      { label: 'Impressions', value: stats.impressions?.toLocaleString(), icon: Eye },
-                      { label: 'Clicks', value: stats.clicks?.toLocaleString(), icon: MousePointer },
-                      { label: 'CTR', value: `${stats.ctr}%`, icon: TrendingUp },
-                      { label: 'Spend', value: `$${stats.spend?.toFixed(2)}`, icon: DollarSign }
+                      { label: 'Impressions', value: stats.impressions?.toLocaleString(), icon: Eye, color: 'text-blue-500', bg: 'bg-blue-50' },
+                      { label: 'Clicks', value: stats.clicks?.toLocaleString(), icon: MousePointer, color: 'text-violet-500', bg: 'bg-violet-50' },
+                      { label: 'CTR', value: `${stats.ctr}%`, icon: TrendingUp, color: 'text-emerald-500', bg: 'bg-emerald-50' },
+                      { label: 'Spend', value: `$${stats.spend?.toFixed(2)}`, icon: DollarSign, color: 'text-orange-500', bg: 'bg-orange-50' }
                     ].map(m => (
-                      <div key={m.label} className="bg-gray-700/50 rounded-lg p-2">
-                        <p className="text-gray-400 text-xs">{m.label}</p>
-                        <p className="text-white font-semibold text-sm">{m.value}</p>
+                      <div key={m.label} className={`${m.bg} rounded-xl p-2.5 flex items-center gap-2`}>
+                        <m.icon className={`w-3.5 h-3.5 ${m.color} flex-shrink-0`} />
+                        <div>
+                          <p className="text-slate-500 text-[10px] font-medium">{m.label}</p>
+                          <p className="text-slate-900 font-bold text-xs">{m.value}</p>
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -514,13 +512,13 @@ const AdManager = () => {
                   <div className="flex gap-2">
                     <button
                       onClick={() => { setActiveTab('campaigns') }}
-                      className="flex-1 py-1.5 text-xs font-medium bg-orange-600/20 text-orange-400 hover:bg-orange-600/30 rounded-lg transition-colors"
+                      className="btn-secondary flex-1 justify-center text-xs py-1.5 px-2"
                     >
                       View Campaigns
                     </button>
                     <button
                       onClick={() => handleDisconnect(account.id, platform.label)}
-                      className="flex-1 py-1.5 text-xs font-medium bg-gray-700 text-gray-400 hover:bg-gray-600 rounded-lg transition-colors"
+                      className="flex-1 py-1.5 text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 rounded-xl transition-colors"
                     >
                       Disconnect
                     </button>
@@ -529,10 +527,10 @@ const AdManager = () => {
                   <button
                     onClick={() => handleConnect(platform.key)}
                     disabled={connecting === platform.key}
-                    className={`w-full py-2 text-sm font-medium ${platform.bg} hover:opacity-90 text-white rounded-lg transition-all disabled:opacity-60 flex items-center justify-center gap-2`}
+                    className="btn-primary w-full justify-center text-xs py-2 disabled:opacity-60 disabled:transform-none"
                   >
                     {connecting === platform.key ? (
-                      <><Loader2 className="w-4 h-4 animate-spin" /> Connecting...</>
+                      <><Loader2 className="w-3.5 h-3.5 animate-spin" /> Connecting...</>
                     ) : (
                       <>Connect {platform.label}</>
                     )}
@@ -545,60 +543,61 @@ const AdManager = () => {
       ) : (
         <div>
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold text-white">Campaigns ({campaigns.length})</h2>
+            <h2 className="text-lg font-bold text-slate-900">Campaigns <span className="text-slate-400 font-normal text-sm">({campaigns.length})</span></h2>
             <button
               onClick={() => setShowCampaignModal(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white text-sm rounded-lg transition-colors"
+              className="btn-primary"
             >
               <Plus className="w-4 h-4" /> New Campaign
             </button>
           </div>
 
           {campaigns.length === 0 ? (
-            <div className="text-center py-16 bg-gray-800 rounded-xl border border-gray-700">
-              <Target className="w-12 h-12 text-gray-600 mx-auto mb-3" />
-              <p className="text-gray-400">No campaigns yet. Create your first campaign!</p>
+            <div className="text-center py-16 card">
+              <Target className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+              <p className="text-slate-400 font-medium">No campaigns yet. Create your first campaign!</p>
             </div>
           ) : (
-            <div className="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden">
+            <div className="card overflow-hidden">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-gray-700">
+                  <tr className="border-b border-slate-100 bg-slate-50">
                     {['Name', 'Platform', 'Objective', 'Status', 'Budget', 'Impressions', 'Clicks', 'Actions'].map(h => (
-                      <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase">{h}</th>
+                      <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{h}</th>
                     ))}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-700">
+                <tbody className="divide-y divide-slate-100">
                   {campaigns.map(c => {
                     const account = accounts.find(a => a.id === c.adAccountId)
+                    const sConfig = statusConfig[c.status] || statusConfig.draft
                     return (
-                      <tr key={c.id} className="hover:bg-gray-700/30 transition-colors">
+                      <tr key={c.id} className="hover:bg-slate-50 transition-colors">
                         <td className="px-4 py-3">
-                          <p className="text-white text-sm font-medium">{c.name}</p>
+                          <p className="text-slate-900 text-sm font-semibold">{c.name}</p>
                         </td>
-                        <td className="px-4 py-3 text-gray-400 text-sm capitalize">{account?.platform || '-'}</td>
-                        <td className="px-4 py-3 text-gray-400 text-sm capitalize">{c.objective}</td>
+                        <td className="px-4 py-3 text-slate-500 text-sm capitalize">{account?.platform || '-'}</td>
+                        <td className="px-4 py-3 text-slate-500 text-sm capitalize">{c.objective}</td>
                         <td className="px-4 py-3">
-                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${statusStyles[c.status]}`}>
-                            {c.status}
+                          <span className={sConfig.className}>
+                            {sConfig.label}
                           </span>
                         </td>
-                        <td className="px-4 py-3 text-gray-400 text-sm">${c.dailyBudget}/day</td>
-                        <td className="px-4 py-3 text-gray-300 text-sm">{(c.impressions || 0).toLocaleString()}</td>
-                        <td className="px-4 py-3 text-gray-300 text-sm">{(c.clicks || 0).toLocaleString()}</td>
+                        <td className="px-4 py-3 text-slate-500 text-sm">${c.dailyBudget}/day</td>
+                        <td className="px-4 py-3 text-slate-700 text-sm font-medium">{(c.impressions || 0).toLocaleString()}</td>
+                        <td className="px-4 py-3 text-slate-700 text-sm font-medium">{(c.clicks || 0).toLocaleString()}</td>
                         <td className="px-4 py-3">
                           <div className="flex items-center gap-1">
                             {c.status === 'draft' || c.status === 'paused' ? (
-                              <button onClick={() => handleLaunch(c.id)} className="p-1.5 text-green-400 hover:bg-green-400/10 rounded transition-colors" title="Launch">
+                              <button onClick={() => handleLaunch(c.id)} className="p-1.5 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors" title="Launch">
                                 <Play className="w-4 h-4" />
                               </button>
                             ) : c.status === 'active' ? (
-                              <button onClick={() => handlePause(c.id)} className="p-1.5 text-yellow-400 hover:bg-yellow-400/10 rounded transition-colors" title="Pause">
+                              <button onClick={() => handlePause(c.id)} className="p-1.5 text-amber-600 hover:bg-amber-50 rounded-lg transition-colors" title="Pause">
                                 <Pause className="w-4 h-4" />
                               </button>
                             ) : null}
-                            <button onClick={() => handleDelete(c.id)} className="p-1.5 text-red-400 hover:bg-red-400/10 rounded transition-colors" title="Delete">
+                            <button onClick={() => handleDelete(c.id)} className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition-colors" title="Delete">
                               <Trash2 className="w-4 h-4" />
                             </button>
                           </div>
