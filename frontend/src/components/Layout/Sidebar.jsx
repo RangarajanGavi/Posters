@@ -2,7 +2,7 @@ import React from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard, CalendarDays, PlusSquare, BarChart3,
-  Share2, TrendingUp, LogOut, Wand2, Target, CreditCard, ChevronRight
+  Share2, TrendingUp, LogOut, Wand2, Target, CreditCard, ChevronRight, Film
 } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext.jsx'
 
@@ -20,6 +20,7 @@ const navGroups = [
     label: 'Tools',
     items: [
       { to: '/ai-studio', icon: Wand2, label: 'AI Studio', badge: 'AI' },
+      { to: '/media-studio', icon: Film, label: 'Media Studio', badge: 'NEW' },
       { to: '/ads', icon: Target, label: 'Ad Manager' },
       { to: '/platforms', icon: Share2, label: 'Platforms' },
     ]
@@ -37,10 +38,10 @@ const Sidebar = () => {
   const navigate = useNavigate()
 
   return (
-    <div style={{ background: '#0f1117' }} className="w-64 flex flex-col h-full border-r border-white/5">
+    <div style={{ background: '#090b0f' }} className="w-64 flex flex-col h-full border-r border-white/5">
       {/* Logo */}
       <div className="flex items-center gap-3 px-5 py-5">
-        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center shadow-lg shadow-blue-500/30 flex-shrink-0">
+        <div className="w-9 h-9 rounded-xl flex items-center justify-center shadow-lg flex-shrink-0" style={{ background: 'linear-gradient(135deg, #4f46e5, #7c3aed)' }}>
           <TrendingUp className="w-5 h-5 text-white" />
         </div>
         <span className="text-white font-bold text-lg tracking-tight">Metricool</span>
@@ -66,10 +67,10 @@ const Sidebar = () => {
                 >
                   {({ isActive }) => (
                     <>
-                      <Icon className={`flex-shrink-0 ${isActive ? 'text-blue-400' : ''}`} style={{ width: '1.1rem', height: '1.1rem' }} />
+                      <Icon className={`flex-shrink-0 ${isActive ? 'text-violet-400' : ''}`} style={{ width: '1.1rem', height: '1.1rem' }} />
                       <span className="flex-1">{label}</span>
                       {badge && (
-                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-gradient-to-r from-blue-500 to-violet-500 text-white">
+                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-gradient-to-r from-violet-500 to-purple-600 text-white">
                           {badge}
                         </span>
                       )}
@@ -86,7 +87,7 @@ const Sidebar = () => {
       {/* User section */}
       <div className="p-3 border-t border-white/5">
         <div className="flex items-center gap-3 px-3 py-3 rounded-xl bg-white/5 mb-1">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-violet-500 flex items-center justify-center flex-shrink-0 text-white text-xs font-bold">
+          <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-white text-xs font-bold" style={{ background: 'linear-gradient(135deg, #4f46e5, #7c3aed)' }}>
             {user?.name?.charAt(0)?.toUpperCase() || 'U'}
           </div>
           <div className="flex-1 min-w-0">

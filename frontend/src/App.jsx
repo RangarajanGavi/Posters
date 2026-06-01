@@ -12,6 +12,7 @@ import Platforms from './pages/Platforms.jsx'
 import Subscription from './pages/Subscription.jsx'
 import AdManager from './pages/AdManager.jsx'
 import AIStudio from './pages/AIStudio.jsx'
+import MediaStudio from './pages/MediaStudio.jsx'
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useAuth()
@@ -65,6 +66,7 @@ const AppRoutes = () => {
         <Route path="subscription" element={<Subscription />} />
         <Route path="ads" element={<AdManager />} />
         <Route path="ai-studio" element={<AIStudio />} />
+        <Route path="media-studio" element={<MediaStudio />} />
       </Route>
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>

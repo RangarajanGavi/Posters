@@ -4,20 +4,79 @@
 @tailwind utilities;
 
 @layer base {
-  body { @apply bg-slate-50 text-slate-900 antialiased; font-family: 'Inter', system-ui, sans-serif; }
-  * { @apply border-slate-200; }
+  body {
+    background-color: #0d0f14;
+    color: #e8eaf2;
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  * { border-color: rgba(255,255,255,0.07); }
+  input, textarea, select {
+    color-scheme: dark;
+  }
 }
 
 @layer components {
-  .btn-primary { @apply inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-blue-600 to-violet-600 text-white text-sm font-semibold rounded-xl shadow-lg shadow-blue-500/20 hover:shadow-xl hover:shadow-blue-500/30 hover:-translate-y-0.5 transition-all duration-200; }
-  .btn-secondary { @apply inline-flex items-center gap-2 px-4 py-2.5 bg-white text-slate-700 text-sm font-medium rounded-xl border border-slate-200 hover:bg-slate-50 hover:border-slate-300 transition-all duration-200; }
-  .card { @apply bg-white rounded-2xl border border-slate-100 shadow-card; }
-  .input { @apply w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200; }
+  .btn-primary {
+    @apply inline-flex items-center gap-2 px-4 py-2.5 text-white text-sm font-semibold rounded-xl
+    transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0;
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    box-shadow: 0 4px 14px rgba(99,102,241,0.4);
+  }
+  .btn-primary:hover { box-shadow: 0 6px 20px rgba(99,102,241,0.5); }
+
+  .btn-secondary {
+    @apply inline-flex items-center gap-2 px-4 py-2.5 text-slate-300 text-sm font-medium rounded-xl
+    border transition-all duration-200 hover:-translate-y-0.5;
+    background-color: rgba(255,255,255,0.05);
+    border-color: rgba(255,255,255,0.1);
+  }
+  .btn-secondary:hover { background-color: rgba(255,255,255,0.08); }
+
+  .btn-media {
+    @apply inline-flex items-center gap-2 px-4 py-2.5 text-white text-sm font-semibold rounded-xl
+    transition-all duration-200 hover:-translate-y-0.5;
+    background: linear-gradient(135deg, #7c3aed, #ec4899);
+    box-shadow: 0 4px 14px rgba(124,58,237,0.4);
+  }
+
+  .card {
+    border-radius: 1rem;
+    background-color: #161a23;
+    border: 1px solid rgba(255,255,255,0.07);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.2);
+  }
+
+  .card-elevated {
+    border-radius: 1rem;
+    background-color: #1e2130;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .input {
+    @apply w-full px-4 py-2.5 text-sm text-slate-100 placeholder-slate-500
+    rounded-xl focus:outline-none transition-all duration-200;
+    background-color: #1e2130;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .input:focus {
+    border-color: rgba(99,102,241,0.6);
+    box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+  }
+
   .badge { @apply inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full; }
+
+  .section-title { @apply text-base font-bold text-slate-100 tracking-tight; }
+  .label { @apply block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1.5; }
+
+  .shimmer-bg {
+    background: linear-gradient(90deg, #1e2130 25%, #252a3a 50%, #1e2130 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { @apply bg-slate-200 rounded-full; }
-::-webkit-scrollbar-thumb:hover { @apply bg-slate-300; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }

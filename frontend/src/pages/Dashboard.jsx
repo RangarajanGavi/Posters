@@ -24,10 +24,10 @@ const platformIcons = {
 }
 
 const statusConfig = {
-  published: { label: 'Published', color: 'bg-emerald-50 text-emerald-600', icon: CheckCircle2 },
-  scheduled: { label: 'Scheduled', color: 'bg-blue-50 text-blue-600', icon: Clock },
-  draft: { label: 'Draft', color: 'bg-slate-100 text-slate-500', icon: FileEdit },
-  failed: { label: 'Failed', color: 'bg-red-50 text-red-600', icon: AlertCircle }
+  published: { label: 'Published', color: 'bg-emerald-500/10 text-emerald-400', icon: CheckCircle2 },
+  scheduled: { label: 'Scheduled', color: 'bg-blue-500/10 text-blue-400', icon: Clock },
+  draft: { label: 'Draft', color: 'bg-white/[0.05] text-slate-400', icon: FileEdit },
+  failed: { label: 'Failed', color: 'bg-red-500/10 text-red-400', icon: AlertCircle }
 }
 
 const gradients = {
@@ -43,11 +43,11 @@ const StatCard = ({ title, value, icon: Icon, gradient, suffix = '', change = '+
       <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${gradients[gradient]} flex items-center justify-center shadow-lg`}>
         <Icon className="w-5 h-5 text-white" />
       </div>
-      <span className="badge bg-emerald-50 text-emerald-600">
+      <span className="badge bg-emerald-500/10 text-emerald-400">
         <ArrowUpRight className="w-3 h-3" /> {change}%
       </span>
     </div>
-    <p className="text-2xl font-bold text-slate-900">{typeof value === 'number' ? value.toLocaleString() : value}{suffix}</p>
+    <p className="text-2xl font-bold text-slate-100">{typeof value === 'number' ? value.toLocaleString() : value}{suffix}</p>
     <p className="text-sm text-slate-500 font-medium mt-0.5">{title}</p>
   </div>
 )
@@ -88,7 +88,7 @@ const Dashboard = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500"></div>
       </div>
     )
   }
@@ -131,20 +131,20 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Follower Growth Chart */}
         <div className="lg:col-span-2 card p-6">
-          <h2 className="text-base font-semibold text-slate-900 mb-4">Follower Growth (Last 30 Days)</h2>
+          <h2 className="text-base font-semibold text-slate-100 mb-4">Follower Growth (Last 30 Days)</h2>
           {growthData.length > 0 ? (
             <ResponsiveContainer width="100%" height={280}>
               <LineChart data={growthData} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
                 <XAxis
                   dataKey="date"
-                  tick={{ fontSize: 11, fill: '#94a3b8' }}
+                  tick={{ fontSize: 11, fill: '#6b7080' }}
                   tickFormatter={(v) => v.slice(5)}
                   interval="preserveStartEnd"
                 />
-                <YAxis tick={{ fontSize: 11, fill: '#94a3b8' }} />
+                <YAxis tick={{ fontSize: 11, fill: '#6b7080' }} />
                 <Tooltip
-                  contentStyle={{ fontSize: 12, borderRadius: 12, border: '1px solid #e2e8f0', boxShadow: '0 4px 16px rgba(0,0,0,0.08)' }}
+                  contentStyle={{ background:'#1e2130', border:'1px solid rgba(255,255,255,0.1)', borderRadius:'12px', color:'#e8eaf2', fontSize:'12px' }}
                 />
                 <Legend wrapperStyle={{ fontSize: 12 }} />
                 {platformNames.map(name => (
@@ -161,12 +161,12 @@ const Dashboard = () => {
               </LineChart>
             </ResponsiveContainer>
           ) : (
-            <div className="flex flex-col items-center justify-center h-64 text-slate-400">
+            <div className="flex flex-col items-center justify-center h-64 text-slate-500">
               <TrendingUp className="w-12 h-12 mb-2 opacity-20" />
               <p className="text-sm text-center">No growth data yet. Connect platforms and sync data.</p>
               <button
                 onClick={() => navigate('/platforms')}
-                className="mt-3 text-sm text-blue-600 hover:text-blue-700 font-medium"
+                className="mt-3 text-sm text-indigo-400 hover:text-indigo-300 font-medium"
               >
                 Connect platforms
               </button>
@@ -177,10 +177,10 @@ const Dashboard = () => {
         {/* Connected Platforms */}
         <div className="card p-5">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-base font-semibold text-slate-900">Connected Platforms</h2>
+            <h2 className="text-base font-semibold text-slate-100">Connected Platforms</h2>
             <button
               onClick={() => navigate('/platforms')}
-              className="text-xs text-blue-600 hover:text-blue-700 font-medium"
+              className="text-xs text-indigo-400 hover:text-indigo-300 font-medium"
             >
               Manage
             </button>
@@ -190,10 +190,10 @@ const Dashboard = () => {
               {connectedPlatforms.map(platform => {
                 const Icon = platformIcons[platform.name] || TrendingUp
                 return (
-                  <div key={platform.id} className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition-colors">
+                  <div key={platform.id} className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.04] hover:bg-white/[0.06] transition-colors">
                     <div
                       className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-                      style={{ backgroundColor: `${platformColors[platform.name]}15` }}
+                      style={{ backgroundColor: `${platformColors[platform.name]}20` }}
                     >
                       <Icon
                         className="w-4.5 h-4.5"
@@ -201,25 +201,25 @@ const Dashboard = () => {
                       />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-slate-800 capitalize">{platform.name}</p>
-                      <p className="text-xs text-slate-400 truncate">{platform.accountName}</p>
+                      <p className="text-sm font-semibold text-slate-200 capitalize">{platform.name}</p>
+                      <p className="text-xs text-slate-500 truncate">{platform.accountName}</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-bold text-slate-900">
+                      <p className="text-sm font-bold text-slate-100">
                         {(platform.followers || 0).toLocaleString()}
                       </p>
-                      <p className="text-xs text-slate-400">followers</p>
+                      <p className="text-xs text-slate-500">followers</p>
                     </div>
                   </div>
                 )
               })}
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center h-40 text-slate-400">
+            <div className="flex flex-col items-center justify-center h-40 text-slate-500">
               <p className="text-sm text-center">No platforms connected</p>
               <button
                 onClick={() => navigate('/platforms')}
-                className="mt-2 text-sm text-blue-600 hover:text-blue-700 font-medium"
+                className="mt-2 text-sm text-indigo-400 hover:text-indigo-300 font-medium"
               >
                 Connect now
               </button>
@@ -231,10 +231,10 @@ const Dashboard = () => {
       {/* Recent Posts */}
       <div className="card p-5">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-base font-semibold text-slate-900">Recent Posts</h2>
+          <h2 className="text-base font-semibold text-slate-100">Recent Posts</h2>
           <button
             onClick={() => navigate('/compose')}
-            className="text-xs text-blue-600 hover:text-blue-700 font-medium"
+            className="text-xs text-indigo-400 hover:text-indigo-300 font-medium"
           >
             New post
           </button>
@@ -245,21 +245,21 @@ const Dashboard = () => {
               const status = statusConfig[post.status] || statusConfig.draft
               const StatusIcon = status.icon
               return (
-                <div key={post.id} className="flex items-start gap-3 p-3.5 rounded-xl hover:bg-slate-50 transition-colors cursor-pointer">
+                <div key={post.id} className="flex items-start gap-3 p-3.5 rounded-xl hover:bg-white/[0.04] transition-colors cursor-pointer">
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm text-slate-700 line-clamp-2 font-medium">{post.content}</p>
+                    <p className="text-sm text-slate-300 line-clamp-2 font-medium">{post.content}</p>
                     <div className="flex items-center gap-2.5 mt-1.5">
                       <span className={`badge ${status.color}`}>
                         <StatusIcon className="w-3 h-3" />
                         {status.label}
                       </span>
-                      <span className="text-xs text-slate-400">
+                      <span className="text-xs text-slate-500">
                         {post.platforms?.join(', ')}
                       </span>
                     </div>
                   </div>
                   <div className="text-right flex-shrink-0">
-                    <p className="text-xs text-slate-400">
+                    <p className="text-xs text-slate-500">
                       {post.scheduledAt
                         ? new Date(post.scheduledAt).toLocaleDateString()
                         : new Date(post.createdAt).toLocaleDateString()}
@@ -270,11 +270,11 @@ const Dashboard = () => {
             })}
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center h-32 text-slate-400">
+          <div className="flex flex-col items-center justify-center h-32 text-slate-500">
             <p className="text-sm">No posts yet</p>
             <button
               onClick={() => navigate('/compose')}
-              className="mt-2 text-sm text-blue-600 hover:text-blue-700 font-medium"
+              className="mt-2 text-sm text-indigo-400 hover:text-indigo-300 font-medium"
             >
               Create your first post
             </button>

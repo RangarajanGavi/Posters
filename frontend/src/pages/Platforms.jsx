@@ -11,9 +11,9 @@ const platformConfig = [
     label: 'Facebook',
     icon: Facebook,
     color: '#1877F2',
-    bg: 'bg-blue-50',
-    iconColor: 'text-blue-600',
-    ringColor: 'ring-blue-200',
+    bg: 'bg-blue-500/10',
+    iconColor: 'text-blue-400',
+    ringColor: 'ring-blue-500/20',
     description: 'Share posts, stories and connect with your audience'
   },
   {
@@ -21,9 +21,9 @@ const platformConfig = [
     label: 'Instagram',
     icon: Instagram,
     color: '#E1306C',
-    bg: 'bg-pink-50',
-    iconColor: 'text-pink-600',
-    ringColor: 'ring-pink-200',
+    bg: 'bg-pink-500/10',
+    iconColor: 'text-pink-400',
+    ringColor: 'ring-pink-500/20',
     description: 'Share photos, reels and stories with your followers'
   },
   {
@@ -31,9 +31,9 @@ const platformConfig = [
     label: 'Twitter / X',
     icon: Twitter,
     color: '#1DA1F2',
-    bg: 'bg-sky-50',
-    iconColor: 'text-sky-600',
-    ringColor: 'ring-sky-200',
+    bg: 'bg-sky-500/10',
+    iconColor: 'text-sky-400',
+    ringColor: 'ring-sky-500/20',
     description: 'Post tweets and engage with trending conversations'
   },
   {
@@ -41,9 +41,9 @@ const platformConfig = [
     label: 'LinkedIn',
     icon: Linkedin,
     color: '#0A66C2',
-    bg: 'bg-indigo-50',
-    iconColor: 'text-indigo-600',
-    ringColor: 'ring-indigo-200',
+    bg: 'bg-indigo-500/10',
+    iconColor: 'text-indigo-400',
+    ringColor: 'ring-indigo-500/20',
     description: 'Share professional content and grow your network'
   }
 ]
@@ -51,12 +51,12 @@ const platformConfig = [
 const Toast = ({ type, message, onClose }) => (
   <div className={`fixed top-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-xl shadow-lg border text-sm font-medium ${
     type === 'success'
-      ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
-      : 'bg-red-50 border-red-200 text-red-800'
+      ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
+      : 'bg-red-500/10 border-red-500/20 text-red-400'
   }`}>
     {type === 'success'
-      ? <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
-      : <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0" />
+      ? <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0" />
+      : <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0" />
     }
     {message}
     <button onClick={onClose} className="ml-2 opacity-60 hover:opacity-100">
@@ -146,7 +146,7 @@ const Platforms = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500"></div>
       </div>
     )
   }
@@ -166,7 +166,7 @@ const Platforms = () => {
             Connect your social media accounts to start scheduling posts and tracking analytics.
           </p>
           <div className="flex items-center gap-2">
-            <span className={`badge ${connectedCount > 0 ? 'bg-emerald-50 text-emerald-600' : 'bg-slate-100 text-slate-500'}`}>
+            <span className={`badge ${connectedCount > 0 ? 'bg-emerald-500/10 text-emerald-400' : 'bg-white/[0.05] text-slate-400'}`}>
               {connectedCount} / {platformConfig.length} connected
             </span>
           </div>
@@ -185,11 +185,11 @@ const Platforms = () => {
               <div
                 key={config.id}
                 className={`card p-6 hover:shadow-card-hover transition-all duration-200 ${
-                  isConnected ? 'ring-1 ring-emerald-200' : ''
+                  isConnected ? `ring-1 ${config.ringColor}` : ''
                 }`}
               >
                 <div className="flex items-start gap-4">
-                  {/* Platform icon — large colored square */}
+                  {/* Platform icon */}
                   <div
                     className={`w-12 h-12 rounded-xl ${config.bg} flex items-center justify-center flex-shrink-0`}
                   >
@@ -199,9 +199,9 @@ const Platforms = () => {
                   {/* Content */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <h3 className="text-base font-semibold text-slate-900">{config.label}</h3>
+                      <h3 className="text-base font-semibold text-slate-100">{config.label}</h3>
                       {isConnected && (
-                        <span className="badge bg-emerald-50 text-emerald-600">
+                        <span className="badge bg-emerald-500/10 text-emerald-400">
                           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                           Connected
                         </span>
@@ -210,22 +210,22 @@ const Platforms = () => {
 
                     {isConnected && platformData ? (
                       <div className="space-y-2 mb-4">
-                        <p className="text-sm text-slate-700 font-medium">{platformData.accountName}</p>
+                        <p className="text-sm text-slate-300 font-medium">{platformData.accountName}</p>
                         {/* Stats row */}
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="flex items-center gap-1.5 text-xs bg-slate-100 text-slate-600 px-2.5 py-1 rounded-lg font-medium">
+                          <span className="flex items-center gap-1.5 text-xs bg-white/[0.05] text-slate-400 px-2.5 py-1 rounded-lg font-medium">
                             <Users className="w-3 h-3" />
                             {(platformData.followers || 0).toLocaleString()} followers
                           </span>
                           {platformData.engagement !== undefined && (
-                            <span className="text-xs bg-blue-50 text-blue-600 px-2.5 py-1 rounded-lg font-medium">
+                            <span className="text-xs bg-blue-500/10 text-blue-400 px-2.5 py-1 rounded-lg font-medium">
                               {platformData.engagement}% engagement
                             </span>
                           )}
                         </div>
                       </div>
                     ) : (
-                      <p className="text-sm text-slate-400 mb-4">{config.description}</p>
+                      <p className="text-sm text-slate-500 mb-4">{config.description}</p>
                     )}
 
                     {/* Actions */}
@@ -243,7 +243,7 @@ const Platforms = () => {
                           <button
                             onClick={() => handleDisconnect(config.id)}
                             disabled={isDisconnecting}
-                            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-xl transition-colors disabled:opacity-50"
+                            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-red-400 bg-red-500/10 hover:bg-red-500/20 rounded-xl transition-colors disabled:opacity-50"
                           >
                             <Link2Off className="w-3.5 h-3.5" />
                             {isDisconnecting ? 'Disconnecting...' : 'Disconnect'}
@@ -268,11 +268,11 @@ const Platforms = () => {
         </div>
 
         {/* Info Banner */}
-        <div className="card p-4 bg-blue-50 border-blue-100 flex gap-3">
-          <AlertCircle className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
+        <div className="card p-4 bg-blue-500/5 border-blue-500/20 flex gap-3">
+          <AlertCircle className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
           <div>
-            <p className="text-sm font-semibold text-blue-900">OAuth Integration Note</p>
-            <p className="text-sm text-blue-700 mt-0.5">
+            <p className="text-sm font-semibold text-blue-300">OAuth Integration Note</p>
+            <p className="text-sm text-blue-400/70 mt-0.5">
               This demo uses mock OAuth stubs. In production, clicking &quot;Connect&quot; would redirect
               you to the platform&apos;s authorization page. Mock data is generated automatically
               for demonstration purposes.

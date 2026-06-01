@@ -25,10 +25,10 @@ const TABS = [
 ]
 
 const statusColors = {
-  published: 'bg-emerald-50 text-emerald-600',
-  scheduled: 'bg-blue-50 text-blue-600',
-  draft: 'bg-slate-100 text-slate-500',
-  failed: 'bg-red-50 text-red-600'
+  published: 'bg-emerald-500/10 text-emerald-400',
+  scheduled: 'bg-blue-500/10 text-blue-400',
+  draft: 'bg-white/[0.05] text-slate-400',
+  failed: 'bg-red-500/10 text-red-400'
 }
 
 const gradients = {
@@ -44,11 +44,11 @@ const KPICard = ({ title, value, icon: Icon, gradient }) => (
       <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${gradients[gradient] || gradients.blue} flex items-center justify-center shadow-lg`}>
         <Icon className="w-5 h-5 text-white" />
       </div>
-      <span className="badge bg-emerald-50 text-emerald-600">
+      <span className="badge bg-emerald-500/10 text-emerald-400">
         <ArrowUpRight className="w-3 h-3" /> +8.4%
       </span>
     </div>
-    <p className="text-2xl font-bold text-slate-900">{typeof value === 'number' ? value.toLocaleString() : value}</p>
+    <p className="text-2xl font-bold text-slate-100">{typeof value === 'number' ? value.toLocaleString() : value}</p>
     <p className="text-sm text-slate-500 font-medium mt-0.5">{title}</p>
   </div>
 )
@@ -106,7 +106,7 @@ const Analytics = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500"></div>
       </div>
     )
   }
@@ -115,7 +115,7 @@ const Analytics = () => {
     <div className="space-y-5 animate-fade-in">
       {/* Tabs + Filter */}
       <div className="flex items-center justify-between">
-        <div className="flex gap-1 bg-slate-100 rounded-xl p-1">
+        <div className="flex gap-1 rounded-xl p-1" style={{ backgroundColor: '#1e2130' }}>
           {TABS.map(tab => {
             const Icon = tab.icon
             return (
@@ -124,8 +124,8 @@ const Analytics = () => {
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
                   activeTab === tab.id
-                    ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/20'
-                    : 'text-slate-500 hover:text-slate-700'
+                    ? 'bg-indigo-600 text-white shadow-sm'
+                    : 'text-slate-500 hover:text-slate-300'
                 }`}
               >
                 <Icon className="w-4 h-4" />
@@ -138,7 +138,8 @@ const Analytics = () => {
         <select
           value={platformFilter}
           onChange={(e) => setPlatformFilter(e.target.value)}
-          className="px-3.5 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white text-slate-700 capitalize transition-all"
+          className="px-3.5 py-2 rounded-xl text-sm focus:outline-none capitalize transition-all text-slate-300"
+          style={{ backgroundColor: '#1e2130', border: '1px solid rgba(255,255,255,0.1)', colorScheme: 'dark' }}
         >
           {PLATFORMS.map(p => (
             <option key={p} value={p} className="capitalize">
@@ -159,7 +160,7 @@ const Analytics = () => {
           </div>
 
           <div className="card p-6">
-            <h3 className="text-sm font-semibold text-slate-900 mb-4">Reach Over Time (Last 30 Days)</h3>
+            <h3 className="text-sm font-semibold text-slate-100 mb-4">Reach Over Time (Last 30 Days)</h3>
             {growthData.length > 0 ? (
               <ResponsiveContainer width="100%" height={300}>
                 <AreaChart data={growthData} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
@@ -171,10 +172,10 @@ const Analytics = () => {
                       </linearGradient>
                     ))}
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                  <XAxis dataKey="date" tick={{ fontSize: 11, fill: '#94a3b8' }} tickFormatter={v => v.slice(5)} interval="preserveStartEnd" />
-                  <YAxis tick={{ fontSize: 11, fill: '#94a3b8' }} />
-                  <Tooltip contentStyle={{ fontSize: 12, borderRadius: 12, border: '1px solid #e2e8f0', boxShadow: '0 4px 16px rgba(0,0,0,0.08)' }} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                  <XAxis dataKey="date" tick={{ fontSize: 11, fill: '#6b7080' }} tickFormatter={v => v.slice(5)} interval="preserveStartEnd" />
+                  <YAxis tick={{ fontSize: 11, fill: '#6b7080' }} />
+                  <Tooltip contentStyle={{ background:'#1e2130', border:'1px solid rgba(255,255,255,0.08)', borderRadius:'12px', color:'#e8eaf2', fontSize:'12px' }} />
                   <Legend wrapperStyle={{ fontSize: 12 }} />
                   {filteredPlatforms.map(name => (
                     <Area
@@ -189,7 +190,7 @@ const Analytics = () => {
                 </AreaChart>
               </ResponsiveContainer>
             ) : (
-              <div className="flex items-center justify-center h-48 text-slate-400">
+              <div className="flex items-center justify-center h-48 text-slate-500">
                 <p className="text-sm">No analytics data yet. Connect platforms and sync data.</p>
               </div>
             )}
@@ -200,16 +201,16 @@ const Analytics = () => {
       {/* Engagement Tab */}
       {activeTab === 'engagement' && (
         <div className="card p-6">
-          <h3 className="text-sm font-semibold text-slate-900 mb-4">
+          <h3 className="text-sm font-semibold text-slate-100 mb-4">
             Engagement Breakdown (Likes / Comments / Shares)
           </h3>
           {flatEngagement.length > 0 ? (
             <ResponsiveContainer width="100%" height={400}>
               <BarChart data={flatEngagement} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                <XAxis dataKey="date" tick={{ fontSize: 11, fill: '#94a3b8' }} tickFormatter={v => v.slice(5)} interval="preserveStartEnd" />
-                <YAxis tick={{ fontSize: 11, fill: '#94a3b8' }} />
-                <Tooltip contentStyle={{ fontSize: 12, borderRadius: 12, border: '1px solid #e2e8f0', boxShadow: '0 4px 16px rgba(0,0,0,0.08)' }} />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                <XAxis dataKey="date" tick={{ fontSize: 11, fill: '#6b7080' }} tickFormatter={v => v.slice(5)} interval="preserveStartEnd" />
+                <YAxis tick={{ fontSize: 11, fill: '#6b7080' }} />
+                <Tooltip contentStyle={{ background:'#1e2130', border:'1px solid rgba(255,255,255,0.08)', borderRadius:'12px', color:'#e8eaf2', fontSize:'12px' }} />
                 <Legend wrapperStyle={{ fontSize: 12 }} />
                 {filteredPlatforms.flatMap(name => [
                   <Bar key={`${name}_likes`} dataKey={`${name}_likes`} name={`${name} Likes`} fill={platformColors[name] || '#6b7280'} radius={[3, 3, 0, 0]} />,
@@ -219,7 +220,7 @@ const Analytics = () => {
               </BarChart>
             </ResponsiveContainer>
           ) : (
-            <div className="flex items-center justify-center h-48 text-slate-400">
+            <div className="flex items-center justify-center h-48 text-slate-500">
               <p className="text-sm">No engagement data yet.</p>
             </div>
           )}
@@ -229,33 +230,33 @@ const Analytics = () => {
       {/* Top Posts Tab */}
       {activeTab === 'top-posts' && (
         <div className="card overflow-hidden">
-          <div className="p-6 border-b border-slate-100">
-            <h3 className="text-sm font-semibold text-slate-900">Top Performing Posts</h3>
+          <div className="p-6 border-b border-white/[0.07]">
+            <h3 className="text-sm font-semibold text-slate-100">Top Performing Posts</h3>
             <p className="text-xs text-slate-500 mt-0.5">Ranked by total engagement</p>
           </div>
           {topPosts.length > 0 ? (
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-white/[0.07]">
               {topPosts.map((post, idx) => {
                 const rankColors = ['bg-amber-400', 'bg-slate-400', 'bg-orange-400']
-                const rankColor = rankColors[idx] || 'bg-slate-200'
+                const rankColor = rankColors[idx] || 'bg-dark-500'
                 return (
-                  <div key={post.id} className="p-5 flex gap-4 hover:bg-slate-50 transition-colors">
-                    <div className={`w-8 h-8 rounded-full ${rankColor} flex items-center justify-center flex-shrink-0 shadow-sm`}>
+                  <div key={post.id} className="p-5 flex gap-4 hover:bg-white/[0.04] transition-colors">
+                    <div className={`w-8 h-8 rounded-full ${rankColor} flex items-center justify-center flex-shrink-0`}>
                       <span className="text-xs font-bold text-white">{idx + 1}</span>
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm text-slate-700 line-clamp-2 mb-2 font-medium">{post.content}</p>
+                      <p className="text-sm text-slate-300 line-clamp-2 mb-2 font-medium">{post.content}</p>
                       <div className="flex items-center gap-3 flex-wrap">
                         <span className={`badge ${statusColors[post.status] || statusColors.draft} capitalize`}>
                           {post.status}
                         </span>
-                        <span className="text-xs text-slate-400 capitalize">
+                        <span className="text-xs text-slate-500 capitalize">
                           {post.platforms?.join(', ')}
                         </span>
                       </div>
                     </div>
                     <div className="flex-shrink-0 text-right space-y-1">
-                      <div className="flex items-center gap-3 text-xs text-slate-600">
+                      <div className="flex items-center gap-3 text-xs text-slate-400">
                         <span className="flex items-center gap-1">
                           <ThumbsUp className="w-3 h-3 text-pink-500" />
                           {(post.engagement?.likes || 0).toLocaleString()}
@@ -269,7 +270,7 @@ const Analytics = () => {
                           {(post.engagement?.shares || 0).toLocaleString()}
                         </span>
                       </div>
-                      <p className="text-xs text-slate-400">
+                      <p className="text-xs text-slate-500">
                         Total: {post.totalEngagement?.toLocaleString()}
                       </p>
                     </div>
@@ -278,7 +279,7 @@ const Analytics = () => {
               })}
             </div>
           ) : (
-            <div className="flex items-center justify-center h-48 text-slate-400">
+            <div className="flex items-center justify-center h-48 text-slate-500">
               <p className="text-sm">No published posts yet.</p>
             </div>
           )}

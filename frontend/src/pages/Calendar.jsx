@@ -15,10 +15,10 @@ const platformColors = {
 }
 
 const platformTextColors = {
-  facebook: 'text-blue-700 bg-blue-100',
-  instagram: 'text-pink-700 bg-pink-100',
-  twitter: 'text-sky-700 bg-sky-100',
-  linkedin: 'text-indigo-700 bg-indigo-100'
+  facebook: 'text-blue-400 bg-blue-500/10',
+  instagram: 'text-pink-400 bg-pink-500/10',
+  twitter: 'text-sky-400 bg-sky-500/10',
+  linkedin: 'text-indigo-400 bg-indigo-500/10'
 }
 
 const platformDotColors = {
@@ -29,10 +29,10 @@ const platformDotColors = {
 }
 
 const statusColors = {
-  published: 'text-emerald-700 bg-emerald-50 border border-emerald-100',
-  scheduled: 'text-blue-700 bg-blue-50 border border-blue-100',
-  draft: 'text-slate-600 bg-slate-100',
-  failed: 'text-red-700 bg-red-50 border border-red-100'
+  published: 'text-emerald-400 bg-emerald-500/10 border border-emerald-500/20',
+  scheduled: 'text-blue-400 bg-blue-500/10 border border-blue-500/20',
+  draft: 'text-slate-400 bg-white/[0.05]',
+  failed: 'text-red-400 bg-red-500/10 border border-red-500/20'
 }
 
 const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
@@ -92,28 +92,28 @@ const Calendar = () => {
       <div className="flex-1 card p-5 overflow-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-5">
-          <h2 className="text-xl font-bold text-slate-900">
+          <h2 className="text-xl font-bold text-slate-100">
             {format(currentDate, 'MMMM yyyy')}
           </h2>
           <div className="flex items-center gap-1.5">
             {loading && (
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500 mr-1"></div>
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-indigo-500 mr-1"></div>
             )}
             <button
               onClick={prevMonth}
-              className="p-2 rounded-xl hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition-colors"
+              className="p-2 rounded-xl hover:bg-white/[0.06] text-slate-500 hover:text-slate-300 transition-colors"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
             <button
               onClick={() => { setCurrentDate(new Date()); setSelectedDay(null) }}
-              className="px-3.5 py-1.5 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors"
+              className="px-3.5 py-1.5 text-xs font-semibold text-slate-400 bg-white/[0.05] hover:bg-white/[0.08] rounded-xl transition-colors"
             >
               Today
             </button>
             <button
               onClick={nextMonth}
-              className="p-2 rounded-xl hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition-colors"
+              className="p-2 rounded-xl hover:bg-white/[0.06] text-slate-500 hover:text-slate-300 transition-colors"
             >
               <ChevronRight className="w-4 h-4" />
             </button>
@@ -123,14 +123,14 @@ const Calendar = () => {
         {/* Weekday Headers */}
         <div className="grid grid-cols-7 mb-2">
           {WEEKDAYS.map(day => (
-            <div key={day} className="text-center text-xs font-semibold text-slate-400 uppercase tracking-wider py-2">
+            <div key={day} className="text-center text-xs font-semibold text-slate-500 uppercase tracking-wider py-2">
               {day}
             </div>
           ))}
         </div>
 
         {/* Days Grid */}
-        <div className="grid grid-cols-7 gap-px bg-slate-100 rounded-xl overflow-hidden border border-slate-100">
+        <div className="grid grid-cols-7 gap-px bg-white/[0.04] rounded-xl overflow-hidden border border-white/[0.05]">
           {days.map((day, idx) => {
             const dayPosts = getPostsForDay(day)
             const isCurrentMonth = isSameMonth(day, currentDate)
@@ -141,25 +141,28 @@ const Calendar = () => {
               <div
                 key={idx}
                 onClick={() => setSelectedDay(isSelected ? null : day)}
-                className={`bg-white min-h-[90px] p-1.5 cursor-pointer transition-colors ${
-                  !isCurrentMonth ? 'bg-slate-50/60' : ''
-                } ${isSelected ? 'bg-blue-50 ring-2 ring-inset ring-blue-500/30' : 'hover:bg-slate-50'}`}
+                className={`min-h-[90px] p-1.5 cursor-pointer transition-colors ${
+                  !isCurrentMonth ? 'bg-dark-800/60' : 'bg-dark-700'
+                } ${isTodayDay ? 'bg-indigo-500/10 ring-1 ring-inset ring-indigo-500/40' : ''} ${
+                  isSelected && !isTodayDay ? 'bg-white/[0.08] ring-2 ring-inset ring-indigo-500/30' : ''
+                } ${!isSelected && !isTodayDay ? 'hover:bg-white/[0.04]' : ''}`}
+                style={{ backgroundColor: !isCurrentMonth ? '#0f1118' : undefined }}
               >
                 <div className={`w-6 h-6 flex items-center justify-center rounded-full text-xs font-semibold mb-1 ${
                   isTodayDay
-                    ? 'bg-blue-600 text-white shadow-sm'
+                    ? 'bg-indigo-600 text-white shadow-sm'
                     : isCurrentMonth
-                    ? 'text-slate-700'
-                    : 'text-slate-300'
+                    ? 'text-slate-300'
+                    : 'text-slate-600'
                 }`}>
                   {format(day, 'd')}
                 </div>
                 <div className="space-y-0.5">
                   {dayPosts.slice(0, 2).map((post, i) => {
                     const platform = post.platforms?.[0]
-                    const dotColor = platformDotColors[platform] || 'bg-slate-400'
+                    const dotColor = platformDotColors[platform] || 'bg-slate-500'
                     return (
-                      <div key={i} className={`flex items-center gap-1 px-1.5 py-0.5 rounded-md ${platform ? platformTextColors[platform] || 'bg-slate-100 text-slate-600' : 'bg-slate-100 text-slate-600'}`}>
+                      <div key={i} className={`flex items-center gap-1 px-1.5 py-0.5 rounded-md ${platform ? platformTextColors[platform] || 'bg-white/[0.05] text-slate-400' : 'bg-white/[0.05] text-slate-400'}`}>
                         <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${dotColor}`} />
                         <span className="text-[10px] font-medium truncate">
                           {platform ? platform.charAt(0).toUpperCase() + platform.slice(1) : 'Post'}
@@ -168,7 +171,7 @@ const Calendar = () => {
                     )
                   })}
                   {dayPosts.length > 2 && (
-                    <p className="text-[10px] text-slate-400 font-medium px-1">+{dayPosts.length - 2} more</p>
+                    <p className="text-[10px] text-slate-500 font-medium px-1">+{dayPosts.length - 2} more</p>
                   )}
                 </div>
               </div>
@@ -177,8 +180,8 @@ const Calendar = () => {
         </div>
 
         {/* Legend */}
-        <div className="flex items-center gap-4 mt-4 pt-4 border-t border-slate-100">
-          <span className="text-xs text-slate-400 font-medium">Platforms:</span>
+        <div className="flex items-center gap-4 mt-4 pt-4 border-t border-white/[0.07]">
+          <span className="text-xs text-slate-500 font-medium">Platforms:</span>
           {Object.entries(platformDotColors).map(([platform, color]) => (
             <div key={platform} className="flex items-center gap-1.5">
               <div className={`w-2 h-2 rounded-full ${color}`} />
@@ -193,22 +196,22 @@ const Calendar = () => {
         <div className="w-80 card p-4 flex flex-col animate-slide-up">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="text-sm font-bold text-slate-900">
+              <h3 className="text-sm font-bold text-slate-100">
                 {format(selectedDay, 'EEEE, MMMM d')}
               </h3>
-              <p className="text-xs text-slate-400 mt-0.5">{selectedDayPosts.length} post{selectedDayPosts.length !== 1 ? 's' : ''} scheduled</p>
+              <p className="text-xs text-slate-500 mt-0.5">{selectedDayPosts.length} post{selectedDayPosts.length !== 1 ? 's' : ''} scheduled</p>
             </div>
             <div className="flex items-center gap-1">
               <button
                 onClick={() => navigate('/compose')}
-                className="p-1.5 rounded-xl hover:bg-slate-100 text-blue-600 transition-colors"
+                className="p-1.5 rounded-xl hover:bg-white/[0.06] text-indigo-400 transition-colors"
                 title="Add post"
               >
                 <PlusCircle className="w-4 h-4" />
               </button>
               <button
                 onClick={() => setSelectedDay(null)}
-                className="p-1.5 rounded-xl hover:bg-slate-100 text-slate-400 transition-colors"
+                className="p-1.5 rounded-xl hover:bg-white/[0.06] text-slate-500 transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -218,13 +221,13 @@ const Calendar = () => {
           <div className="flex-1 overflow-y-auto space-y-2.5">
             {selectedDayPosts.length > 0 ? (
               selectedDayPosts.map(post => (
-                <div key={post.id} className="p-3.5 rounded-xl border border-slate-100 bg-slate-50 hover:bg-white hover:border-slate-200 transition-all cursor-pointer">
+                <div key={post.id} className="p-3.5 rounded-xl border border-white/[0.07] bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/[0.1] transition-all cursor-pointer">
                   <div className="flex items-start justify-between gap-2 mb-2">
                     <div className="flex gap-1 flex-wrap">
                       {post.platforms?.map(platform => (
                         <span
                           key={platform}
-                          className={`badge text-[10px] capitalize ${platformTextColors[platform] || 'bg-slate-100 text-slate-600'}`}
+                          className={`badge text-[10px] capitalize ${platformTextColors[platform] || 'bg-white/[0.05] text-slate-400'}`}
                         >
                           {platform}
                         </span>
@@ -234,9 +237,9 @@ const Calendar = () => {
                       {post.status}
                     </span>
                   </div>
-                  <p className="text-sm text-slate-700 line-clamp-3 font-medium">{post.content}</p>
+                  <p className="text-sm text-slate-300 line-clamp-3 font-medium">{post.content}</p>
                   {post.scheduledAt && (
-                    <div className="flex items-center gap-1 mt-2 text-xs text-slate-400">
+                    <div className="flex items-center gap-1 mt-2 text-xs text-slate-500">
                       <Clock className="w-3 h-3" />
                       {format(new Date(post.scheduledAt), 'h:mm a')}
                     </div>
@@ -244,11 +247,11 @@ const Calendar = () => {
                 </div>
               ))
             ) : (
-              <div className="flex flex-col items-center justify-center h-32 text-slate-400">
+              <div className="flex flex-col items-center justify-center h-32 text-slate-500">
                 <p className="text-sm text-center">No posts scheduled for this day</p>
                 <button
                   onClick={() => navigate('/compose')}
-                  className="mt-2 text-sm text-blue-600 hover:text-blue-700 font-semibold"
+                  className="mt-2 text-sm text-indigo-400 hover:text-indigo-300 font-semibold"
                 >
                   Schedule a post
                 </button>

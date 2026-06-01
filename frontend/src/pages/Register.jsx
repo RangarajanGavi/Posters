@@ -69,21 +69,21 @@ const Register = () => {
       </div>
 
       {/* Right form panel */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white">
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8" style={{ background: '#0d0f14' }}>
         <div className="w-full max-w-sm space-y-8">
           <div>
-            <h2 className="text-3xl font-bold text-slate-900">Create your account</h2>
+            <h2 className="text-3xl font-bold text-slate-100">Create your account</h2>
             <p className="mt-2 text-slate-500">Start managing your social media with Metricool</p>
           </div>
           <form onSubmit={handleSubmit} className="space-y-5">
             {error && (
-              <div className="flex items-center gap-2 p-3.5 bg-red-50 border border-red-100 rounded-xl text-red-600 text-sm">
+              <div className="flex items-center gap-2 p-3.5 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm">
                 <AlertCircle className="w-4 h-4 flex-shrink-0" />
                 {error}
               </div>
             )}
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-1.5">Full name</label>
+              <label className="block text-sm font-semibold text-slate-300 mb-1.5">Full name</label>
               <input
                 type="text"
                 required
@@ -94,7 +94,7 @@ const Register = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-1.5">Email address</label>
+              <label className="block text-sm font-semibold text-slate-300 mb-1.5">Email address</label>
               <input
                 type="email"
                 required
@@ -105,7 +105,7 @@ const Register = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-1.5">Password</label>
+              <label className="block text-sm font-semibold text-slate-300 mb-1.5">Password</label>
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -118,12 +118,12 @@ const Register = () => {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
-              <p className="mt-1.5 text-xs text-slate-400">Must be at least 6 characters</p>
+              <p className="mt-1.5 text-xs text-slate-500">Must be at least 6 characters</p>
             </div>
             <button
               type="submit"
@@ -140,7 +140,7 @@ const Register = () => {
           </form>
           <p className="text-center text-sm text-slate-500">
             Already have an account?{' '}
-            <Link to="/login" className="text-blue-600 hover:text-blue-700 font-semibold">Sign in</Link>
+            <Link to="/login" className="text-indigo-400 hover:text-indigo-300 font-semibold">Sign in</Link>
           </p>
         </div>
       </div>

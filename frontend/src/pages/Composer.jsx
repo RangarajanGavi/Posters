@@ -7,10 +7,10 @@ import {
 import api from '../api/axios.js'
 
 const platformConfig = [
-  { id: 'facebook', label: 'Facebook', icon: Facebook, color: '#1877F2', activeBg: 'bg-blue-600', activeBorder: 'border-blue-600', activeText: 'text-white', idleBorder: 'border-slate-200', idleBg: 'bg-white', idleText: 'text-slate-600', checkBg: 'bg-blue-50' },
-  { id: 'instagram', label: 'Instagram', icon: Instagram, color: '#E1306C', activeBg: 'bg-pink-600', activeBorder: 'border-pink-600', activeText: 'text-white', idleBorder: 'border-slate-200', idleBg: 'bg-white', idleText: 'text-slate-600', checkBg: 'bg-pink-50' },
-  { id: 'twitter', label: 'Twitter/X', icon: Twitter, color: '#1DA1F2', activeBg: 'bg-sky-500', activeBorder: 'border-sky-500', activeText: 'text-white', idleBorder: 'border-slate-200', idleBg: 'bg-white', idleText: 'text-slate-600', checkBg: 'bg-sky-50' },
-  { id: 'linkedin', label: 'LinkedIn', icon: Linkedin, color: '#0A66C2', activeBg: 'bg-indigo-600', activeBorder: 'border-indigo-600', activeText: 'text-white', idleBorder: 'border-slate-200', idleBg: 'bg-white', idleText: 'text-slate-600', checkBg: 'bg-indigo-50' }
+  { id: 'facebook', label: 'Facebook', icon: Facebook, color: '#1877F2', activeBg: 'bg-blue-600', activeBorder: 'border-blue-600', activeText: 'text-white', idleBorder: 'border-white/[0.1]', idleBg: 'bg-white/[0.03]', idleText: 'text-slate-400', checkBg: 'bg-blue-500/10' },
+  { id: 'instagram', label: 'Instagram', icon: Instagram, color: '#E1306C', activeBg: 'bg-pink-600', activeBorder: 'border-pink-600', activeText: 'text-white', idleBorder: 'border-white/[0.1]', idleBg: 'bg-white/[0.03]', idleText: 'text-slate-400', checkBg: 'bg-pink-500/10' },
+  { id: 'twitter', label: 'Twitter/X', icon: Twitter, color: '#1DA1F2', activeBg: 'bg-sky-500', activeBorder: 'border-sky-500', activeText: 'text-white', idleBorder: 'border-white/[0.1]', idleBg: 'bg-white/[0.03]', idleText: 'text-slate-400', checkBg: 'bg-sky-500/10' },
+  { id: 'linkedin', label: 'LinkedIn', icon: Linkedin, color: '#0A66C2', activeBg: 'bg-indigo-600', activeBorder: 'border-indigo-600', activeText: 'text-white', idleBorder: 'border-white/[0.1]', idleBg: 'bg-white/[0.03]', idleText: 'text-slate-400', checkBg: 'bg-indigo-500/10' }
 ]
 
 const MAX_CHARS = 280
@@ -18,12 +18,12 @@ const MAX_CHARS = 280
 const Toast = ({ type, message, onClose }) => (
   <div className={`fixed top-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-xl shadow-lg border text-sm font-medium ${
     type === 'success'
-      ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
-      : 'bg-red-50 border-red-200 text-red-800'
+      ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
+      : 'bg-red-500/10 border-red-500/20 text-red-400'
   }`}>
     {type === 'success'
-      ? <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-      : <AlertCircle className="w-4 h-4 text-red-600" />
+      ? <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+      : <AlertCircle className="w-4 h-4 text-red-500" />
     }
     {message}
     <button onClick={onClose} className="ml-2 opacity-60 hover:opacity-100">
@@ -120,7 +120,7 @@ const Composer = () => {
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Content */}
           <div className="card p-6">
-            <label className="block text-sm font-semibold text-slate-700 mb-2">
+            <label className="block text-sm font-semibold text-slate-300 mb-2">
               Post Content <span className="text-red-500">*</span>
             </label>
             <textarea
@@ -131,13 +131,13 @@ const Composer = () => {
               rows={5}
             />
             <div className="flex items-center justify-between mt-3">
-              <span className={`text-xs font-medium ${isOverLimit ? 'text-red-600' : 'text-slate-400'}`}>
+              <span className={`text-xs font-medium ${isOverLimit ? 'text-red-400' : 'text-slate-500'}`}>
                 {charCount} / {MAX_CHARS} characters
               </span>
-              <div className="w-24 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+              <div className="w-24 h-1.5 bg-white/[0.08] rounded-full overflow-hidden">
                 <div
                   className={`h-full rounded-full transition-all ${
-                    isOverLimit ? 'bg-red-500' : charPercent > 80 ? 'bg-amber-500' : 'bg-blue-500'
+                    isOverLimit ? 'bg-red-500' : charPercent > 80 ? 'bg-amber-500' : 'bg-indigo-500'
                   }`}
                   style={{ width: `${charPercent}%` }}
                 />
@@ -147,10 +147,10 @@ const Composer = () => {
 
           {/* Image URL */}
           <div className="card p-6">
-            <label className="block text-sm font-semibold text-slate-700 mb-2">
+            <label className="block text-sm font-semibold text-slate-300 mb-2">
               <div className="flex items-center gap-2">
-                <Image className="w-4 h-4 text-slate-400" />
-                Image URL <span className="text-slate-400 font-normal">(optional)</span>
+                <Image className="w-4 h-4 text-slate-500" />
+                Image URL <span className="text-slate-500 font-normal">(optional)</span>
               </div>
             </label>
             <input
@@ -161,7 +161,7 @@ const Composer = () => {
               placeholder="https://example.com/image.jpg"
             />
             {imageUrl && (
-              <div className="mt-3 rounded-xl overflow-hidden border border-slate-100">
+              <div className="mt-3 rounded-xl overflow-hidden border border-white/[0.07]">
                 <img
                   src={imageUrl}
                   alt="Preview"
@@ -174,7 +174,7 @@ const Composer = () => {
 
           {/* Platforms */}
           <div className="card p-6">
-            <label className="block text-sm font-semibold text-slate-700 mb-3">
+            <label className="block text-sm font-semibold text-slate-300 mb-3">
               Platforms <span className="text-red-500">*</span>
             </label>
             <div className="grid grid-cols-2 gap-3">
@@ -189,7 +189,7 @@ const Composer = () => {
                     className={`flex items-center gap-3 p-3.5 rounded-xl border-2 transition-all duration-150 ${
                       isSelected
                         ? `${platform.activeBg} ${platform.activeText} ${platform.activeBorder} shadow-sm`
-                        : `${platform.idleBg} ${platform.idleText} ${platform.idleBorder} hover:border-slate-300 hover:bg-slate-50`
+                        : `${platform.idleBg} ${platform.idleText} ${platform.idleBorder} hover:border-white/[0.2] hover:bg-white/[0.06]`
                     }`}
                   >
                     <Icon className="w-5 h-5 flex-shrink-0" />
@@ -204,14 +204,14 @@ const Composer = () => {
           {/* Scheduling */}
           <div className="card p-6">
             <div className="flex items-center justify-between mb-4">
-              <label className="block text-sm font-semibold text-slate-700">
+              <label className="block text-sm font-semibold text-slate-300">
                 <div className="flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-slate-400" />
+                  <Calendar className="w-4 h-4 text-slate-500" />
                   Schedule
                 </div>
               </label>
               <label className="flex items-center gap-2.5 cursor-pointer group">
-                <div className={`relative w-10 h-5 rounded-full transition-colors duration-200 ${postNow ? 'bg-blue-600' : 'bg-slate-200'}`}>
+                <div className={`relative w-10 h-5 rounded-full transition-colors duration-200 ${postNow ? 'bg-indigo-600' : 'bg-white/[0.1]'}`}>
                   <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform duration-200 ${postNow ? 'translate-x-5' : 'translate-x-0.5'}`} />
                   <input
                     type="checkbox"
@@ -220,7 +220,7 @@ const Composer = () => {
                     className="sr-only"
                   />
                 </div>
-                <span className="text-sm font-medium text-slate-600">Post Now</span>
+                <span className="text-sm font-medium text-slate-400">Post Now</span>
               </label>
             </div>
 
@@ -239,6 +239,7 @@ const Composer = () => {
                     onChange={(e) => setScheduledAt(e.target.value)}
                     min={new Date().toISOString().slice(0, 16)}
                     className="input"
+                    style={{ colorScheme: 'dark' }}
                   />
                 </div>
 
@@ -248,6 +249,7 @@ const Composer = () => {
                     value={status}
                     onChange={(e) => setStatus(e.target.value)}
                     className="input"
+                    style={{ backgroundColor: '#1e2130', colorScheme: 'dark' }}
                   >
                     <option value="draft">Draft</option>
                     <option value="scheduled">Scheduled</option>
@@ -257,9 +259,9 @@ const Composer = () => {
             )}
 
             {postNow && (
-              <div className="flex items-center gap-2.5 p-3.5 bg-emerald-50 rounded-xl border border-emerald-100">
-                <Send className="w-4 h-4 text-emerald-600 flex-shrink-0" />
-                <span className="text-sm text-emerald-700 font-medium">This post will be published immediately</span>
+              <div className="flex items-center gap-2.5 p-3.5 bg-emerald-500/10 rounded-xl border border-emerald-500/20">
+                <Send className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                <span className="text-sm text-emerald-400 font-medium">This post will be published immediately</span>
               </div>
             )}
           </div>

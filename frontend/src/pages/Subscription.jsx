@@ -111,10 +111,10 @@ const Subscription = () => {
     return (
       <div className="max-w-5xl mx-auto">
         <div className="animate-pulse space-y-8">
-          <div className="h-10 bg-slate-200 rounded-xl w-64 mx-auto" />
+          <div className="h-10 bg-white/[0.05] rounded-xl w-64 mx-auto" />
           <div className="grid grid-cols-3 gap-6">
             {[1, 2, 3].map(i => (
-              <div key={i} className="h-96 bg-slate-100 rounded-2xl" />
+              <div key={i} className="h-96 bg-white/[0.04] rounded-2xl" />
             ))}
           </div>
         </div>
@@ -129,12 +129,12 @@ const Subscription = () => {
       {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
 
       <div className="text-center mb-10">
-        <h1 className="text-3xl font-bold text-slate-900 mb-3">Choose Your Plan</h1>
+        <h1 className="text-3xl font-bold text-slate-100 mb-3">Choose Your Plan</h1>
         <p className="text-slate-500 text-lg">Scale your social media presence with the right tools</p>
         {currentSubscription && (
-          <div className="mt-4 inline-flex items-center gap-2 bg-slate-100 px-4 py-2 rounded-full">
+          <div className="mt-4 inline-flex items-center gap-2 bg-white/[0.05] px-4 py-2 rounded-full">
             <span className="text-slate-500 text-sm">Current plan:</span>
-            <span className="text-slate-900 font-semibold text-sm capitalize">{currentPlan}</span>
+            <span className="text-slate-100 font-semibold text-sm capitalize">{currentPlan}</span>
           </div>
         )}
       </div>
@@ -151,11 +151,11 @@ const Subscription = () => {
             <div
               key={plan.key}
               className={`card p-8 flex flex-col hover:shadow-card-hover transition-all duration-200 relative ${
-                isPro ? 'ring-2 ring-blue-500' : ''
-              } ${isBusiness ? 'ring-2 ring-violet-500' : ''}`}
+                isPro ? 'ring-1 ring-indigo-500/50' : ''
+              } ${isBusiness ? 'ring-1 ring-violet-500/50' : ''}`}
             >
               {config.badge && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-blue-600 to-violet-600 text-white text-xs font-bold px-4 py-1 rounded-full shadow-lg shadow-blue-500/20 whitespace-nowrap">
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-xs font-bold px-4 py-1 rounded-full shadow-lg whitespace-nowrap">
                   {config.badge}
                 </div>
               )}
@@ -168,23 +168,23 @@ const Subscription = () => {
 
               <div className="mb-6">
                 <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl mb-4 ${
-                  plan.key === 'free' ? 'bg-slate-100' :
-                  isPro ? 'bg-blue-50' : 'bg-violet-50'
+                  plan.key === 'free' ? 'bg-white/[0.05]' :
+                  isPro ? 'bg-indigo-500/10' : 'bg-violet-500/10'
                 }`}>
                   <Icon className={`w-6 h-6 ${
-                    plan.key === 'free' ? 'text-slate-400' :
-                    isPro ? 'text-blue-600' : 'text-violet-600'
+                    plan.key === 'free' ? 'text-slate-500' :
+                    isPro ? 'text-indigo-400' : 'text-violet-400'
                   }`} />
                 </div>
-                <h2 className="text-xl font-bold text-slate-900">{plan.name}</h2>
+                <h2 className="text-xl font-bold text-slate-100">{plan.name}</h2>
                 <p className="text-slate-500 text-sm mt-1">{plan.description}</p>
                 <div className="mt-4 flex items-end gap-1">
                   {plan.price === 0 ? (
-                    <span className="text-5xl font-bold bg-gradient-to-r from-slate-700 to-slate-900 bg-clip-text text-transparent">Free</span>
+                    <span className="text-5xl font-bold bg-gradient-to-r from-slate-300 to-slate-100 bg-clip-text text-transparent">Free</span>
                   ) : (
                     <>
-                      <span className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent">${plan.price}</span>
-                      <span className="text-slate-400 mb-1.5">/mo</span>
+                      <span className="text-5xl font-bold bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent">${plan.price}</span>
+                      <span className="text-slate-500 mb-1.5">/mo</span>
                     </>
                   )}
                 </div>
@@ -196,9 +196,9 @@ const Subscription = () => {
                     {feature.included ? (
                       <Check className="w-4 h-4 text-emerald-500 flex-shrink-0" />
                     ) : (
-                      <X className="w-4 h-4 text-slate-300 flex-shrink-0" />
+                      <X className="w-4 h-4 text-slate-600 flex-shrink-0" />
                     )}
-                    <span className={feature.included ? 'text-slate-700' : 'text-slate-400'}>
+                    <span className={feature.included ? 'text-slate-300' : 'text-slate-600'}>
                       {feature.label}
                     </span>
                   </li>
@@ -208,7 +208,7 @@ const Subscription = () => {
               {isCurrentPlan ? (
                 <button
                   disabled
-                  className="w-full py-2.5 rounded-xl text-sm font-semibold bg-emerald-50 text-emerald-600 border border-emerald-100 cursor-not-allowed"
+                  className="w-full py-2.5 rounded-xl text-sm font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 cursor-not-allowed"
                 >
                   Current Plan
                 </button>
@@ -242,7 +242,7 @@ const Subscription = () => {
       </div>
 
       <div className="mt-10 text-center">
-        <p className="text-slate-400 text-sm">
+        <p className="text-slate-500 text-sm">
           All plans include a 14-day free trial. No credit card required for Free plan.
           <br />
           Upgrade or downgrade at any time. Cancel anytime.
