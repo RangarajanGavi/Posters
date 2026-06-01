@@ -23,6 +23,7 @@ export const AuthProvider = ({ children }) => {
   const logout = useCallback(() => {
     localStorage.removeItem('token')
     localStorage.removeItem('user')
+    localStorage.removeItem('demo_mode')
     setToken(null)
     setUser(null)
   }, [])

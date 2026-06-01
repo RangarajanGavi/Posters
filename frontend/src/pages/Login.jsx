@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { TrendingUp, Eye, EyeOff, AlertCircle, CheckCircle } from 'lucide-react'
+import { TrendingUp, Eye, EyeOff, AlertCircle, CheckCircle, Zap } from 'lucide-react'
 import api from '../api/axios.js'
 import { useAuth } from '../context/AuthContext.jsx'
 
@@ -12,6 +12,14 @@ const Login = () => {
   const [loading, setLoading] = useState(false)
   const { login } = useAuth()
   const navigate = useNavigate()
+
+  const handleDemoLogin = () => {
+    localStorage.setItem('demo_mode', 'true')
+    localStorage.setItem('token', 'demo_token_xyz')
+    localStorage.setItem('user', JSON.stringify({ id:'demo1', name:'Rangarajan Gavi', email:'demo@metricool.com', avatar:null }))
+    login('demo_token_xyz', { id:'demo1', name:'Rangarajan Gavi', email:'demo@metricool.com' })
+    navigate('/dashboard')
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -128,6 +136,36 @@ const Login = () => {
               ) : 'Sign in'}
             </button>
           </form>
+          {/* Divider */}
+          <div style={{ display:'flex', alignItems:'center', gap:12 }}>
+            <div style={{ flex:1, height:1, background:'#2a2a2a' }} />
+            <span style={{ fontSize:11, color:'#3a3a3a', fontWeight:600, letterSpacing:'0.1em' }}>OR</span>
+            <div style={{ flex:1, height:1, background:'#2a2a2a' }} />
+          </div>
+
+          {/* Demo Login */}
+          <div style={{ border:'1px solid rgba(230,48,0,0.25)', background:'rgba(230,48,0,0.04)', padding:20 }}>
+            <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:10 }}>
+              <div style={{ width:24, height:24, background:'rgba(230,48,0,0.15)', border:'1px solid rgba(230,48,0,0.3)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                <Zap style={{ width:13, height:13, color:'#e63000' }} />
+              </div>
+              <div>
+                <p style={{ color:'#ffffff', fontSize:13, fontWeight:700, lineHeight:1 }}>Try Demo — No sign up needed</p>
+                <p style={{ color:'#6b6b6b', fontSize:11, marginTop:3 }}>Explore all features with pre-loaded sample data</p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={handleDemoLogin}
+              style={{ width:'100%', padding:'11px 0', background:'rgba(230,48,0,0.12)', border:'1px solid rgba(230,48,0,0.35)', color:'#e63000', fontWeight:700, fontSize:13, cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', gap:8, letterSpacing:'0.02em', transition:'background 0.15s' }}
+              onMouseEnter={e => e.currentTarget.style.background='rgba(230,48,0,0.2)'}
+              onMouseLeave={e => e.currentTarget.style.background='rgba(230,48,0,0.12)'}
+            >
+              <Zap style={{ width:14, height:14 }} />
+              Launch Demo
+            </button>
+          </div>
+
           <p style={{ textAlign: 'center', fontSize: 13, color: '#6b6b6b' }}>
             Don&apos;t have an account?{' '}
             <Link to="/register" style={{ color: '#e63000', fontWeight: 700, textDecoration: 'none' }}>Create account</Link>
