@@ -7,9 +7,9 @@ import {
 } from 'lucide-react'
 
 const Toast = ({ message, type, onClose }) => (
-  <div className={`fixed bottom-6 right-6 z-50 px-5 py-3 rounded-xl shadow-lg text-white text-sm font-semibold flex items-center gap-3 ${type === 'success' ? 'bg-emerald-600' : 'bg-red-600'}`}>
+  <div style={{ position: 'fixed', bottom: 24, right: 24, zIndex: 50, padding: '12px 20px', background: '#1a1a1a', border: `1px solid ${type === 'success' ? '#e63000' : '#cc0000'}`, color: '#ffffff', fontSize: 13, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 12 }}>
     {message}
-    <button onClick={onClose}><X className="w-4 h-4" /></button>
+    <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6b6b6b' }}><X style={{ width: 16, height: 16 }} /></button>
   </div>
 )
 
@@ -29,16 +29,17 @@ const CopyButton = ({ text, id }) => {
   return (
     <button
       onClick={() => copy(text, id)}
-      className="p-1.5 text-slate-500 hover:text-slate-300 transition-colors rounded-lg hover:bg-white/[0.06]"
+      className="btn-secondary"
+      style={{ width: 32, height: 32, padding: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
       title="Copy"
     >
-      {copied === id ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
+      {copied === id ? <Check style={{ width: 14, height: 14, color: '#e63000' }} /> : <Copy style={{ width: 14, height: 14 }} />}
     </button>
   )
 }
 
 const SectionLabel = ({ children }) => (
-  <label className="block text-sm font-semibold text-slate-300 mb-1.5">{children}</label>
+  <label className="label">{children}</label>
 )
 
 const FieldInput = ({ className = '', ...props }) => (
@@ -46,7 +47,7 @@ const FieldInput = ({ className = '', ...props }) => (
 )
 
 const FieldSelect = ({ children, className = '', ...props }) => (
-  <select className={`input ${className}`} style={{ backgroundColor: '#1e2130', colorScheme: 'dark' }} {...props}>{children}</select>
+  <select className={`input ${className}`} style={{ colorScheme: 'dark' }} {...props}>{children}</select>
 )
 
 const FieldTextarea = ({ className = '', ...props }) => (
@@ -78,28 +79,25 @@ const StoryGenerator = ({ showToast }) => {
   return (
     <div className="space-y-5">
       <div>
-        <h2 className="text-xl font-bold text-slate-100 mb-1">Story Generator</h2>
-        <p className="text-slate-500 text-sm">Create engaging social media posts powered by AI</p>
+        <p className="section-prefix">// STORY GENERATOR</p>
+        <h2 style={{ fontSize: 20, fontWeight: 700, color: '#ffffff', marginTop: 2 }}>Story Generator</h2>
+        <p style={{ color: '#6b6b6b', fontSize: 13, marginTop: 4 }}>Create engaging social media posts powered by AI</p>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
           <SectionLabel>Platform</SectionLabel>
-          <FieldSelect
-            value={form.platform} onChange={e => setForm(p => ({ ...p, platform: e.target.value }))}
-          >
+          <FieldSelect value={form.platform} onChange={e => setForm(p => ({ ...p, platform: e.target.value }))}>
             {['instagram', 'facebook', 'twitter', 'linkedin', 'tiktok'].map(p => (
-              <option key={p} value={p} className="capitalize">{p.charAt(0).toUpperCase() + p.slice(1)}</option>
+              <option key={p} value={p}>{p.charAt(0).toUpperCase() + p.slice(1)}</option>
             ))}
           </FieldSelect>
         </div>
         <div>
           <SectionLabel>Tone</SectionLabel>
-          <FieldSelect
-            value={form.tone} onChange={e => setForm(p => ({ ...p, tone: e.target.value }))}
-          >
+          <FieldSelect value={form.tone} onChange={e => setForm(p => ({ ...p, tone: e.target.value }))}>
             {['professional', 'casual', 'funny', 'inspirational', 'educational'].map(t => (
-              <option key={t} value={t} className="capitalize">{t.charAt(0).toUpperCase() + t.slice(1)}</option>
+              <option key={t} value={t}>{t.charAt(0).toUpperCase() + t.slice(1)}</option>
             ))}
           </FieldSelect>
         </div>
@@ -126,54 +124,46 @@ const StoryGenerator = ({ showToast }) => {
         <input
           type="range" min="50" max="200" step="50" value={form.length}
           onChange={e => setForm(p => ({ ...p, length: parseInt(e.target.value) }))}
-          className="w-full accent-indigo-500"
+          className="w-full"
+          style={{ accentColor: '#e63000' }}
         />
-        <div className="flex justify-between text-xs text-slate-500 mt-1">
-          {[50, 100, 150, 200].map(v => <span key={v}>{v}</span>)}
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 4 }}>
+          {[50, 100, 150, 200].map(v => <span key={v} style={{ fontSize: 11, color: '#6b6b6b' }}>{v}</span>)}
         </div>
       </div>
 
-      <button
-        onClick={handleGenerate} disabled={loading}
-        className="btn-primary w-full justify-center py-3 disabled:opacity-60 disabled:transform-none"
-      >
-        {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Sparkles className="w-5 h-5" />}
+      <button onClick={handleGenerate} disabled={loading} className="btn-primary w-full justify-center py-3" style={{ opacity: loading ? 0.6 : 1 }}>
+        {loading ? <Loader2 style={{ width: 18, height: 18, animation: 'spin 1s linear infinite' }} /> : <Sparkles style={{ width: 18, height: 18 }} />}
         {loading ? 'Generating...' : 'Generate Story'}
       </button>
 
       {loading && (
-        <div className="animate-pulse space-y-3">
-          <div className="h-4 bg-white/[0.05] rounded-xl w-3/4" />
-          <div className="h-4 bg-white/[0.05] rounded-xl w-full" />
-          <div className="h-4 bg-white/[0.05] rounded-xl w-5/6" />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {[3, 4, 3].map((w, i) => (
+            <div key={i} className="shimmer-bg" style={{ height: 14, width: `${w * 25}%` }} />
+          ))}
         </div>
       )}
 
       {result && !loading && (
         <div className="card-elevated p-5">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-sm font-semibold text-indigo-400">Generated Story</span>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+            <p className="metric-label" style={{ color: '#e63000' }}>Generated Story</p>
             <CopyButton text={result.text} id="story" />
           </div>
-          <p className="text-slate-300 text-sm leading-relaxed whitespace-pre-wrap">{result.text}</p>
+          <p style={{ color: '#ffffff', fontSize: 13, lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>{result.text}</p>
           {result.hashtags && result.hashtags.length > 0 && (
-            <div className="flex flex-wrap gap-2 mt-3">
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 12 }}>
               {result.hashtags.map((tag, i) => (
-                <span key={i} className="badge bg-indigo-500/10 text-indigo-400">{tag}</span>
+                <span key={i} className="platform-tag" style={{ color: '#e63000', borderColor: '#e63000' }}>{tag}</span>
               ))}
             </div>
           )}
           <div className="flex gap-3 mt-4">
-            <button
-              onClick={() => navigate('/compose', { state: { prefillContent: result.text } })}
-              className="btn-primary flex-1 justify-center"
-            >
+            <button onClick={() => navigate('/compose', { state: { prefillContent: result.text } })} className="btn-primary flex-1 justify-center">
               Use in Post
             </button>
-            <button
-              onClick={handleGenerate}
-              className="btn-secondary flex-1 justify-center"
-            >
+            <button onClick={handleGenerate} className="btn-secondary flex-1 justify-center">
               Regenerate
             </button>
           </div>
@@ -213,33 +203,27 @@ const ImageCreator = ({ showToast }) => {
   return (
     <div className="space-y-5">
       <div>
-        <h2 className="text-xl font-bold text-slate-100 mb-1">Image Creator</h2>
-        <p className="text-slate-500 text-sm">Generate stunning visuals with DALL-E 3</p>
+        <p className="section-prefix">// IMAGE CREATOR</p>
+        <h2 style={{ fontSize: 20, fontWeight: 700, color: '#ffffff', marginTop: 2 }}>Image Creator</h2>
+        <p style={{ color: '#6b6b6b', fontSize: 13, marginTop: 4 }}>Generate stunning visuals with DALL-E 3</p>
       </div>
 
       <div>
         <SectionLabel>Image Description *</SectionLabel>
-        <FieldTextarea
-          value={form.prompt} onChange={e => setForm(p => ({ ...p, prompt: e.target.value }))}
-          rows={4} placeholder="Describe the image you want..."
-        />
+        <FieldTextarea value={form.prompt} onChange={e => setForm(p => ({ ...p, prompt: e.target.value }))} rows={4} placeholder="Describe the image you want..." />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
           <SectionLabel>Style</SectionLabel>
-          <FieldSelect
-            value={form.style} onChange={e => setForm(p => ({ ...p, style: e.target.value }))}
-          >
+          <FieldSelect value={form.style} onChange={e => setForm(p => ({ ...p, style: e.target.value }))}>
             <option value="vivid">Vivid</option>
             <option value="natural">Natural</option>
           </FieldSelect>
         </div>
         <div>
           <SectionLabel>Size</SectionLabel>
-          <FieldSelect
-            value={form.size} onChange={e => setForm(p => ({ ...p, size: e.target.value }))}
-          >
+          <FieldSelect value={form.size} onChange={e => setForm(p => ({ ...p, size: e.target.value }))}>
             <option value="1024x1024">1024x1024 (Square)</option>
             <option value="1792x1024">1792x1024 (Landscape)</option>
             <option value="1024x1792">1024x1792 (Portrait)</option>
@@ -249,16 +233,13 @@ const ImageCreator = ({ showToast }) => {
 
       <div>
         <SectionLabel>Platform Presets</SectionLabel>
-        <div className="flex flex-wrap gap-2">
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
           {PRESETS.map(p => (
             <button
               key={p.label}
               onClick={() => setForm(prev => ({ ...prev, size: p.size }))}
-              className={`px-3 py-1.5 text-xs font-medium rounded-xl transition-all ${
-                form.size === p.size
-                  ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-sm'
-                  : 'bg-white/[0.05] text-slate-400 hover:bg-white/[0.08]'
-              }`}
+              className={form.size === p.size ? 'btn-primary' : 'btn-secondary'}
+              style={{ fontSize: 11, padding: '5px 10px' }}
             >
               {p.label}
             </button>
@@ -266,45 +247,36 @@ const ImageCreator = ({ showToast }) => {
         </div>
       </div>
 
-      <button
-        onClick={handleGenerate} disabled={loading}
-        className="btn-primary w-full justify-center py-3 disabled:opacity-60 disabled:transform-none"
-      >
-        {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Image className="w-5 h-5" />}
+      <button onClick={handleGenerate} disabled={loading} className="btn-primary w-full justify-center py-3" style={{ opacity: loading ? 0.6 : 1 }}>
+        {loading ? <Loader2 style={{ width: 18, height: 18, animation: 'spin 1s linear infinite' }} /> : <Image style={{ width: 18, height: 18 }} />}
         {loading ? 'Generating...' : 'Generate Image'}
       </button>
 
       {loading && (
-        <div className="aspect-square rounded-2xl animate-pulse flex items-center justify-center shimmer-bg">
-          <Sparkles className="w-8 h-8 text-slate-600" />
+        <div className="shimmer-bg" style={{ aspectRatio: '1', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Sparkles style={{ width: 32, height: 32, color: '#3a3a3a' }} />
         </div>
       )}
 
       {result && !loading && (
         <div className="space-y-3">
-          <div className="rounded-2xl overflow-hidden border border-white/[0.07]">
-            <img
-              src={result.imageUrl} alt="Generated"
-              className="w-full object-cover"
-            />
+          <div style={{ border: '1px solid #2a2a2a', overflow: 'hidden' }}>
+            <img src={result.imageUrl} alt="Generated" className="w-full object-cover" />
           </div>
           {result.isMock && (
-            <p className="text-xs text-amber-400 text-center font-medium">
+            <p style={{ fontSize: 11, color: '#e6b400', textAlign: 'center', fontWeight: 500 }}>
               Demo mode — using Picsum placeholder. Add OPENAI_API_KEY for real DALL-E 3 generation.
             </p>
           )}
           <div className="flex gap-3">
-            <a
-              href={result.imageUrl} download="ai-generated-image.png" target="_blank" rel="noreferrer"
-              className="btn-secondary flex-1 justify-center"
-            >
-              <Download className="w-4 h-4" /> Download
+            <a href={result.imageUrl} download="ai-generated-image.png" target="_blank" rel="noreferrer" className="btn-secondary flex-1 justify-center">
+              <Download style={{ width: 14, height: 14 }} /> Download
             </a>
           </div>
         </div>
       )}
 
-      <p className="text-xs text-slate-500 text-center">
+      <p style={{ fontSize: 11, color: '#6b6b6b', textAlign: 'center' }}>
         Powered by DALL-E 3. Add OPENAI_API_KEY for real generation; demo mode uses Picsum placeholders.
       </p>
     </div>
@@ -336,25 +308,22 @@ const VideoCreator = ({ showToast }) => {
     const blob = new Blob([content], { type: 'text/plain' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
-    a.href = url
-    a.download = 'video-script.txt'
-    a.click()
+    a.href = url; a.download = 'video-script.txt'; a.click()
     URL.revokeObjectURL(url)
   }
 
   return (
     <div className="space-y-5">
       <div>
-        <h2 className="text-xl font-bold text-slate-100 mb-1">Video Creator</h2>
-        <p className="text-slate-500 text-sm">Generate structured video scripts with AI</p>
+        <p className="section-prefix">// VIDEO CREATOR</p>
+        <h2 style={{ fontSize: 20, fontWeight: 700, color: '#ffffff', marginTop: 2 }}>Video Creator</h2>
+        <p style={{ color: '#6b6b6b', fontSize: 13, marginTop: 4 }}>Generate structured video scripts with AI</p>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
           <SectionLabel>Platform</SectionLabel>
-          <FieldSelect
-            value={form.platform} onChange={e => setForm(p => ({ ...p, platform: e.target.value }))}
-          >
+          <FieldSelect value={form.platform} onChange={e => setForm(p => ({ ...p, platform: e.target.value }))}>
             {['YouTube', 'Instagram Reels', 'TikTok', 'Facebook'].map(p => (
               <option key={p} value={p}>{p}</option>
             ))}
@@ -362,9 +331,7 @@ const VideoCreator = ({ showToast }) => {
         </div>
         <div>
           <SectionLabel>Duration</SectionLabel>
-          <FieldSelect
-            value={form.duration} onChange={e => setForm(p => ({ ...p, duration: e.target.value }))}
-          >
+          <FieldSelect value={form.duration} onChange={e => setForm(p => ({ ...p, duration: e.target.value }))}>
             {[['15', '15 seconds'], ['30', '30 seconds'], ['60', '60 seconds'], ['180', '3 minutes']].map(([v, l]) => (
               <option key={v} value={v}>{l}</option>
             ))}
@@ -374,51 +341,43 @@ const VideoCreator = ({ showToast }) => {
 
       <div>
         <SectionLabel>Topic *</SectionLabel>
-        <FieldInput
-          type="text" value={form.topic} onChange={e => setForm(p => ({ ...p, topic: e.target.value }))}
-          placeholder="Product demo, tutorial, brand story..."
-        />
+        <FieldInput type="text" value={form.topic} onChange={e => setForm(p => ({ ...p, topic: e.target.value }))} placeholder="Product demo, tutorial, brand story..." />
       </div>
 
       <div>
         <SectionLabel>Style</SectionLabel>
-        <FieldSelect
-          value={form.style} onChange={e => setForm(p => ({ ...p, style: e.target.value }))}
-        >
+        <FieldSelect value={form.style} onChange={e => setForm(p => ({ ...p, style: e.target.value }))}>
           {['educational', 'entertaining', 'promotional', 'storytelling'].map(s => (
-            <option key={s} value={s} className="capitalize">{s.charAt(0).toUpperCase() + s.slice(1)}</option>
+            <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>
           ))}
         </FieldSelect>
       </div>
 
-      <button
-        onClick={handleGenerate} disabled={loading}
-        className="btn-primary w-full justify-center py-3 disabled:opacity-60 disabled:transform-none"
-      >
-        {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Video className="w-5 h-5" />}
+      <button onClick={handleGenerate} disabled={loading} className="btn-primary w-full justify-center py-3" style={{ opacity: loading ? 0.6 : 1 }}>
+        {loading ? <Loader2 style={{ width: 18, height: 18, animation: 'spin 1s linear infinite' }} /> : <Video style={{ width: 18, height: 18 }} />}
         {loading ? 'Generating...' : 'Generate Script'}
       </button>
 
       {result && !loading && (
         <div className="space-y-4">
           <div className="card-elevated p-5">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-sm font-semibold text-violet-400">Video Script</span>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+              <p className="metric-label" style={{ color: '#e63000' }}>Video Script</p>
               <CopyButton text={result.script} id="script" />
             </div>
-            <pre className="text-slate-300 text-sm leading-relaxed whitespace-pre-wrap font-sans">{result.script}</pre>
+            <pre style={{ color: '#ffffff', fontSize: 13, lineHeight: 1.6, whiteSpace: 'pre-wrap', fontFamily: 'inherit' }}>{result.script}</pre>
           </div>
 
           {result.scenes && result.scenes.length > 0 && (
             <div className="card-elevated p-5">
-              <h3 className="text-sm font-semibold text-violet-400 mb-3">Scene Breakdown</h3>
+              <p className="metric-label" style={{ color: '#e63000', marginBottom: 12 }}>Scene Breakdown</p>
               <div className="space-y-3">
                 {result.scenes.map((scene, i) => (
-                  <div key={i} className="flex gap-3 p-3 rounded-xl bg-white/[0.04] border-l-2 border-violet-500">
-                    <span className="text-xs font-bold text-violet-400 whitespace-nowrap flex-shrink-0 pt-0.5">{scene.time}</span>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm text-slate-300 font-medium">{scene.description}</p>
-                      <p className="text-xs text-slate-500 mt-1 italic">&quot;{scene.voiceover}&quot;</p>
+                  <div key={i} style={{ display: 'flex', gap: 12, padding: 12, background: '#1a1a1a', borderLeft: '2px solid #e63000' }}>
+                    <span style={{ fontSize: 11, fontWeight: 700, color: '#e63000', whiteSpace: 'nowrap', flexShrink: 0, paddingTop: 2 }}>{scene.time}</span>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <p style={{ fontSize: 13, color: '#ffffff', fontWeight: 500 }}>{scene.description}</p>
+                      <p style={{ fontSize: 12, color: '#6b6b6b', marginTop: 4, fontStyle: 'italic' }}>&quot;{scene.voiceover}&quot;</p>
                     </div>
                   </div>
                 ))}
@@ -426,41 +385,31 @@ const VideoCreator = ({ showToast }) => {
             </div>
           )}
 
-          {/* Mock Video Editor */}
-          <div className="card overflow-hidden">
-            <div className="p-3 border-b border-white/[0.07] flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-400">Video Editor (Preview)</span>
-              <span className="text-xs text-slate-600">Mock UI — Requires RunwayML/Sora integration</span>
+          <div className="card" style={{ overflow: 'hidden' }}>
+            <div style={{ padding: '12px 16px', borderBottom: '1px solid #2a2a2a', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <span style={{ fontSize: 11, fontWeight: 600, color: '#6b6b6b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Video Editor (Preview)</span>
+              <span style={{ fontSize: 11, color: '#3a3a3a' }}>Mock UI</span>
             </div>
-            <div className="bg-dark-900 aspect-video flex items-center justify-center" style={{ backgroundColor: '#090b0f' }}>
-              <div className="text-center">
-                <Video className="w-12 h-12 text-slate-700 mx-auto mb-2" />
-                <p className="text-slate-600 text-sm">Video preview area</p>
+            <div style={{ background: '#0d0d0d', aspectRatio: '16/9', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ textAlign: 'center' }}>
+                <Video style={{ width: 48, height: 48, color: '#2a2a2a', margin: '0 auto 8px' }} />
+                <p style={{ color: '#3a3a3a', fontSize: 13 }}>Video preview area</p>
               </div>
             </div>
-            <div className="p-3 border-t border-white/[0.07]" style={{ backgroundColor: '#1e2130' }}>
-              <div className="h-8 bg-white/[0.08] rounded-lg mb-3 relative overflow-hidden">
-                <div className="absolute left-0 top-0 bottom-0 w-1/3 bg-violet-500/30 border-r-2 border-violet-500" />
+            <div style={{ padding: 12, background: '#111111', borderTop: '1px solid #2a2a2a' }}>
+              <div style={{ height: 8, background: '#2a2a2a', marginBottom: 12, position: 'relative', overflow: 'hidden' }}>
+                <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '33%', background: '#e63000' }} />
               </div>
-              <div className="flex gap-2">
+              <div style={{ display: 'flex', gap: 8 }}>
                 {['Add Clip', 'Add Text', 'Add Music'].map(label => (
-                  <button key={label} className="btn-secondary text-xs px-3 py-1.5">
-                    {label}
-                  </button>
+                  <button key={label} className="btn-secondary" style={{ fontSize: 11, padding: '5px 10px' }}>{label}</button>
                 ))}
               </div>
             </div>
           </div>
 
-          <p className="text-xs text-slate-500 text-center">
-            Video generation requires RunwayML or Sora API. Script generation is live.
-          </p>
-
-          <button
-            onClick={handleExport}
-            className="btn-secondary w-full justify-center"
-          >
-            <Download className="w-4 h-4" /> Export Script
+          <button onClick={handleExport} className="btn-secondary w-full justify-center">
+            <Download style={{ width: 14, height: 14 }} /> Export Script
           </button>
         </div>
       )}
@@ -491,64 +440,50 @@ const AdCopyTab = ({ showToast }) => {
   return (
     <div className="space-y-5">
       <div>
-        <h2 className="text-xl font-bold text-slate-100 mb-1">Ad Copy Generator</h2>
-        <p className="text-slate-500 text-sm">Generate high-converting ad copy with AI</p>
+        <p className="section-prefix">// AD COPY GENERATOR</p>
+        <h2 style={{ fontSize: 20, fontWeight: 700, color: '#ffffff', marginTop: 2 }}>Ad Copy Generator</h2>
+        <p style={{ color: '#6b6b6b', fontSize: 13, marginTop: 4 }}>Generate high-converting ad copy with AI</p>
       </div>
 
       <div className="space-y-4">
         <div>
           <SectionLabel>Product / Service *</SectionLabel>
-          <FieldInput
-            type="text" value={form.product} onChange={e => setForm(p => ({ ...p, product: e.target.value }))}
-            placeholder="SaaS tool, physical product, service..."
-          />
+          <FieldInput type="text" value={form.product} onChange={e => setForm(p => ({ ...p, product: e.target.value }))} placeholder="SaaS tool, physical product, service..." />
         </div>
         <div>
           <SectionLabel>Target Audience</SectionLabel>
-          <FieldInput
-            type="text" value={form.audience} onChange={e => setForm(p => ({ ...p, audience: e.target.value }))}
-            placeholder="Small business owners, fitness enthusiasts..."
-          />
+          <FieldInput type="text" value={form.audience} onChange={e => setForm(p => ({ ...p, audience: e.target.value }))} placeholder="Small business owners, fitness enthusiasts..." />
         </div>
         <div className="grid grid-cols-3 gap-4">
           <div>
             <SectionLabel>Objective</SectionLabel>
-            <FieldSelect
-              value={form.objective} onChange={e => setForm(p => ({ ...p, objective: e.target.value }))}
-            >
+            <FieldSelect value={form.objective} onChange={e => setForm(p => ({ ...p, objective: e.target.value }))}>
               {['awareness', 'traffic', 'leads', 'conversions', 'sales'].map(o => (
-                <option key={o} value={o} className="capitalize">{o.charAt(0).toUpperCase() + o.slice(1)}</option>
+                <option key={o} value={o}>{o.charAt(0).toUpperCase() + o.slice(1)}</option>
               ))}
             </FieldSelect>
           </div>
           <div>
             <SectionLabel>Platform</SectionLabel>
-            <FieldSelect
-              value={form.platform} onChange={e => setForm(p => ({ ...p, platform: e.target.value }))}
-            >
+            <FieldSelect value={form.platform} onChange={e => setForm(p => ({ ...p, platform: e.target.value }))}>
               {['facebook', 'google', 'linkedin', 'tiktok', 'twitter'].map(p => (
-                <option key={p} value={p} className="capitalize">{p.charAt(0).toUpperCase() + p.slice(1)}</option>
+                <option key={p} value={p}>{p.charAt(0).toUpperCase() + p.slice(1)}</option>
               ))}
             </FieldSelect>
           </div>
           <div>
             <SectionLabel>Tone</SectionLabel>
-            <FieldSelect
-              value={form.tone} onChange={e => setForm(p => ({ ...p, tone: e.target.value }))}
-            >
+            <FieldSelect value={form.tone} onChange={e => setForm(p => ({ ...p, tone: e.target.value }))}>
               {['professional', 'casual', 'urgent', 'friendly', 'bold'].map(t => (
-                <option key={t} value={t} className="capitalize">{t.charAt(0).toUpperCase() + t.slice(1)}</option>
+                <option key={t} value={t}>{t.charAt(0).toUpperCase() + t.slice(1)}</option>
               ))}
             </FieldSelect>
           </div>
         </div>
       </div>
 
-      <button
-        onClick={handleGenerate} disabled={loading}
-        className="btn-primary w-full justify-center py-3 disabled:opacity-60 disabled:transform-none"
-      >
-        {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Megaphone className="w-5 h-5" />}
+      <button onClick={handleGenerate} disabled={loading} className="btn-primary w-full justify-center py-3" style={{ opacity: loading ? 0.6 : 1 }}>
+        {loading ? <Loader2 style={{ width: 18, height: 18, animation: 'spin 1s linear infinite' }} /> : <Megaphone style={{ width: 18, height: 18 }} />}
         {loading ? 'Generating...' : 'Generate Ad Copy'}
       </button>
 
@@ -560,19 +495,16 @@ const AdCopyTab = ({ showToast }) => {
             { label: 'Call to Action', value: result.callToAction, id: 'cta' }
           ].map(field => (
             <div key={field.id} className="card-elevated p-4">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-bold text-orange-400 uppercase tracking-wider">{field.label}</span>
-                <button onClick={() => copy(field.value, field.id)} className="p-1.5 text-slate-500 hover:text-slate-300 rounded-lg hover:bg-white/[0.06]">
-                  {copied === field.id ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+                <p className="metric-label" style={{ color: '#e63000' }}>{field.label}</p>
+                <button onClick={() => copy(field.value, field.id)} className="btn-secondary" style={{ width: 28, height: 28, padding: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  {copied === field.id ? <Check style={{ width: 12, height: 12, color: '#e63000' }} /> : <Copy style={{ width: 12, height: 12 }} />}
                 </button>
               </div>
-              <p className="text-slate-300 text-sm font-medium">{field.value}</p>
+              <p style={{ color: '#ffffff', fontSize: 13, fontWeight: 500 }}>{field.value}</p>
             </div>
           ))}
-          <button
-            onClick={() => showToast('Use the Ad Manager to create a campaign with this copy!', 'success')}
-            className="btn-primary w-full justify-center"
-          >
+          <button onClick={() => showToast('Use the Ad Manager to create a campaign with this copy!', 'success')} className="btn-primary w-full justify-center">
             Use in Campaign
           </button>
         </div>
@@ -616,58 +548,47 @@ const EditContentTab = ({ showToast }) => {
   return (
     <div className="space-y-5">
       <div>
-        <h2 className="text-xl font-bold text-slate-100 mb-1">Edit Content</h2>
-        <p className="text-slate-500 text-sm">Polish and refine your content with AI assistance</p>
+        <p className="section-prefix">// EDIT CONTENT</p>
+        <h2 style={{ fontSize: 20, fontWeight: 700, color: '#ffffff', marginTop: 2 }}>Edit Content</h2>
+        <p style={{ color: '#6b6b6b', fontSize: 13, marginTop: 4 }}>Polish and refine your content with AI assistance</p>
       </div>
 
       <div>
         <SectionLabel>Original Content</SectionLabel>
-        <FieldTextarea
-          value={content} onChange={e => setContent(e.target.value)}
-          rows={5} placeholder="Paste your content here..."
-        />
+        <FieldTextarea value={content} onChange={e => setContent(e.target.value)} rows={5} placeholder="Paste your content here..." />
       </div>
 
       <div>
         <SectionLabel>Instruction</SectionLabel>
-        <div className="flex flex-wrap gap-2 mb-2">
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 8 }}>
           {QUICK_INSTRUCTIONS.map(qi => (
             <button
               key={qi} onClick={() => setInstruction(qi)}
-              className={`px-3 py-1 text-xs font-medium rounded-full transition-all ${
-                instruction === qi
-                  ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-sm'
-                  : 'bg-white/[0.05] text-slate-400 hover:bg-white/[0.08]'
-              }`}
+              className={instruction === qi ? 'btn-primary' : 'btn-secondary'}
+              style={{ fontSize: 11, padding: '5px 10px' }}
             >
               {qi}
             </button>
           ))}
         </div>
-        <FieldInput
-          type="text" value={instruction} onChange={e => setInstruction(e.target.value)}
-          placeholder="Custom instruction..."
-        />
+        <FieldInput type="text" value={instruction} onChange={e => setInstruction(e.target.value)} placeholder="Custom instruction..." />
       </div>
 
-      <button
-        onClick={handleEdit} disabled={loading}
-        className="btn-primary w-full justify-center py-3 disabled:opacity-60 disabled:transform-none"
-      >
-        {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Edit3 className="w-5 h-5" />}
+      <button onClick={handleEdit} disabled={loading} className="btn-primary w-full justify-center py-3" style={{ opacity: loading ? 0.6 : 1 }}>
+        {loading ? <Loader2 style={{ width: 18, height: 18, animation: 'spin 1s linear infinite' }} /> : <Edit3 style={{ width: 18, height: 18 }} />}
         {loading ? 'Editing...' : 'Edit with AI'}
       </button>
 
       {result && !loading && (
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
-            <div className="card-elevated p-4 border-l-4 border-red-500/40">
-              <p className="text-xs font-bold text-red-400 mb-2 uppercase tracking-wider">Before</p>
-              <p className="text-slate-400 text-sm whitespace-pre-wrap">{content}</p>
+            <div className="card-elevated p-4" style={{ borderLeft: '2px solid rgba(200,0,0,0.4)' }}>
+              <p className="metric-label" style={{ color: '#cc3333', marginBottom: 8 }}>Before</p>
+              <p style={{ color: '#6b6b6b', fontSize: 13, whiteSpace: 'pre-wrap' }}>{content}</p>
             </div>
-            <div className="card-elevated p-4 border-l-4 border-emerald-500/40">
-              <p className="text-xs font-bold text-emerald-400 mb-2 uppercase tracking-wider">After</p>
-              <p className="text-slate-300 text-sm whitespace-pre-wrap">{result}</p>
+            <div className="card-elevated p-4" style={{ borderLeft: '2px solid #e63000' }}>
+              <p className="metric-label" style={{ color: '#e63000', marginBottom: 8 }}>After</p>
+              <p style={{ color: '#ffffff', fontSize: 13, whiteSpace: 'pre-wrap' }}>{result}</p>
             </div>
           </div>
           {!accepted ? (
@@ -678,15 +599,12 @@ const EditContentTab = ({ showToast }) => {
               >
                 Accept
               </button>
-              <button
-                onClick={() => setResult(null)}
-                className="btn-secondary flex-1 justify-center"
-              >
+              <button onClick={() => setResult(null)} className="btn-secondary flex-1 justify-center">
                 Reject
               </button>
             </div>
           ) : (
-            <p className="text-center text-emerald-400 text-sm font-semibold">Content accepted and updated!</p>
+            <p style={{ textAlign: 'center', color: '#e63000', fontSize: 13, fontWeight: 600 }}>Content accepted and updated!</p>
           )}
         </div>
       )}
@@ -715,30 +633,27 @@ const HistoryTab = ({ showToast }) => {
 
   useEffect(() => { fetchHistory() }, [fetchHistory])
 
-  const typeStyles = {
-    story: 'badge bg-violet-500/10 text-violet-400',
-    image: 'badge bg-pink-500/10 text-pink-400',
-    video_script: 'badge bg-blue-500/10 text-blue-400',
-    ad_copy: 'badge bg-orange-500/10 text-orange-400'
+  const typeColors = {
+    story: '#e63000',
+    image: '#ff6644',
+    video_script: '#cc2200',
+    ad_copy: '#ff3d00'
   }
 
   return (
     <div className="space-y-5">
-      <div className="flex items-center justify-between">
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div>
-          <h2 className="text-xl font-bold text-slate-100 mb-1">Generation History</h2>
-          <p className="text-slate-500 text-sm">Your past AI generations</p>
+          <p className="section-prefix">// HISTORY</p>
+          <h2 style={{ fontSize: 20, fontWeight: 700, color: '#ffffff', marginTop: 2 }}>Generation History</h2>
         </div>
-        <div className="flex gap-1.5 rounded-xl p-1" style={{ backgroundColor: '#1e2130' }}>
+        <div style={{ display: 'flex', gap: 4 }}>
           {['', 'story', 'image', 'video_script', 'ad_copy'].map(type => (
             <button
               key={type}
               onClick={() => setFilter(type)}
-              className={`px-3 py-1 text-xs font-semibold rounded-lg transition-all ${
-                filter === type
-                  ? 'bg-white/[0.1] text-slate-100 shadow-sm'
-                  : 'text-slate-500 hover:text-slate-300'
-              }`}
+              className={filter === type ? 'btn-primary' : 'btn-secondary'}
+              style={{ fontSize: 11, padding: '5px 10px' }}
             >
               {type === '' ? 'All' : type.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase())}
             </button>
@@ -748,29 +663,29 @@ const HistoryTab = ({ showToast }) => {
 
       {loading ? (
         <div className="space-y-2">
-          {[1, 2, 3].map(i => <div key={i} className="h-16 bg-white/[0.04] rounded-xl animate-pulse" />)}
+          {[1, 2, 3].map(i => <div key={i} className="card shimmer-bg" style={{ height: 56 }} />)}
         </div>
       ) : history.length === 0 ? (
-        <div className="text-center py-16 card">
-          <Clock className="w-12 h-12 text-slate-600 mx-auto mb-3" />
-          <p className="text-slate-500">No generations yet. Start creating!</p>
+        <div className="card" style={{ padding: 64, textAlign: 'center' }}>
+          <Clock style={{ width: 48, height: 48, color: '#2a2a2a', margin: '0 auto 12px' }} />
+          <p style={{ color: '#6b6b6b', fontSize: 13 }}>No generations yet. Start creating!</p>
         </div>
       ) : (
         <div className="space-y-2">
           {history.map(item => (
-            <div key={item.id} className="card p-4 flex items-start gap-4 hover:shadow-card-hover transition-all">
-              <span className={typeStyles[item.type] || 'badge bg-white/[0.05] text-slate-400'}>
+            <div key={item.id} className="card" style={{ padding: '12px 16px', display: 'flex', alignItems: 'flex-start', gap: 16 }}>
+              <span className="platform-tag" style={{ color: typeColors[item.type] || '#6b6b6b', borderColor: typeColors[item.type] || '#333333', flexShrink: 0 }}>
                 {item.type.replace('_', ' ')}
               </span>
-              <div className="flex-1 min-w-0">
-                <p className="text-slate-300 text-sm truncate font-medium">{item.prompt}</p>
-                {item.platform && <p className="text-slate-500 text-xs mt-0.5">Platform: {item.platform}</p>}
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <p style={{ color: '#ffffff', fontSize: 13, fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.prompt}</p>
+                {item.platform && <p style={{ color: '#6b6b6b', fontSize: 11, marginTop: 2 }}>Platform: {item.platform}</p>}
               </div>
-              <div className="flex items-center gap-3 flex-shrink-0">
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
                 {item.usedInPost && (
-                  <span className="badge bg-emerald-500/10 text-emerald-400">Used</span>
+                  <span className="platform-tag" style={{ color: '#e63000', borderColor: '#e63000' }}>Used</span>
                 )}
-                <span className="text-slate-500 text-xs">{new Date(item.createdAt).toLocaleDateString()}</span>
+                <span style={{ color: '#6b6b6b', fontSize: 11 }}>{new Date(item.createdAt).toLocaleDateString()}</span>
               </div>
             </div>
           ))}
@@ -812,38 +727,42 @@ const AIStudio = () => {
   }
 
   return (
-    <div className="flex h-full gap-5 animate-fade-in">
+    <div style={{ display: 'flex', height: '100%', gap: 20 }} className="animate-fade-in">
       {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
 
       {/* Vertical tab nav */}
-      <div className="w-52 flex-shrink-0 card p-3 space-y-1 self-start">
-        <div className="px-3 py-3 mb-1">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl flex items-center justify-center shadow-sm" style={{ background: 'linear-gradient(135deg, #4f46e5, #7c3aed)' }}>
-              <Wand2 className="w-4 h-4 text-white" />
+      <div className="card" style={{ width: 200, flexShrink: 0, padding: 12, alignSelf: 'flex-start' }}>
+        <div style={{ padding: '12px 8px 16px', borderBottom: '1px solid #2a2a2a', marginBottom: 8 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{ width: 28, height: 28, background: '#e63000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Wand2 style={{ width: 14, height: 14, color: '#fff' }} />
             </div>
-            <span className="text-slate-100 font-bold text-sm">AI Studio</span>
+            <span style={{ color: '#ffffff', fontWeight: 700, fontSize: 13 }}>AI Studio</span>
           </div>
         </div>
         {tabs.map(({ key, label, icon: Icon }) => (
           <button
             key={key}
             onClick={() => setActiveTab(key)}
-            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-left ${
-              activeTab === key
-                ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-lg'
-                : 'text-slate-500 hover:text-slate-300 hover:bg-white/[0.06]'
-            }`}
+            style={{
+              width: '100%', display: 'flex', alignItems: 'center', gap: 10,
+              padding: '8px 10px', fontSize: 12, fontWeight: 500, textAlign: 'left',
+              color: activeTab === key ? '#ffffff' : '#6b6b6b',
+              background: activeTab === key ? '#1f1f1f' : 'transparent',
+              border: 'none', cursor: 'pointer',
+              borderLeft: `2px solid ${activeTab === key ? '#e63000' : 'transparent'}`,
+              transition: 'all 0.1s',
+            }}
           >
-            <Icon className="w-4 h-4 flex-shrink-0" />
+            <Icon style={{ width: 14, height: 14, flexShrink: 0 }} />
             {label}
           </button>
         ))}
       </div>
 
       {/* Content area */}
-      <div className="flex-1 overflow-y-auto">
-        <div className="max-w-2xl">
+      <div style={{ flex: 1, overflowY: 'auto' }}>
+        <div style={{ maxWidth: 640 }}>
           {renderTab()}
         </div>
       </div>

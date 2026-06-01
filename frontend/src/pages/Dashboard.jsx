@@ -5,15 +5,15 @@ import {
 } from 'recharts'
 import {
   Users, Eye, FileText, TrendingUp, ArrowUpRight, Facebook,
-  Instagram, Twitter, Linkedin, CheckCircle2, Clock, AlertCircle, FileEdit
+  Instagram, Twitter, Linkedin, Wand2, CalendarDays, Share2, Target
 } from 'lucide-react'
 import api from '../api/axios.js'
 
 const platformColors = {
-  facebook: '#1877F2',
-  instagram: '#E1306C',
-  twitter: '#1DA1F2',
-  linkedin: '#0A66C2'
+  facebook: '#e63000',
+  instagram: '#ff3d00',
+  twitter: '#333333',
+  linkedin: '#555555'
 }
 
 const platformIcons = {
@@ -23,32 +23,16 @@ const platformIcons = {
   linkedin: Linkedin
 }
 
-const statusConfig = {
-  published: { label: 'Published', color: 'bg-emerald-500/10 text-emerald-400', icon: CheckCircle2 },
-  scheduled: { label: 'Scheduled', color: 'bg-blue-500/10 text-blue-400', icon: Clock },
-  draft: { label: 'Draft', color: 'bg-white/[0.05] text-slate-400', icon: FileEdit },
-  failed: { label: 'Failed', color: 'bg-red-500/10 text-red-400', icon: AlertCircle }
-}
-
-const gradients = {
-  blue: 'from-blue-500 to-cyan-500',
-  purple: 'from-violet-500 to-purple-600',
-  green: 'from-emerald-500 to-teal-500',
-  orange: 'from-orange-400 to-amber-500',
-}
-
-const StatCard = ({ title, value, icon: Icon, gradient, suffix = '', change = '+12.5' }) => (
-  <div className="card p-5 hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-200 group">
-    <div className="flex items-start justify-between mb-4">
-      <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${gradients[gradient]} flex items-center justify-center shadow-lg`}>
-        <Icon className="w-5 h-5 text-white" />
-      </div>
-      <span className="badge bg-emerald-500/10 text-emerald-400">
-        <ArrowUpRight className="w-3 h-3" /> {change}%
-      </span>
+const StatCard = ({ label, sublabel, value, icon: Icon, suffix = '' }) => (
+  <div className="card p-5">
+    <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+      <p className="metric-label">{label}</p>
+      <Icon style={{ width: 16, height: 16, color: '#e63000' }} />
     </div>
-    <p className="text-2xl font-bold text-slate-100">{typeof value === 'number' ? value.toLocaleString() : value}{suffix}</p>
-    <p className="text-sm text-slate-500 font-medium mt-0.5">{title}</p>
+    <p style={{ fontSize: 32, fontWeight: 800, color: '#ffffff', marginTop: 10, lineHeight: 1 }}>
+      {typeof value === 'number' ? value.toLocaleString() : value}{suffix}
+    </p>
+    <p style={{ fontSize: 12, color: '#6b6b6b', marginTop: 6 }}>{sublabel}</p>
   </div>
 )
 
@@ -82,91 +66,103 @@ const Dashboard = () => {
     fetchData()
   }, [])
 
-  const connectedPlatforms = platforms.filter(p => p.isConnected)
   const platformNames = [...new Set(growthData.flatMap(d => Object.keys(d).filter(k => k !== 'date')))]
 
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500"></div>
+        <div style={{ width: 32, height: 32, border: '2px solid #2a2a2a', borderTopColor: '#e63000', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
       </div>
     )
   }
 
+  const actions = [
+    { label: 'Generate ad copy', icon: Wand2, to: '/ai-studio' },
+    { label: 'Schedule a post', icon: CalendarDays, to: '/compose' },
+    { label: 'Connect platform', icon: Share2, to: '/platforms' },
+    { label: 'Launch campaign', icon: Target, to: '/ads' },
+  ]
+
   return (
     <div className="space-y-6 animate-fade-in">
-      {/* Stats Row */}
+      {/* Stat Cards Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
-          title="Total Followers"
+          label="Total Followers"
+          sublabel="across all platforms"
           value={overview?.totalFollowers || 0}
           icon={Users}
-          gradient="blue"
-          change="+12.5"
         />
         <StatCard
-          title="Total Reach"
+          label="Reach (30D)"
+          sublabel="across all platforms"
           value={overview?.totalReach || 0}
           icon={Eye}
-          gradient="purple"
-          change="+8.2"
         />
         <StatCard
-          title="Total Posts"
+          label="Total Posts"
+          sublabel="published &amp; scheduled"
           value={overview?.totalPosts || 0}
           icon={FileText}
-          gradient="green"
-          change="+5.1"
         />
         <StatCard
-          title="Avg Engagement Rate"
+          label="Avg Engagement"
+          sublabel="rate this period"
           value={overview?.avgEngagementRate || 0}
           icon={TrendingUp}
-          gradient="orange"
           suffix="%"
-          change="+3.7"
         />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Follower Growth Chart */}
+        {/* Performance Trend Chart */}
         <div className="lg:col-span-2 card p-6">
-          <h2 className="text-base font-semibold text-slate-100 mb-4">Follower Growth (Last 30 Days)</h2>
+          <div className="mb-5">
+            <p className="section-prefix">// PERFORMANCE TREND</p>
+            <h2 style={{ fontSize: 18, fontWeight: 700, color: '#ffffff', marginTop: 2 }}>Follower Growth (Last 30 Days)</h2>
+          </div>
           {growthData.length > 0 ? (
             <ResponsiveContainer width="100%" height={280}>
               <LineChart data={growthData} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#1f1f1f" />
                 <XAxis
                   dataKey="date"
-                  tick={{ fontSize: 11, fill: '#6b7080' }}
+                  tick={{ fontSize: 11, fill: '#6b6b6b' }}
                   tickFormatter={(v) => v.slice(5)}
                   interval="preserveStartEnd"
+                  axisLine={{ stroke: '#2a2a2a' }}
+                  tickLine={false}
                 />
-                <YAxis tick={{ fontSize: 11, fill: '#6b7080' }} />
+                <YAxis
+                  tick={{ fontSize: 11, fill: '#6b6b6b' }}
+                  axisLine={false}
+                  tickLine={false}
+                />
                 <Tooltip
-                  contentStyle={{ background:'#1e2130', border:'1px solid rgba(255,255,255,0.1)', borderRadius:'12px', color:'#e8eaf2', fontSize:'12px' }}
+                  contentStyle={{ background: '#1a1a1a', border: '1px solid #2a2a2a', borderRadius: 0, color: '#fff', fontSize: 11 }}
+                  cursor={{ stroke: '#2a2a2a' }}
                 />
-                <Legend wrapperStyle={{ fontSize: 12 }} />
-                {platformNames.map(name => (
+                <Legend wrapperStyle={{ fontSize: 11, color: '#6b6b6b' }} />
+                {platformNames.map((name, i) => (
                   <Line
                     key={name}
                     type="monotone"
                     dataKey={name}
-                    stroke={platformColors[name] || '#6b7280'}
-                    strokeWidth={2}
+                    stroke={i === 0 ? '#e63000' : '#333333'}
+                    strokeWidth={i === 0 ? 2 : 1.5}
                     dot={false}
-                    activeDot={{ r: 4 }}
+                    activeDot={{ r: 4, fill: i === 0 ? '#e63000' : '#333333' }}
                   />
                 ))}
               </LineChart>
             </ResponsiveContainer>
           ) : (
-            <div className="flex flex-col items-center justify-center h-64 text-slate-500">
-              <TrendingUp className="w-12 h-12 mb-2 opacity-20" />
-              <p className="text-sm text-center">No growth data yet. Connect platforms and sync data.</p>
+            <div className="flex flex-col items-center justify-center h-64" style={{ color: '#6b6b6b' }}>
+              <TrendingUp style={{ width: 48, height: 48, marginBottom: 8, opacity: 0.2 }} />
+              <p style={{ fontSize: 13, textAlign: 'center' }}>No growth data yet. Connect platforms and sync data.</p>
               <button
                 onClick={() => navigate('/platforms')}
-                className="mt-3 text-sm text-indigo-400 hover:text-indigo-300 font-medium"
+                style={{ marginTop: 12, fontSize: 13, color: '#e63000', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600 }}
               >
                 Connect platforms
               </button>
@@ -174,107 +170,89 @@ const Dashboard = () => {
           )}
         </div>
 
-        {/* Connected Platforms */}
+        {/* Quick Actions */}
         <div className="card p-5">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-base font-semibold text-slate-100">Connected Platforms</h2>
-            <button
-              onClick={() => navigate('/platforms')}
-              className="text-xs text-indigo-400 hover:text-indigo-300 font-medium"
-            >
-              Manage
-            </button>
+          <div className="mb-4">
+            <p className="section-prefix">// QUICK ACTIONS</p>
+            <h2 style={{ fontSize: 16, fontWeight: 700, color: '#ffffff', marginTop: 2 }}>Jump to</h2>
           </div>
-          {connectedPlatforms.length > 0 ? (
-            <div className="space-y-2.5">
-              {connectedPlatforms.map(platform => {
-                const Icon = platformIcons[platform.name] || TrendingUp
-                return (
-                  <div key={platform.id} className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.04] hover:bg-white/[0.06] transition-colors">
-                    <div
-                      className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-                      style={{ backgroundColor: `${platformColors[platform.name]}20` }}
-                    >
-                      <Icon
-                        className="w-4.5 h-4.5"
-                        style={{ color: platformColors[platform.name], width: '1.1rem', height: '1.1rem' }}
-                      />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-slate-200 capitalize">{platform.name}</p>
-                      <p className="text-xs text-slate-500 truncate">{platform.accountName}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-sm font-bold text-slate-100">
-                        {(platform.followers || 0).toLocaleString()}
-                      </p>
-                      <p className="text-xs text-slate-500">followers</p>
-                    </div>
+          <div>
+            {actions.map((action, i) => {
+              const Icon = action.icon
+              return (
+                <button
+                  key={action.label}
+                  onClick={() => navigate(action.to)}
+                  className="flex items-center gap-3 w-full py-3.5 transition-colors hover:bg-[#1f1f1f]"
+                  style={{
+                    borderBottom: i < actions.length - 1 ? '1px solid #2a2a2a' : 'none',
+                    background: 'none',
+                    border: i < actions.length - 1 ? '0 0 1px 0' : 'none',
+                    borderBottomWidth: i < actions.length - 1 ? 1 : 0,
+                    borderBottomColor: '#2a2a2a',
+                    borderBottomStyle: 'solid',
+                    cursor: 'pointer',
+                    paddingLeft: 0,
+                    paddingRight: 0,
+                  }}
+                >
+                  <div style={{ width: 32, height: 32, background: 'rgba(230,48,0,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Icon style={{ width: 14, height: 14, color: '#e63000' }} />
                   </div>
-                )
-              })}
-            </div>
-          ) : (
-            <div className="flex flex-col items-center justify-center h-40 text-slate-500">
-              <p className="text-sm text-center">No platforms connected</p>
-              <button
-                onClick={() => navigate('/platforms')}
-                className="mt-2 text-sm text-indigo-400 hover:text-indigo-300 font-medium"
-              >
-                Connect now
-              </button>
-            </div>
-          )}
+                  <span style={{ flex: 1, fontSize: 13, fontWeight: 500, color: '#ffffff', textAlign: 'left' }}>{action.label}</span>
+                  <ArrowUpRight style={{ width: 14, height: 14, color: '#3a3a3a' }} />
+                </button>
+              )
+            })}
+          </div>
         </div>
       </div>
 
       {/* Recent Posts */}
       <div className="card p-5">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-base font-semibold text-slate-100">Recent Posts</h2>
+          <div>
+            <p className="section-prefix">// RECENT POSTS</p>
+            <h2 style={{ fontSize: 16, fontWeight: 700, color: '#ffffff', marginTop: 2 }}>Activity</h2>
+          </div>
           <button
             onClick={() => navigate('/compose')}
-            className="text-xs text-indigo-400 hover:text-indigo-300 font-medium"
+            style={{ fontSize: 12, color: '#e63000', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600 }}
           >
             New post
           </button>
         </div>
         {posts.length > 0 ? (
-          <div className="space-y-2">
-            {posts.map(post => {
-              const status = statusConfig[post.status] || statusConfig.draft
-              const StatusIcon = status.icon
-              return (
-                <div key={post.id} className="flex items-start gap-3 p-3.5 rounded-xl hover:bg-white/[0.04] transition-colors cursor-pointer">
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm text-slate-300 line-clamp-2 font-medium">{post.content}</p>
-                    <div className="flex items-center gap-2.5 mt-1.5">
-                      <span className={`badge ${status.color}`}>
-                        <StatusIcon className="w-3 h-3" />
-                        {status.label}
-                      </span>
-                      <span className="text-xs text-slate-500">
-                        {post.platforms?.join(', ')}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="text-right flex-shrink-0">
-                    <p className="text-xs text-slate-500">
-                      {post.scheduledAt
-                        ? new Date(post.scheduledAt).toLocaleDateString()
-                        : new Date(post.createdAt).toLocaleDateString()}
-                    </p>
+          <div>
+            {posts.map((post, i) => (
+              <div
+                key={post.id}
+                className="flex items-start gap-3 py-3 hover:bg-[#1f1f1f] cursor-pointer transition-colors"
+                style={{ borderBottom: i < posts.length - 1 ? '1px solid #2a2a2a' : 'none', paddingLeft: 8, paddingRight: 8 }}
+              >
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <p style={{ fontSize: 13, color: '#ffffff', fontWeight: 500, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>{post.content}</p>
+                  <div className="flex items-center gap-2 mt-1.5">
+                    <span className="platform-tag">{post.status}</span>
+                    <span style={{ fontSize: 11, color: '#6b6b6b' }}>{post.platforms?.join(', ')}</span>
                   </div>
                 </div>
-              )
-            })}
+                <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                  <p style={{ fontSize: 11, color: '#6b6b6b' }}>
+                    {post.scheduledAt
+                      ? new Date(post.scheduledAt).toLocaleDateString()
+                      : new Date(post.createdAt).toLocaleDateString()}
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center h-32 text-slate-500">
-            <p className="text-sm">No posts yet</p>
+          <div className="flex flex-col items-center justify-center h-32" style={{ color: '#6b6b6b' }}>
+            <p style={{ fontSize: 13 }}>No posts yet</p>
             <button
               onClick={() => navigate('/compose')}
-              className="mt-2 text-sm text-indigo-400 hover:text-indigo-300 font-medium"
+              style={{ marginTop: 8, fontSize: 13, color: '#e63000', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600 }}
             >
               Create your first post
             </button>

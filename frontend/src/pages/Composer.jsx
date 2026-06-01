@@ -7,27 +7,23 @@ import {
 import api from '../api/axios.js'
 
 const platformConfig = [
-  { id: 'facebook', label: 'Facebook', icon: Facebook, color: '#1877F2', activeBg: 'bg-blue-600', activeBorder: 'border-blue-600', activeText: 'text-white', idleBorder: 'border-white/[0.1]', idleBg: 'bg-white/[0.03]', idleText: 'text-slate-400', checkBg: 'bg-blue-500/10' },
-  { id: 'instagram', label: 'Instagram', icon: Instagram, color: '#E1306C', activeBg: 'bg-pink-600', activeBorder: 'border-pink-600', activeText: 'text-white', idleBorder: 'border-white/[0.1]', idleBg: 'bg-white/[0.03]', idleText: 'text-slate-400', checkBg: 'bg-pink-500/10' },
-  { id: 'twitter', label: 'Twitter/X', icon: Twitter, color: '#1DA1F2', activeBg: 'bg-sky-500', activeBorder: 'border-sky-500', activeText: 'text-white', idleBorder: 'border-white/[0.1]', idleBg: 'bg-white/[0.03]', idleText: 'text-slate-400', checkBg: 'bg-sky-500/10' },
-  { id: 'linkedin', label: 'LinkedIn', icon: Linkedin, color: '#0A66C2', activeBg: 'bg-indigo-600', activeBorder: 'border-indigo-600', activeText: 'text-white', idleBorder: 'border-white/[0.1]', idleBg: 'bg-white/[0.03]', idleText: 'text-slate-400', checkBg: 'bg-indigo-500/10' }
+  { id: 'facebook', label: 'Facebook', icon: Facebook, color: '#1877F2' },
+  { id: 'instagram', label: 'Instagram', icon: Instagram, color: '#E1306C' },
+  { id: 'twitter', label: 'Twitter/X', icon: Twitter, color: '#1DA1F2' },
+  { id: 'linkedin', label: 'LinkedIn', icon: Linkedin, color: '#0A66C2' }
 ]
 
 const MAX_CHARS = 280
 
 const Toast = ({ type, message, onClose }) => (
-  <div className={`fixed top-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-xl shadow-lg border text-sm font-medium ${
-    type === 'success'
-      ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
-      : 'bg-red-500/10 border-red-500/20 text-red-400'
-  }`}>
+  <div style={{ position: 'fixed', top: 24, right: 24, zIndex: 50, display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', background: '#1a1a1a', border: `1px solid ${type === 'success' ? '#e63000' : '#cc0000'}`, color: type === 'success' ? '#e63000' : '#cc3333', fontSize: 13, fontWeight: 600 }}>
     {type === 'success'
-      ? <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-      : <AlertCircle className="w-4 h-4 text-red-500" />
+      ? <CheckCircle2 style={{ width: 16, height: 16 }} />
+      : <AlertCircle style={{ width: 16, height: 16 }} />
     }
     {message}
-    <button onClick={onClose} className="ml-2 opacity-60 hover:opacity-100">
-      <X className="w-3.5 h-3.5" />
+    <button onClick={onClose} style={{ marginLeft: 8, background: 'none', border: 'none', cursor: 'pointer', color: '#6b6b6b' }}>
+      <X style={{ width: 14, height: 14 }} />
     </button>
   </div>
 )
@@ -116,41 +112,45 @@ const Composer = () => {
         <Toast type={toast.type} message={toast.message} onClose={() => setToast(null)} />
       )}
 
-      <div className="max-w-2xl mx-auto animate-fade-in">
-        <form onSubmit={handleSubmit} className="space-y-5">
+      <div style={{ maxWidth: 640, margin: '0 auto' }} className="animate-fade-in">
+        <form onSubmit={handleSubmit} className="space-y-4">
           {/* Content */}
-          <div className="card p-6">
-            <label className="block text-sm font-semibold text-slate-300 mb-2">
-              Post Content <span className="text-red-500">*</span>
+          <div className="card p-5">
+            <label className="label">
+              Post Content <span style={{ color: '#e63000' }}>*</span>
             </label>
             <textarea
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              className="input min-h-[120px] resize-none"
+              className="input"
+              style={{ minHeight: 120, resize: 'none' }}
               placeholder="What would you like to share?"
               rows={5}
             />
-            <div className="flex items-center justify-between mt-3">
-              <span className={`text-xs font-medium ${isOverLimit ? 'text-red-400' : 'text-slate-500'}`}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 12 }}>
+              <span style={{ fontSize: 12, fontWeight: 500, color: isOverLimit ? '#e63000' : '#6b6b6b' }}>
                 {charCount} / {MAX_CHARS} characters
               </span>
-              <div className="w-24 h-1.5 bg-white/[0.08] rounded-full overflow-hidden">
+              <div style={{ width: 80, height: 3, background: '#2a2a2a' }}>
                 <div
-                  className={`h-full rounded-full transition-all ${
-                    isOverLimit ? 'bg-red-500' : charPercent > 80 ? 'bg-amber-500' : 'bg-indigo-500'
-                  }`}
-                  style={{ width: `${charPercent}%` }}
+                  style={{
+                    height: '100%',
+                    background: isOverLimit ? '#e63000' : charPercent > 80 ? '#e6b400' : '#e63000',
+                    width: `${charPercent}%`,
+                    transition: 'width 0.15s',
+                    opacity: isOverLimit ? 1 : 0.6,
+                  }}
                 />
               </div>
             </div>
           </div>
 
           {/* Image URL */}
-          <div className="card p-6">
-            <label className="block text-sm font-semibold text-slate-300 mb-2">
-              <div className="flex items-center gap-2">
-                <Image className="w-4 h-4 text-slate-500" />
-                Image URL <span className="text-slate-500 font-normal">(optional)</span>
+          <div className="card p-5">
+            <label className="label">
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <Image style={{ width: 14, height: 14 }} />
+                Image URL <span style={{ color: '#6b6b6b', textTransform: 'none', letterSpacing: 0, fontWeight: 400 }}>(optional)</span>
               </div>
             </label>
             <input
@@ -161,11 +161,11 @@ const Composer = () => {
               placeholder="https://example.com/image.jpg"
             />
             {imageUrl && (
-              <div className="mt-3 rounded-xl overflow-hidden border border-white/[0.07]">
+              <div style={{ marginTop: 12, border: '1px solid #2a2a2a', overflow: 'hidden' }}>
                 <img
                   src={imageUrl}
                   alt="Preview"
-                  className="h-40 w-full object-cover"
+                  style={{ height: 160, width: '100%', objectFit: 'cover' }}
                   onError={(e) => { e.target.style.display = 'none' }}
                 />
               </div>
@@ -173,9 +173,9 @@ const Composer = () => {
           </div>
 
           {/* Platforms */}
-          <div className="card p-6">
-            <label className="block text-sm font-semibold text-slate-300 mb-3">
-              Platforms <span className="text-red-500">*</span>
+          <div className="card p-5">
+            <label className="label">
+              Platforms <span style={{ color: '#e63000' }}>*</span>
             </label>
             <div className="grid grid-cols-2 gap-3">
               {platformConfig.map(platform => {
@@ -186,15 +186,16 @@ const Composer = () => {
                     key={platform.id}
                     type="button"
                     onClick={() => togglePlatform(platform.id)}
-                    className={`flex items-center gap-3 p-3.5 rounded-xl border-2 transition-all duration-150 ${
-                      isSelected
-                        ? `${platform.activeBg} ${platform.activeText} ${platform.activeBorder} shadow-sm`
-                        : `${platform.idleBg} ${platform.idleText} ${platform.idleBorder} hover:border-white/[0.2] hover:bg-white/[0.06]`
-                    }`}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 10, padding: '12px 14px',
+                      background: isSelected ? 'rgba(230,48,0,0.08)' : '#1f1f1f',
+                      border: `1px solid ${isSelected ? '#e63000' : '#2a2a2a'}`,
+                      cursor: 'pointer', transition: 'all 0.15s',
+                    }}
                   >
-                    <Icon className="w-5 h-5 flex-shrink-0" />
-                    <span className="text-sm font-semibold">{platform.label}</span>
-                    {isSelected && <CheckCircle2 className="w-4 h-4 ml-auto opacity-80" />}
+                    <Icon style={{ width: 16, height: 16, color: isSelected ? platform.color : '#6b6b6b', flexShrink: 0 }} />
+                    <span style={{ fontSize: 13, fontWeight: 600, color: isSelected ? '#ffffff' : '#6b6b6b' }}>{platform.label}</span>
+                    {isSelected && <CheckCircle2 style={{ width: 14, height: 14, marginLeft: 'auto', color: '#e63000' }} />}
                   </button>
                 )
               })}
@@ -202,34 +203,34 @@ const Composer = () => {
           </div>
 
           {/* Scheduling */}
-          <div className="card p-6">
-            <div className="flex items-center justify-between mb-4">
-              <label className="block text-sm font-semibold text-slate-300">
-                <div className="flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-slate-500" />
+          <div className="card p-5">
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+              <label className="label" style={{ marginBottom: 0 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <Calendar style={{ width: 14, height: 14 }} />
                   Schedule
                 </div>
               </label>
-              <label className="flex items-center gap-2.5 cursor-pointer group">
-                <div className={`relative w-10 h-5 rounded-full transition-colors duration-200 ${postNow ? 'bg-indigo-600' : 'bg-white/[0.1]'}`}>
-                  <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform duration-200 ${postNow ? 'translate-x-5' : 'translate-x-0.5'}`} />
+              <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer' }}>
+                <div style={{ position: 'relative', width: 36, height: 20, background: postNow ? '#e63000' : '#2a2a2a', transition: 'background 0.2s' }}>
+                  <div style={{ position: 'absolute', top: 2, left: postNow ? 18 : 2, width: 16, height: 16, background: '#ffffff', transition: 'left 0.2s' }} />
                   <input
                     type="checkbox"
                     checked={postNow}
                     onChange={(e) => setPostNow(e.target.checked)}
-                    className="sr-only"
+                    style={{ display: 'none' }}
                   />
                 </div>
-                <span className="text-sm font-medium text-slate-400">Post Now</span>
+                <span style={{ fontSize: 13, fontWeight: 500, color: '#6b6b6b' }}>Post Now</span>
               </label>
             </div>
 
             {!postNow && (
               <div className="space-y-3">
                 <div>
-                  <label className="block text-xs font-medium text-slate-500 mb-1.5">
-                    <div className="flex items-center gap-1">
-                      <Clock className="w-3.5 h-3.5" />
+                  <label className="label">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <Clock style={{ width: 12, height: 12 }} />
                       Date &amp; Time
                     </div>
                   </label>
@@ -244,12 +245,12 @@ const Composer = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-500 mb-1.5">Status</label>
+                  <label className="label">Status</label>
                   <select
                     value={status}
                     onChange={(e) => setStatus(e.target.value)}
                     className="input"
-                    style={{ backgroundColor: '#1e2130', colorScheme: 'dark' }}
+                    style={{ colorScheme: 'dark' }}
                   >
                     <option value="draft">Draft</option>
                     <option value="scheduled">Scheduled</option>
@@ -259,9 +260,9 @@ const Composer = () => {
             )}
 
             {postNow && (
-              <div className="flex items-center gap-2.5 p-3.5 bg-emerald-500/10 rounded-xl border border-emerald-500/20">
-                <Send className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-                <span className="text-sm text-emerald-400 font-medium">This post will be published immediately</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 14px', background: 'rgba(230,48,0,0.08)', border: '1px solid rgba(230,48,0,0.2)' }}>
+                <Send style={{ width: 14, height: 14, color: '#e63000', flexShrink: 0 }} />
+                <span style={{ fontSize: 13, color: '#e63000', fontWeight: 500 }}>This post will be published immediately</span>
               </div>
             )}
           </div>
@@ -278,16 +279,17 @@ const Composer = () => {
             <button
               type="submit"
               disabled={loading || isOverLimit}
-              className="btn-primary flex-1 justify-center py-3 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+              className="btn-primary flex-1 justify-center py-3"
+              style={{ opacity: loading || isOverLimit ? 0.5 : 1, cursor: loading || isOverLimit ? 'not-allowed' : 'pointer' }}
             >
               {loading ? (
                 <>
-                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                  <div style={{ width: 16, height: 16, border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
                   Creating...
                 </>
               ) : (
                 <>
-                  {postNow ? <Send className="w-4 h-4" /> : <FileEdit className="w-4 h-4" />}
+                  {postNow ? <Send style={{ width: 16, height: 16 }} /> : <FileEdit style={{ width: 16, height: 16 }} />}
                   {postNow ? 'Publish Now' : status === 'draft' ? 'Save Draft' : 'Schedule Post'}
                 </>
               )}

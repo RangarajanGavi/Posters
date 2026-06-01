@@ -11,9 +11,6 @@ const platformConfig = [
     label: 'Facebook',
     icon: Facebook,
     color: '#1877F2',
-    bg: 'bg-blue-500/10',
-    iconColor: 'text-blue-400',
-    ringColor: 'ring-blue-500/20',
     description: 'Share posts, stories and connect with your audience'
   },
   {
@@ -21,9 +18,6 @@ const platformConfig = [
     label: 'Instagram',
     icon: Instagram,
     color: '#E1306C',
-    bg: 'bg-pink-500/10',
-    iconColor: 'text-pink-400',
-    ringColor: 'ring-pink-500/20',
     description: 'Share photos, reels and stories with your followers'
   },
   {
@@ -31,9 +25,6 @@ const platformConfig = [
     label: 'Twitter / X',
     icon: Twitter,
     color: '#1DA1F2',
-    bg: 'bg-sky-500/10',
-    iconColor: 'text-sky-400',
-    ringColor: 'ring-sky-500/20',
     description: 'Post tweets and engage with trending conversations'
   },
   {
@@ -41,26 +32,19 @@ const platformConfig = [
     label: 'LinkedIn',
     icon: Linkedin,
     color: '#0A66C2',
-    bg: 'bg-indigo-500/10',
-    iconColor: 'text-indigo-400',
-    ringColor: 'ring-indigo-500/20',
     description: 'Share professional content and grow your network'
   }
 ]
 
 const Toast = ({ type, message, onClose }) => (
-  <div className={`fixed top-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-xl shadow-lg border text-sm font-medium ${
-    type === 'success'
-      ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
-      : 'bg-red-500/10 border-red-500/20 text-red-400'
-  }`}>
+  <div style={{ position: 'fixed', top: 24, right: 24, zIndex: 50, display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', background: '#1a1a1a', border: `1px solid ${type === 'success' ? '#e63000' : '#cc0000'}`, color: type === 'success' ? '#e63000' : '#cc3333', fontSize: 13, fontWeight: 600 }}>
     {type === 'success'
-      ? <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0" />
-      : <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0" />
+      ? <CheckCircle2 style={{ width: 16, height: 16, flexShrink: 0 }} />
+      : <AlertCircle style={{ width: 16, height: 16, flexShrink: 0 }} />
     }
     {message}
-    <button onClick={onClose} className="ml-2 opacity-60 hover:opacity-100">
-      <X className="w-3.5 h-3.5" />
+    <button onClick={onClose} style={{ marginLeft: 8, background: 'none', border: 'none', cursor: 'pointer', color: '#6b6b6b', opacity: 0.8 }}>
+      <X style={{ width: 14, height: 14 }} />
     </button>
   </div>
 )
@@ -146,7 +130,7 @@ const Platforms = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500"></div>
+        <div style={{ width: 32, height: 32, border: '2px solid #2a2a2a', borderTopColor: '#e63000', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
       </div>
     )
   }
@@ -160,16 +144,14 @@ const Platforms = () => {
       )}
 
       <div className="space-y-5 animate-fade-in">
-        {/* Summary bar */}
-        <div className="flex items-center justify-between">
-          <p className="text-sm text-slate-500">
+        {/* Summary */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <p style={{ fontSize: 13, color: '#6b6b6b' }}>
             Connect your social media accounts to start scheduling posts and tracking analytics.
           </p>
-          <div className="flex items-center gap-2">
-            <span className={`badge ${connectedCount > 0 ? 'bg-emerald-500/10 text-emerald-400' : 'bg-white/[0.05] text-slate-400'}`}>
-              {connectedCount} / {platformConfig.length} connected
-            </span>
-          </div>
+          <span className="platform-tag" style={{ color: connectedCount > 0 ? '#e63000' : '#6b6b6b', borderColor: connectedCount > 0 ? '#e63000' : '#333333' }}>
+            {connectedCount} / {platformConfig.length} connected
+          </span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -184,68 +166,71 @@ const Platforms = () => {
             return (
               <div
                 key={config.id}
-                className={`card p-6 hover:shadow-card-hover transition-all duration-200 ${
-                  isConnected ? `ring-1 ${config.ringColor}` : ''
-                }`}
+                className="card"
+                style={{
+                  padding: 20,
+                  borderLeftWidth: isConnected ? 2 : 1,
+                  borderLeftColor: isConnected ? '#e63000' : '#2a2a2a',
+                }}
               >
-                <div className="flex items-start gap-4">
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
                   {/* Platform icon */}
                   <div
-                    className={`w-12 h-12 rounded-xl ${config.bg} flex items-center justify-center flex-shrink-0`}
+                    style={{ width: 40, height: 40, background: '#1f1f1f', border: '1px solid #2a2a2a', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
                   >
-                    <Icon className={`w-6 h-6 ${config.iconColor}`} />
+                    <Icon style={{ width: 20, height: 20, color: config.color }} />
                   </div>
 
                   {/* Content */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <h3 className="text-base font-semibold text-slate-100">{config.label}</h3>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
+                      <h3 style={{ fontSize: 14, fontWeight: 600, color: '#ffffff' }}>{config.label}</h3>
                       {isConnected && (
-                        <span className="badge bg-emerald-500/10 text-emerald-400">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                        <span className="platform-tag" style={{ color: '#e63000', borderColor: '#e63000' }}>
+                          <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#e63000', display: 'inline-block' }} />
                           Connected
                         </span>
                       )}
                     </div>
 
                     {isConnected && platformData ? (
-                      <div className="space-y-2 mb-4">
-                        <p className="text-sm text-slate-300 font-medium">{platformData.accountName}</p>
-                        {/* Stats row */}
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <span className="flex items-center gap-1.5 text-xs bg-white/[0.05] text-slate-400 px-2.5 py-1 rounded-lg font-medium">
-                            <Users className="w-3 h-3" />
-                            {(platformData.followers || 0).toLocaleString()} followers
-                          </span>
+                      <div style={{ marginBottom: 16 }}>
+                        <p style={{ fontSize: 13, color: '#ffffff', fontWeight: 500, marginBottom: 8 }}>{platformData.accountName}</p>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: '#1f1f1f', border: '1px solid #2a2a2a', padding: '4px 10px' }}>
+                            <Users style={{ width: 12, height: 12, color: '#6b6b6b' }} />
+                            <span style={{ fontSize: 11, color: '#6b6b6b', fontWeight: 600 }}>{(platformData.followers || 0).toLocaleString()} followers</span>
+                          </div>
                           {platformData.engagement !== undefined && (
-                            <span className="text-xs bg-blue-500/10 text-blue-400 px-2.5 py-1 rounded-lg font-medium">
-                              {platformData.engagement}% engagement
-                            </span>
+                            <div style={{ background: '#1f1f1f', border: '1px solid #2a2a2a', padding: '4px 10px' }}>
+                              <span style={{ fontSize: 11, color: '#6b6b6b', fontWeight: 600 }}>{platformData.engagement}% engagement</span>
+                            </div>
                           )}
                         </div>
                       </div>
                     ) : (
-                      <p className="text-sm text-slate-500 mb-4">{config.description}</p>
+                      <p style={{ fontSize: 13, color: '#6b6b6b', marginBottom: 16 }}>{config.description}</p>
                     )}
 
                     {/* Actions */}
-                    <div className="flex items-center gap-2">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                       {isConnected ? (
                         <>
                           <button
                             onClick={() => handleSync(config.id)}
                             disabled={isSyncing}
-                            className="btn-secondary text-xs px-3 py-1.5 gap-1.5 disabled:opacity-50"
+                            className="btn-secondary"
+                            style={{ fontSize: 12, padding: '6px 12px', gap: 6, opacity: isSyncing ? 0.5 : 1 }}
                           >
-                            <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin' : ''}`} />
+                            <RefreshCw style={{ width: 12, height: 12, animation: isSyncing ? 'spin 1s linear infinite' : 'none' }} />
                             {isSyncing ? 'Syncing...' : 'Sync Data'}
                           </button>
                           <button
                             onClick={() => handleDisconnect(config.id)}
                             disabled={isDisconnecting}
-                            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-red-400 bg-red-500/10 hover:bg-red-500/20 rounded-xl transition-colors disabled:opacity-50"
+                            style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 12px', fontSize: 12, fontWeight: 500, color: '#cc3333', background: 'rgba(200,0,0,0.08)', border: '1px solid rgba(200,0,0,0.2)', cursor: 'pointer', opacity: isDisconnecting ? 0.5 : 1 }}
                           >
-                            <Link2Off className="w-3.5 h-3.5" />
+                            <Link2Off style={{ width: 12, height: 12 }} />
                             {isDisconnecting ? 'Disconnecting...' : 'Disconnect'}
                           </button>
                         </>
@@ -253,9 +238,10 @@ const Platforms = () => {
                         <button
                           onClick={() => handleConnect(config.id)}
                           disabled={isConnecting}
-                          className="btn-primary text-xs px-4 py-2 gap-1.5 disabled:opacity-50 disabled:transform-none"
+                          className="btn-primary"
+                          style={{ fontSize: 12, padding: '8px 16px', gap: 6, opacity: isConnecting ? 0.5 : 1 }}
                         >
-                          <Link2 className="w-3.5 h-3.5" />
+                          <Link2 style={{ width: 12, height: 12 }} />
                           {isConnecting ? 'Connecting...' : `Connect ${config.label}`}
                         </button>
                       )}
@@ -268,11 +254,11 @@ const Platforms = () => {
         </div>
 
         {/* Info Banner */}
-        <div className="card p-4 bg-blue-500/5 border-blue-500/20 flex gap-3">
-          <AlertCircle className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
+        <div className="card" style={{ padding: 16, borderColor: '#2a2a2a', display: 'flex', gap: 12 }}>
+          <AlertCircle style={{ width: 16, height: 16, color: '#6b6b6b', flexShrink: 0, marginTop: 2 }} />
           <div>
-            <p className="text-sm font-semibold text-blue-300">OAuth Integration Note</p>
-            <p className="text-sm text-blue-400/70 mt-0.5">
+            <p style={{ fontSize: 13, fontWeight: 600, color: '#ffffff', marginBottom: 4 }}>OAuth Integration Note</p>
+            <p style={{ fontSize: 12, color: '#6b6b6b' }}>
               This demo uses mock OAuth stubs. In production, clicking &quot;Connect&quot; would redirect
               you to the platform&apos;s authorization page. Mock data is generated automatically
               for demonstration purposes.

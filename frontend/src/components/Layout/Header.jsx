@@ -1,48 +1,44 @@
 import React from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { PlusCircle, Bell, Search } from 'lucide-react'
+import { PlusCircle, Bell } from 'lucide-react'
+import { useAuth } from '../../context/AuthContext.jsx'
 
-const pageTitles = {
-  '/dashboard': { title: 'Dashboard', sub: 'Welcome back' },
-  '/calendar': { title: 'Content Calendar', sub: 'Plan your content' },
-  '/compose': { title: 'Compose Post', sub: 'Create & schedule' },
-  '/analytics': { title: 'Analytics', sub: 'Track performance' },
-  '/platforms': { title: 'Platforms', sub: 'Manage connections' },
-  '/ai-studio': { title: 'AI Studio', sub: 'Create with AI' },
-  '/media-studio': { title: 'AI Media Studio', sub: 'Generate photos & videos' },
-  '/ads': { title: 'Ad Manager', sub: 'Run campaigns' },
-  '/subscription': { title: 'Subscription', sub: 'Manage your plan' },
+const pages = {
+  '/dashboard':    { prefix: '// CONSOLE',       title: 'Welcome back' },
+  '/calendar':     { prefix: '// SCHEDULER',     title: 'Content calendar' },
+  '/compose':      { prefix: '// LIBRARY',       title: 'New post' },
+  '/analytics':    { prefix: '// ANALYTICS',     title: 'Performance' },
+  '/platforms':    { prefix: '// CONNECTORS',    title: 'Platforms' },
+  '/ai-studio':    { prefix: '// AI STUDIO',     title: 'AI Studio' },
+  '/media-studio': { prefix: '// MEDIA STUDIO',  title: 'Media Studio' },
+  '/ads':          { prefix: '// AD CAMPAIGNS',  title: 'Campaign manager' },
+  '/subscription': { prefix: '// BILLING',       title: 'Subscription' },
 }
 
 const Header = () => {
   const location = useLocation()
   const navigate = useNavigate()
-  const page = pageTitles[location.pathname] || { title: 'Metricool', sub: '' }
+  const { user } = useAuth()
+  const page = pages[location.pathname] || { prefix: '// METRICOOL', title: 'Dashboard' }
+
+  const title = location.pathname === '/dashboard' ? `Welcome, ${user?.name?.split(' ')[0] || 'User'}` : page.title
 
   return (
-    <header
-      className="backdrop-blur-md border-b border-white/[0.06] sticky top-0 z-10 px-6 py-3.5 flex items-center justify-between"
-      style={{ background: 'rgba(13,15,20,0.85)' }}
-    >
+    <header style={{ background: '#0d0d0d', borderBottom: '1px solid #2a2a2a', padding: '16px 28px', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 10 }}>
       <div>
-        <h1 className="text-lg font-bold text-slate-100 leading-tight">{page.title}</h1>
-        <p className="text-xs text-slate-500 font-medium">{page.sub}</p>
+        <p className="section-prefix">{page.prefix}</p>
+        <h1 style={{ fontSize: 28, fontWeight: 800, color: '#ffffff', lineHeight: 1.1, marginTop: 2 }}>{title}</h1>
       </div>
-      <div className="flex items-center gap-2">
-        <button className="p-2.5 text-slate-500 hover:text-slate-300 rounded-xl hover:bg-white/[0.06] transition-all">
-          <Search className="w-4 h-4" />
-        </button>
-        <button className="relative p-2.5 text-slate-500 hover:text-slate-300 rounded-xl hover:bg-white/[0.06] transition-all">
-          <Bell className="w-4 h-4" />
-          <span className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 4 }}>
+        <button style={{ width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'transparent', border: '1px solid #2a2a2a', cursor: 'pointer', position: 'relative' }}
+          className="text-[#6b6b6b] hover:text-white hover:border-[#3a3a3a] transition-colors">
+          <Bell style={{ width: 15, height: 15 }} />
+          <span style={{ position: 'absolute', top: 8, right: 8, width: 5, height: 5, background: '#e63000', borderRadius: '50%' }}></span>
         </button>
         {location.pathname !== '/compose' && (
-          <button
-            onClick={() => navigate('/compose')}
-            className="btn-primary"
-          >
-            <PlusCircle className="w-4 h-4" />
-            New Post
+          <button onClick={() => navigate('/compose')} className="btn-primary" style={{ gap: 6 }}>
+            <PlusCircle style={{ width: 14, height: 14 }} />
+            New post
           </button>
         )}
       </div>

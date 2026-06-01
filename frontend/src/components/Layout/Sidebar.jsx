@@ -1,34 +1,31 @@
 import React from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
-import {
-  LayoutDashboard, CalendarDays, PlusSquare, BarChart3,
-  Share2, TrendingUp, LogOut, Wand2, Target, CreditCard, ChevronRight, Film
-} from 'lucide-react'
+import { LayoutDashboard, CalendarDays, PlusSquare, BarChart3, Share2, TrendingUp, LogOut, Wand2, Target, CreditCard, Film, ArrowRight } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext.jsx'
 
 const navGroups = [
   {
-    label: 'Main',
+    label: 'WORKSPACE',
     items: [
-      { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-      { to: '/calendar', icon: CalendarDays, label: 'Calendar' },
-      { to: '/compose', icon: PlusSquare, label: 'New Post' },
+      { to: '/dashboard', icon: LayoutDashboard, label: 'Console' },
+      { to: '/platforms', icon: Share2, label: 'Connectors' },
+      { to: '/calendar', icon: CalendarDays, label: 'Scheduler' },
+      { to: '/compose', icon: PlusSquare, label: 'Library' },
+    ]
+  },
+  {
+    label: 'TOOLS',
+    items: [
+      { to: '/ai-studio', icon: Wand2, label: 'AI Studio' },
+      { to: '/media-studio', icon: Film, label: 'Media Studio' },
+      { to: '/ads', icon: Target, label: 'Campaigns' },
       { to: '/analytics', icon: BarChart3, label: 'Analytics' },
     ]
   },
   {
-    label: 'Tools',
+    label: 'ACCOUNT',
     items: [
-      { to: '/ai-studio', icon: Wand2, label: 'AI Studio', badge: 'AI' },
-      { to: '/media-studio', icon: Film, label: 'Media Studio', badge: 'NEW' },
-      { to: '/ads', icon: Target, label: 'Ad Manager' },
-      { to: '/platforms', icon: Share2, label: 'Platforms' },
-    ]
-  },
-  {
-    label: 'Account',
-    items: [
-      { to: '/subscription', icon: CreditCard, label: 'Subscription' },
+      { to: '/subscription', icon: CreditCard, label: 'Billing' },
     ]
   }
 ]
@@ -38,68 +35,48 @@ const Sidebar = () => {
   const navigate = useNavigate()
 
   return (
-    <div style={{ background: '#090b0f' }} className="w-64 flex flex-col h-full border-r border-white/5">
+    <div style={{ width: 220, background: '#111111', borderRight: '1px solid #2a2a2a', flexShrink: 0 }} className="flex flex-col h-full">
       {/* Logo */}
-      <div className="flex items-center gap-3 px-5 py-5">
-        <div className="w-9 h-9 rounded-xl flex items-center justify-center shadow-lg flex-shrink-0" style={{ background: 'linear-gradient(135deg, #4f46e5, #7c3aed)' }}>
-          <TrendingUp className="w-5 h-5 text-white" />
+      <div className="flex items-center gap-3 px-5 py-5" style={{ borderBottom: '1px solid #2a2a2a' }}>
+        <div style={{ width: 28, height: 28, background: '#e63000', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <TrendingUp style={{ width: 16, height: 16, color: '#fff' }} />
         </div>
-        <span className="text-white font-bold text-lg tracking-tight">Metricool</span>
+        <span style={{ color: '#ffffff', fontWeight: 800, fontSize: 13, letterSpacing: '0.05em' }}>METRICOOL.</span>
       </div>
 
-      {/* Navigation */}
-      <nav className="flex-1 px-3 py-2 overflow-y-auto space-y-5">
+      {/* Nav */}
+      <nav className="flex-1 px-3 py-4 overflow-y-auto">
         {navGroups.map(group => (
-          <div key={group.label}>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-white/25 px-3 mb-1.5">{group.label}</p>
-            <div className="space-y-0.5">
-              {group.items.map(({ to, icon: Icon, label, badge }) => (
-                <NavLink
-                  key={to}
-                  to={to}
-                  className={({ isActive }) =>
-                    `group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 ${
-                      isActive
-                        ? 'bg-white/10 text-white'
-                        : 'text-white/50 hover:text-white/80 hover:bg-white/5'
-                    }`
-                  }
-                >
-                  {({ isActive }) => (
-                    <>
-                      <Icon className={`flex-shrink-0 ${isActive ? 'text-violet-400' : ''}`} style={{ width: '1.1rem', height: '1.1rem' }} />
-                      <span className="flex-1">{label}</span>
-                      {badge && (
-                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-gradient-to-r from-violet-500 to-purple-600 text-white">
-                          {badge}
-                        </span>
-                      )}
-                      {isActive && <ChevronRight className="w-3.5 h-3.5 text-white/40" />}
-                    </>
-                  )}
-                </NavLink>
-              ))}
-            </div>
+          <div key={group.label} className="mb-5">
+            <p style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.15em', color: '#3a3a3a', marginBottom: 6, paddingLeft: 8 }}>{group.label}</p>
+            {group.items.map(({ to, icon: Icon, label }) => (
+              <NavLink
+                key={to}
+                to={to}
+                className={({ isActive }) => `flex items-center gap-3 px-3 py-2 transition-colors duration-100 ${isActive ? 'text-white' : 'text-[#6b6b6b] hover:text-white hover:bg-[#161616]'}`}
+                style={({ isActive }) => isActive ? { background: '#1f1f1f', borderLeft: '2px solid #e63000' } : { borderLeft: '2px solid transparent' }}
+              >
+                <Icon style={{ width: 15, height: 15, flexShrink: 0 }} />
+                <span style={{ fontSize: 13, fontWeight: 500 }}>{label}</span>
+              </NavLink>
+            ))}
           </div>
         ))}
       </nav>
 
-      {/* User section */}
-      <div className="p-3 border-t border-white/5">
-        <div className="flex items-center gap-3 px-3 py-3 rounded-xl bg-white/5 mb-1">
-          <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-white text-xs font-bold" style={{ background: 'linear-gradient(135deg, #4f46e5, #7c3aed)' }}>
+      {/* User */}
+      <div style={{ borderTop: '1px solid #2a2a2a', padding: '12px 16px' }}>
+        <div className="flex items-center gap-3 mb-2">
+          <div style={{ width: 28, height: 28, background: '#e63000', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 700, color: '#fff', flexShrink: 0 }}>
             {user?.name?.charAt(0)?.toUpperCase() || 'U'}
           </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-white text-sm font-semibold truncate">{user?.name || 'User'}</p>
-            <p className="text-white/40 text-xs truncate">{user?.email || ''}</p>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <p style={{ color: '#fff', fontSize: 12, fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user?.name || 'User'}</p>
+            <p style={{ color: '#3a3a3a', fontSize: 10, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase' }}>PRO PLAN</p>
           </div>
         </div>
-        <button
-          onClick={() => { logout(); navigate('/login') }}
-          className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium text-white/40 hover:text-white/70 hover:bg-white/5 transition-all w-full"
-        >
-          <LogOut style={{ width: '1rem', height: '1rem' }} />
+        <button onClick={() => { logout(); navigate('/login') }} className="flex items-center gap-2 text-[#6b6b6b] hover:text-white transition-colors w-full" style={{ fontSize: 12, fontWeight: 500, background: 'none', border: 'none', cursor: 'pointer', padding: '4px 0' }}>
+          <LogOut style={{ width: 13, height: 13 }} />
           Sign out
         </button>
       </div>

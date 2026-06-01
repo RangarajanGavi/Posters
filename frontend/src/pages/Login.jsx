@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { TrendingUp, Eye, EyeOff, AlertCircle } from 'lucide-react'
+import { TrendingUp, Eye, EyeOff, AlertCircle, CheckCircle } from 'lucide-react'
 import api from '../api/axios.js'
 import { useAuth } from '../context/AuthContext.jsx'
 
@@ -30,53 +30,57 @@ const Login = () => {
     }
   }
 
+  const features = [
+    'Schedule posts across all platforms',
+    'AI-generated content & images',
+    'Advanced analytics & reporting',
+  ]
+
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex" style={{ background: '#0d0d0d' }}>
       {/* Left branding panel */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-slate-900 via-blue-950 to-violet-950 flex-col justify-between p-12">
+      <div className="hidden lg:flex lg:w-1/2 flex-col justify-between p-12" style={{ background: '#0d0d0d', borderRight: '1px solid #2a2a2a' }}>
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-400 to-violet-500 flex items-center justify-center">
-            <TrendingUp className="w-5 h-5 text-white" />
+          <div style={{ width: 28, height: 28, background: '#e63000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <TrendingUp style={{ width: 16, height: 16, color: '#fff' }} />
           </div>
-          <span className="text-white font-bold text-xl">Metricool</span>
+          <span style={{ color: '#ffffff', fontWeight: 800, fontSize: 13, letterSpacing: '0.05em' }}>METRICOOL.</span>
         </div>
-        <div className="space-y-8">
-          <div>
-            <h2 className="text-4xl font-bold text-white leading-tight">Schedule smarter.<br />Grow faster.</h2>
-            <p className="mt-4 text-blue-200/70 text-lg">The all-in-one platform for social media management, analytics, and AI-powered content creation.</p>
-          </div>
-          <div className="space-y-4">
-            {['Schedule posts across all platforms', 'AI-generated content & images', 'Advanced analytics & reporting'].map(f => (
-              <div key={f} className="flex items-center gap-3 text-white/80">
-                <div className="w-5 h-5 rounded-full bg-blue-500/30 flex items-center justify-center flex-shrink-0">
-                  <svg className="w-3 h-3 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
-                  </svg>
+        <div>
+          <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.15em', color: '#6b6b6b', textTransform: 'uppercase', marginBottom: 16 }}>// SOCIAL MEDIA PLATFORM</p>
+          <h2 style={{ fontSize: 40, fontWeight: 900, color: '#ffffff', lineHeight: 1.1 }}>Schedule smarter.<br />Grow faster.</h2>
+          <p style={{ marginTop: 16, color: '#6b6b6b', fontSize: 15 }}>The all-in-one platform for social media management, analytics, and AI-powered content creation.</p>
+          <div style={{ marginTop: 32, display: 'flex', flexDirection: 'column', gap: 12 }}>
+            {features.map(f => (
+              <div key={f} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <div style={{ width: 20, height: 20, background: 'rgba(230,48,0,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <CheckCircle style={{ width: 12, height: 12, color: '#e63000' }} />
                 </div>
-                <span className="text-sm">{f}</span>
+                <span style={{ fontSize: 13, color: '#ffffff' }}>{f}</span>
               </div>
             ))}
           </div>
         </div>
-        <p className="text-white/30 text-sm">Trusted by 50,000+ creators worldwide</p>
+        <p style={{ color: '#3a3a3a', fontSize: 12 }}>Trusted by 50,000+ creators worldwide</p>
       </div>
 
       {/* Right form panel */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8" style={{ background: '#0d0f14' }}>
-        <div className="w-full max-w-sm space-y-8">
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8" style={{ background: '#111111' }}>
+        <div className="w-full max-w-sm" style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
           <div>
-            <h2 className="text-3xl font-bold text-slate-100">Welcome back</h2>
-            <p className="mt-2 text-slate-500">Sign in to your account to continue</p>
+            <p className="section-prefix">// SIGN IN</p>
+            <h2 style={{ fontSize: 32, fontWeight: 900, color: '#ffffff', marginTop: 4 }}>Welcome back</h2>
+            <p style={{ marginTop: 8, color: '#6b6b6b', fontSize: 14 }}>Sign in to your account to continue</p>
           </div>
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
             {error && (
-              <div className="flex items-center gap-2 p-3.5 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm">
-                <AlertCircle className="w-4 h-4 flex-shrink-0" />
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '12px 14px', background: 'rgba(230,48,0,0.08)', border: '1px solid rgba(230,48,0,0.2)', color: '#e63000', fontSize: 13 }}>
+                <AlertCircle style={{ width: 16, height: 16, flexShrink: 0 }} />
                 {error}
               </div>
             )}
             <div>
-              <label className="block text-sm font-semibold text-slate-300 mb-1.5">Email address</label>
+              <label className="label">Email address</label>
               <input
                 type="email"
                 required
@@ -87,44 +91,46 @@ const Login = () => {
               />
             </div>
             <div>
-              <div className="flex items-center justify-between mb-1.5">
-                <label className="block text-sm font-semibold text-slate-300">Password</label>
-                <a href="#" className="text-xs text-indigo-400 hover:text-indigo-300 font-medium">Forgot password?</a>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+                <label className="label" style={{ marginBottom: 0 }}>Password</label>
+                <a href="#" style={{ fontSize: 11, color: '#e63000', fontWeight: 600, textDecoration: 'none' }}>Forgot password?</a>
               </div>
-              <div className="relative">
+              <div style={{ position: 'relative' }}>
                 <input
                   type={showPassword ? 'text' : 'password'}
                   required
                   value={password}
                   onChange={e => setPassword(e.target.value)}
-                  className="input pr-10"
+                  className="input"
+                  style={{ paddingRight: 40 }}
                   placeholder="••••••••"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
+                  style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#6b6b6b' }}
                 >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  {showPassword ? <EyeOff style={{ width: 16, height: 16 }} /> : <Eye style={{ width: 16, height: 16 }} />}
                 </button>
               </div>
             </div>
             <button
               type="submit"
               disabled={loading}
-              className="btn-primary w-full justify-center py-3 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none"
+              className="btn-primary w-full justify-center py-3"
+              style={{ opacity: loading ? 0.6 : 1, cursor: loading ? 'not-allowed' : 'pointer' }}
             >
               {loading ? (
-                <span className="flex items-center gap-2">
-                  <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ width: 16, height: 16, border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 1s linear infinite', display: 'inline-block' }}></span>
                   Signing in...
                 </span>
               ) : 'Sign in'}
             </button>
           </form>
-          <p className="text-center text-sm text-slate-500">
+          <p style={{ textAlign: 'center', fontSize: 13, color: '#6b6b6b' }}>
             Don&apos;t have an account?{' '}
-            <Link to="/register" className="text-indigo-400 hover:text-indigo-300 font-semibold">Create account</Link>
+            <Link to="/register" style={{ color: '#e63000', fontWeight: 700, textDecoration: 'none' }}>Create account</Link>
           </p>
         </div>
       </div>

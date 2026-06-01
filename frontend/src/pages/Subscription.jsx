@@ -18,7 +18,7 @@ const PLAN_FEATURES = {
   },
   pro: {
     icon: Zap,
-    badge: 'Most Popular',
+    badge: 'MOST POPULAR',
     features: [
       { label: 'Unlimited posts', included: true },
       { label: '5 social accounts', included: true },
@@ -46,14 +46,10 @@ const PLAN_FEATURES = {
 }
 
 const Toast = ({ message, type, onClose }) => (
-  <div
-    className={`fixed bottom-6 right-6 z-50 px-5 py-3 rounded-xl shadow-lg text-white text-sm font-medium flex items-center gap-3 transition-all ${
-      type === 'success' ? 'bg-emerald-600' : 'bg-red-600'
-    }`}
-  >
+  <div style={{ position: 'fixed', bottom: 24, right: 24, zIndex: 50, padding: '12px 20px', background: '#1a1a1a', border: `1px solid ${type === 'success' ? '#e63000' : '#cc0000'}`, color: '#ffffff', fontSize: 13, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 12 }}>
     {message}
-    <button onClick={onClose} className="ml-2 text-white/80 hover:text-white">
-      <X className="w-4 h-4" />
+    <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6b6b6b' }}>
+      <X style={{ width: 16, height: 16 }} />
     </button>
   </div>
 )
@@ -102,21 +98,18 @@ const Subscription = () => {
   }
 
   const plans = [
-    { key: 'free', name: 'Free', price: 0, description: 'Perfect for getting started' },
-    { key: 'pro', name: 'Pro', price: 29, description: 'For growing businesses' },
-    { key: 'business', name: 'Business', price: 79, description: 'For teams and enterprises' }
+    { key: 'free', name: 'FREE', price: 0, description: 'Perfect for getting started' },
+    { key: 'pro', name: 'PRO', price: 29, description: 'For growing businesses' },
+    { key: 'business', name: 'BUSINESS', price: 79, description: 'For teams and enterprises' }
   ]
 
   if (loading) {
     return (
-      <div className="max-w-5xl mx-auto">
-        <div className="animate-pulse space-y-8">
-          <div className="h-10 bg-white/[0.05] rounded-xl w-64 mx-auto" />
-          <div className="grid grid-cols-3 gap-6">
-            {[1, 2, 3].map(i => (
-              <div key={i} className="h-96 bg-white/[0.04] rounded-2xl" />
-            ))}
-          </div>
+      <div style={{ maxWidth: 900, margin: '0 auto' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24, marginTop: 32 }}>
+          {[1, 2, 3].map(i => (
+            <div key={i} className="card" style={{ height: 380, animation: 'pulse 2s infinite' }} />
+          ))}
         </div>
       </div>
     )
@@ -125,80 +118,74 @@ const Subscription = () => {
   const currentPlan = currentSubscription?.plan || 'free'
 
   return (
-    <div className="max-w-5xl mx-auto animate-fade-in">
+    <div style={{ maxWidth: 900, margin: '0 auto' }} className="animate-fade-in">
       {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
 
-      <div className="text-center mb-10">
-        <h1 className="text-3xl font-bold text-slate-100 mb-3">Choose Your Plan</h1>
-        <p className="text-slate-500 text-lg">Scale your social media presence with the right tools</p>
+      <div style={{ marginBottom: 32 }}>
+        <p className="section-prefix">// CHOOSE YOUR PLAN</p>
+        <h1 style={{ fontSize: 32, fontWeight: 800, color: '#ffffff', marginTop: 4 }}>Pricing</h1>
+        <p style={{ color: '#6b6b6b', fontSize: 14, marginTop: 8 }}>Scale your social media presence with the right tools</p>
         {currentSubscription && (
-          <div className="mt-4 inline-flex items-center gap-2 bg-white/[0.05] px-4 py-2 rounded-full">
-            <span className="text-slate-500 text-sm">Current plan:</span>
-            <span className="text-slate-100 font-semibold text-sm capitalize">{currentPlan}</span>
+          <div style={{ marginTop: 16, display: 'inline-flex', alignItems: 'center', gap: 8, background: '#1a1a1a', border: '1px solid #2a2a2a', padding: '6px 14px' }}>
+            <span style={{ color: '#6b6b6b', fontSize: 12 }}>Current plan:</span>
+            <span style={{ color: '#ffffff', fontWeight: 700, fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.08em' }}>{currentPlan}</span>
           </div>
         )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(1, 1fr)', gap: 16 }} className="md:grid-cols-3">
         {plans.map((plan) => {
           const config = PLAN_FEATURES[plan.key]
           const Icon = config.icon
           const isCurrentPlan = currentPlan === plan.key
           const isPro = plan.key === 'pro'
-          const isBusiness = plan.key === 'business'
 
           return (
             <div
               key={plan.key}
-              className={`card p-8 flex flex-col hover:shadow-card-hover transition-all duration-200 relative ${
-                isPro ? 'ring-1 ring-indigo-500/50' : ''
-              } ${isBusiness ? 'ring-1 ring-violet-500/50' : ''}`}
+              className="card"
+              style={{
+                padding: 28,
+                display: 'flex',
+                flexDirection: 'column',
+                position: 'relative',
+                borderTopWidth: isCurrentPlan ? 2 : 1,
+                borderTopColor: isCurrentPlan ? '#e63000' : '#2a2a2a',
+              }}
             >
               {config.badge && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-xs font-bold px-4 py-1 rounded-full shadow-lg whitespace-nowrap">
+                <div style={{ position: 'absolute', top: -1, right: 20, background: '#e63000', color: '#fff', fontSize: 9, fontWeight: 700, letterSpacing: '0.12em', padding: '4px 10px' }}>
                   {config.badge}
                 </div>
               )}
 
-              {isCurrentPlan && (
-                <div className="absolute -top-3 right-4 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500 text-white shadow-sm">
-                  Current Plan
+              <div style={{ marginBottom: 24 }}>
+                <div style={{ width: 40, height: 40, background: isCurrentPlan ? 'rgba(230,48,0,0.1)' : '#1f1f1f', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
+                  <Icon style={{ width: 20, height: 20, color: isCurrentPlan ? '#e63000' : '#6b6b6b' }} />
                 </div>
-              )}
-
-              <div className="mb-6">
-                <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl mb-4 ${
-                  plan.key === 'free' ? 'bg-white/[0.05]' :
-                  isPro ? 'bg-indigo-500/10' : 'bg-violet-500/10'
-                }`}>
-                  <Icon className={`w-6 h-6 ${
-                    plan.key === 'free' ? 'text-slate-500' :
-                    isPro ? 'text-indigo-400' : 'text-violet-400'
-                  }`} />
-                </div>
-                <h2 className="text-xl font-bold text-slate-100">{plan.name}</h2>
-                <p className="text-slate-500 text-sm mt-1">{plan.description}</p>
-                <div className="mt-4 flex items-end gap-1">
+                <p className="metric-label" style={{ marginBottom: 4 }}>{plan.name} PLAN</p>
+                <p style={{ color: '#6b6b6b', fontSize: 12, marginBottom: 16 }}>{plan.description}</p>
+                <div style={{ display: 'flex', alignItems: 'flex-end', gap: 4 }}>
                   {plan.price === 0 ? (
-                    <span className="text-5xl font-bold bg-gradient-to-r from-slate-300 to-slate-100 bg-clip-text text-transparent">Free</span>
+                    <span style={{ fontSize: 40, fontWeight: 900, color: '#ffffff', lineHeight: 1 }}>Free</span>
                   ) : (
                     <>
-                      <span className="text-5xl font-bold bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent">${plan.price}</span>
-                      <span className="text-slate-500 mb-1.5">/mo</span>
+                      <span style={{ fontSize: 40, fontWeight: 900, color: '#ffffff', lineHeight: 1 }}>${plan.price}</span>
+                      <span style={{ color: '#6b6b6b', fontSize: 13, paddingBottom: 4 }}>/mo</span>
                     </>
                   )}
                 </div>
               </div>
 
-              <ul className="space-y-3 flex-1 mb-6">
+              <ul style={{ display: 'flex', flexDirection: 'column', gap: 10, flex: 1, marginBottom: 24 }}>
                 {config.features.map((feature, idx) => (
-                  <li key={idx} className="flex items-center gap-3 text-sm">
+                  <li key={idx} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 13 }}>
                     {feature.included ? (
-                      <Check className="w-4 h-4 text-emerald-500 flex-shrink-0" />
+                      <Check style={{ width: 14, height: 14, color: '#e63000', flexShrink: 0 }} />
                     ) : (
-                      <X className="w-4 h-4 text-slate-600 flex-shrink-0" />
+                      <X style={{ width: 14, height: 14, color: '#3a3a3a', flexShrink: 0 }} />
                     )}
-                    <span className={feature.included ? 'text-slate-300' : 'text-slate-600'}>
+                    <span style={{ color: feature.included ? '#ffffff' : '#3a3a3a' }}>
                       {feature.label}
                     </span>
                   </li>
@@ -208,7 +195,7 @@ const Subscription = () => {
               {isCurrentPlan ? (
                 <button
                   disabled
-                  className="w-full py-2.5 rounded-xl text-sm font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 cursor-not-allowed"
+                  style={{ width: '100%', padding: '10px', fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', background: 'rgba(230,48,0,0.1)', border: '1px solid rgba(230,48,0,0.3)', color: '#e63000', cursor: 'not-allowed' }}
                 >
                   Current Plan
                 </button>
@@ -217,6 +204,7 @@ const Subscription = () => {
                   onClick={() => handleUpgrade('free')}
                   disabled={upgrading === 'free'}
                   className="btn-secondary w-full justify-center"
+                  style={{ opacity: upgrading === 'free' ? 0.6 : 1 }}
                 >
                   Downgrade to Free
                 </button>
@@ -224,11 +212,12 @@ const Subscription = () => {
                 <button
                   onClick={() => handleUpgrade(plan.key)}
                   disabled={upgrading === plan.key}
-                  className="btn-primary w-full justify-center disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none"
+                  className="btn-primary w-full justify-center"
+                  style={{ opacity: upgrading === plan.key ? 0.6 : 1 }}
                 >
                   {upgrading === plan.key ? (
                     <>
-                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      <div style={{ width: 16, height: 16, border: '2px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
                       Upgrading...
                     </>
                   ) : (
@@ -241,8 +230,8 @@ const Subscription = () => {
         })}
       </div>
 
-      <div className="mt-10 text-center">
-        <p className="text-slate-500 text-sm">
+      <div style={{ marginTop: 40, textAlign: 'center' }}>
+        <p style={{ color: '#3a3a3a', fontSize: 12 }}>
           All plans include a 14-day free trial. No credit card required for Free plan.
           <br />
           Upgrade or downgrade at any time. Cancel anytime.

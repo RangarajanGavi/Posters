@@ -5,17 +5,17 @@ import {
 } from 'recharts'
 import {
   Users, Eye, Heart, MessageSquare, Share2, TrendingUp,
-  ThumbsUp, BarChart3, Star, ArrowUpRight
+  ThumbsUp, BarChart3, Star
 } from 'lucide-react'
 import api from '../api/axios.js'
 
 const PLATFORMS = ['all', 'facebook', 'instagram', 'twitter', 'linkedin']
 
 const platformColors = {
-  facebook: '#1877F2',
-  instagram: '#E1306C',
-  twitter: '#1DA1F2',
-  linkedin: '#0A66C2'
+  facebook: '#e63000',
+  instagram: '#ff3d00',
+  twitter: '#333333',
+  linkedin: '#555555'
 }
 
 const TABS = [
@@ -24,32 +24,15 @@ const TABS = [
   { id: 'top-posts', label: 'Top Posts', icon: Star }
 ]
 
-const statusColors = {
-  published: 'bg-emerald-500/10 text-emerald-400',
-  scheduled: 'bg-blue-500/10 text-blue-400',
-  draft: 'bg-white/[0.05] text-slate-400',
-  failed: 'bg-red-500/10 text-red-400'
-}
-
-const gradients = {
-  blue: 'from-blue-500 to-cyan-500',
-  purple: 'from-violet-500 to-purple-600',
-  pink: 'from-pink-500 to-rose-500',
-  green: 'from-emerald-500 to-teal-500',
-}
-
-const KPICard = ({ title, value, icon: Icon, gradient }) => (
-  <div className="card p-5 hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-200">
-    <div className="flex items-start justify-between mb-4">
-      <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${gradients[gradient] || gradients.blue} flex items-center justify-center shadow-lg`}>
-        <Icon className="w-5 h-5 text-white" />
-      </div>
-      <span className="badge bg-emerald-500/10 text-emerald-400">
-        <ArrowUpRight className="w-3 h-3" /> +8.4%
-      </span>
+const KPICard = ({ title, value, icon: Icon }) => (
+  <div className="card p-5">
+    <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+      <p className="metric-label">{title}</p>
+      <Icon style={{ width: 16, height: 16, color: '#e63000' }} />
     </div>
-    <p className="text-2xl font-bold text-slate-100">{typeof value === 'number' ? value.toLocaleString() : value}</p>
-    <p className="text-sm text-slate-500 font-medium mt-0.5">{title}</p>
+    <p style={{ fontSize: 32, fontWeight: 800, color: '#ffffff', marginTop: 10, lineHeight: 1 }}>
+      {typeof value === 'number' ? value.toLocaleString() : value}
+    </p>
   </div>
 )
 
@@ -85,7 +68,6 @@ const Analytics = () => {
     fetchAll()
   }, [])
 
-  // Flatten engagement data for bar chart
   const flatEngagement = engagementData.map(row => {
     const result = { date: row.date }
     Object.entries(row).forEach(([key, val]) => {
@@ -106,29 +88,37 @@ const Analytics = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500"></div>
+        <div style={{ width: 32, height: 32, border: '2px solid #2a2a2a', borderTopColor: '#e63000', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
       </div>
     )
   }
+
+  const tooltipStyle = { background: '#1a1a1a', border: '1px solid #2a2a2a', borderRadius: 0, color: '#fff', fontSize: 11 }
 
   return (
     <div className="space-y-5 animate-fade-in">
       {/* Tabs + Filter */}
       <div className="flex items-center justify-between">
-        <div className="flex gap-1 rounded-xl p-1" style={{ backgroundColor: '#1e2130' }}>
+        <div style={{ display: 'flex', borderBottom: '1px solid #2a2a2a', gap: 0 }}>
           {TABS.map(tab => {
             const Icon = tab.icon
+            const isActive = activeTab === tab.id
             return (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
-                  activeTab === tab.id
-                    ? 'bg-indigo-600 text-white shadow-sm'
-                    : 'text-slate-500 hover:text-slate-300'
-                }`}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 8,
+                  padding: '10px 16px',
+                  fontSize: 13, fontWeight: 600,
+                  color: isActive ? '#ffffff' : '#6b6b6b',
+                  background: 'none', border: 'none', cursor: 'pointer',
+                  borderBottom: isActive ? '2px solid #e63000' : '2px solid transparent',
+                  marginBottom: -1,
+                  transition: 'color 0.15s',
+                }}
               >
-                <Icon className="w-4 h-4" />
+                <Icon style={{ width: 14, height: 14 }} />
                 {tab.label}
               </button>
             )
@@ -138,11 +128,11 @@ const Analytics = () => {
         <select
           value={platformFilter}
           onChange={(e) => setPlatformFilter(e.target.value)}
-          className="px-3.5 py-2 rounded-xl text-sm focus:outline-none capitalize transition-all text-slate-300"
-          style={{ backgroundColor: '#1e2130', border: '1px solid rgba(255,255,255,0.1)', colorScheme: 'dark' }}
+          className="input"
+          style={{ width: 'auto', padding: '8px 12px', fontSize: 12, colorScheme: 'dark' }}
         >
           {PLATFORMS.map(p => (
-            <option key={p} value={p} className="capitalize">
+            <option key={p} value={p}>
               {p === 'all' ? 'All Platforms' : p.charAt(0).toUpperCase() + p.slice(1)}
             </option>
           ))}
@@ -153,45 +143,48 @@ const Analytics = () => {
       {activeTab === 'overview' && (
         <div className="space-y-5">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <KPICard title="Total Followers" value={overview?.totalFollowers || 0} icon={Users} gradient="blue" />
-            <KPICard title="Total Reach" value={overview?.totalReach || 0} icon={Eye} gradient="purple" />
-            <KPICard title="Total Likes" value={overview?.totalLikes || 0} icon={ThumbsUp} gradient="pink" />
-            <KPICard title="Avg Engagement Rate" value={`${overview?.avgEngagementRate || 0}%`} icon={TrendingUp} gradient="green" />
+            <KPICard title="Total Followers" value={overview?.totalFollowers || 0} icon={Users} />
+            <KPICard title="Total Reach" value={overview?.totalReach || 0} icon={Eye} />
+            <KPICard title="Total Likes" value={overview?.totalLikes || 0} icon={ThumbsUp} />
+            <KPICard title="Avg Engagement" value={`${overview?.avgEngagementRate || 0}%`} icon={TrendingUp} />
           </div>
 
           <div className="card p-6">
-            <h3 className="text-sm font-semibold text-slate-100 mb-4">Reach Over Time (Last 30 Days)</h3>
+            <div className="mb-5">
+              <p className="section-prefix">// REACH TREND</p>
+              <h3 style={{ fontSize: 16, fontWeight: 700, color: '#ffffff', marginTop: 2 }}>Reach Over Time (Last 30 Days)</h3>
+            </div>
             {growthData.length > 0 ? (
               <ResponsiveContainer width="100%" height={300}>
                 <AreaChart data={growthData} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
                   <defs>
-                    {filteredPlatforms.map(name => (
+                    {filteredPlatforms.map((name, i) => (
                       <linearGradient key={name} id={`gradient-${name}`} x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor={platformColors[name] || '#6b7280'} stopOpacity={0.25} />
-                        <stop offset="95%" stopColor={platformColors[name] || '#6b7280'} stopOpacity={0} />
+                        <stop offset="5%" stopColor={i === 0 ? '#e63000' : '#333333'} stopOpacity={0.2} />
+                        <stop offset="95%" stopColor={i === 0 ? '#e63000' : '#333333'} stopOpacity={0} />
                       </linearGradient>
                     ))}
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                  <XAxis dataKey="date" tick={{ fontSize: 11, fill: '#6b7080' }} tickFormatter={v => v.slice(5)} interval="preserveStartEnd" />
-                  <YAxis tick={{ fontSize: 11, fill: '#6b7080' }} />
-                  <Tooltip contentStyle={{ background:'#1e2130', border:'1px solid rgba(255,255,255,0.08)', borderRadius:'12px', color:'#e8eaf2', fontSize:'12px' }} />
-                  <Legend wrapperStyle={{ fontSize: 12 }} />
-                  {filteredPlatforms.map(name => (
+                  <CartesianGrid strokeDasharray="3 3" stroke="#1f1f1f" />
+                  <XAxis dataKey="date" tick={{ fontSize: 11, fill: '#6b6b6b' }} tickFormatter={v => v.slice(5)} interval="preserveStartEnd" axisLine={{ stroke: '#2a2a2a' }} tickLine={false} />
+                  <YAxis tick={{ fontSize: 11, fill: '#6b6b6b' }} axisLine={false} tickLine={false} />
+                  <Tooltip contentStyle={tooltipStyle} cursor={{ stroke: '#2a2a2a' }} />
+                  <Legend wrapperStyle={{ fontSize: 11, color: '#6b6b6b' }} />
+                  {filteredPlatforms.map((name, i) => (
                     <Area
                       key={name}
                       type="monotone"
                       dataKey={name}
-                      stroke={platformColors[name] || '#6b7280'}
+                      stroke={i === 0 ? '#e63000' : '#333333'}
                       fill={`url(#gradient-${name})`}
-                      strokeWidth={2}
+                      strokeWidth={i === 0 ? 2 : 1.5}
                     />
                   ))}
                 </AreaChart>
               </ResponsiveContainer>
             ) : (
-              <div className="flex items-center justify-center h-48 text-slate-500">
-                <p className="text-sm">No analytics data yet. Connect platforms and sync data.</p>
+              <div className="flex items-center justify-center h-48" style={{ color: '#6b6b6b' }}>
+                <p style={{ fontSize: 13 }}>No analytics data yet. Connect platforms and sync data.</p>
               </div>
             )}
           </div>
@@ -201,27 +194,28 @@ const Analytics = () => {
       {/* Engagement Tab */}
       {activeTab === 'engagement' && (
         <div className="card p-6">
-          <h3 className="text-sm font-semibold text-slate-100 mb-4">
-            Engagement Breakdown (Likes / Comments / Shares)
-          </h3>
+          <div className="mb-5">
+            <p className="section-prefix">// ENGAGEMENT BREAKDOWN</p>
+            <h3 style={{ fontSize: 16, fontWeight: 700, color: '#ffffff', marginTop: 2 }}>Likes / Comments / Shares</h3>
+          </div>
           {flatEngagement.length > 0 ? (
             <ResponsiveContainer width="100%" height={400}>
               <BarChart data={flatEngagement} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                <XAxis dataKey="date" tick={{ fontSize: 11, fill: '#6b7080' }} tickFormatter={v => v.slice(5)} interval="preserveStartEnd" />
-                <YAxis tick={{ fontSize: 11, fill: '#6b7080' }} />
-                <Tooltip contentStyle={{ background:'#1e2130', border:'1px solid rgba(255,255,255,0.08)', borderRadius:'12px', color:'#e8eaf2', fontSize:'12px' }} />
-                <Legend wrapperStyle={{ fontSize: 12 }} />
-                {filteredPlatforms.flatMap(name => [
-                  <Bar key={`${name}_likes`} dataKey={`${name}_likes`} name={`${name} Likes`} fill={platformColors[name] || '#6b7280'} radius={[3, 3, 0, 0]} />,
-                  <Bar key={`${name}_comments`} dataKey={`${name}_comments`} name={`${name} Comments`} fill={`${platformColors[name] || '#6b7280'}99`} radius={[3, 3, 0, 0]} />,
-                  <Bar key={`${name}_shares`} dataKey={`${name}_shares`} name={`${name} Shares`} fill={`${platformColors[name] || '#6b7280'}55`} radius={[3, 3, 0, 0]} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#1f1f1f" />
+                <XAxis dataKey="date" tick={{ fontSize: 11, fill: '#6b6b6b' }} tickFormatter={v => v.slice(5)} interval="preserveStartEnd" axisLine={{ stroke: '#2a2a2a' }} tickLine={false} />
+                <YAxis tick={{ fontSize: 11, fill: '#6b6b6b' }} axisLine={false} tickLine={false} />
+                <Tooltip contentStyle={tooltipStyle} cursor={{ fill: 'rgba(255,255,255,0.03)' }} />
+                <Legend wrapperStyle={{ fontSize: 11, color: '#6b6b6b' }} />
+                {filteredPlatforms.flatMap((name, i) => [
+                  <Bar key={`${name}_likes`} dataKey={`${name}_likes`} name={`${name} Likes`} fill={i === 0 ? '#e63000' : '#333333'} radius={[0, 0, 0, 0]} />,
+                  <Bar key={`${name}_comments`} dataKey={`${name}_comments`} name={`${name} Comments`} fill={i === 0 ? '#ff3d00' : '#444444'} radius={[0, 0, 0, 0]} />,
+                  <Bar key={`${name}_shares`} dataKey={`${name}_shares`} name={`${name} Shares`} fill={i === 0 ? '#cc2900' : '#555555'} radius={[0, 0, 0, 0]} />
                 ])}
               </BarChart>
             </ResponsiveContainer>
           ) : (
-            <div className="flex items-center justify-center h-48 text-slate-500">
-              <p className="text-sm">No engagement data yet.</p>
+            <div className="flex items-center justify-center h-48" style={{ color: '#6b6b6b' }}>
+              <p style={{ fontSize: 13 }}>No engagement data yet.</p>
             </div>
           )}
         </div>
@@ -229,58 +223,55 @@ const Analytics = () => {
 
       {/* Top Posts Tab */}
       {activeTab === 'top-posts' && (
-        <div className="card overflow-hidden">
-          <div className="p-6 border-b border-white/[0.07]">
-            <h3 className="text-sm font-semibold text-slate-100">Top Performing Posts</h3>
-            <p className="text-xs text-slate-500 mt-0.5">Ranked by total engagement</p>
+        <div className="card">
+          <div style={{ padding: '20px 24px', borderBottom: '1px solid #2a2a2a' }}>
+            <p className="section-prefix">// TOP POSTS</p>
+            <h3 style={{ fontSize: 16, fontWeight: 700, color: '#ffffff', marginTop: 2 }}>Top Performing Posts</h3>
+            <p style={{ fontSize: 11, color: '#6b6b6b', marginTop: 4 }}>Ranked by total engagement</p>
           </div>
           {topPosts.length > 0 ? (
-            <div className="divide-y divide-white/[0.07]">
-              {topPosts.map((post, idx) => {
-                const rankColors = ['bg-amber-400', 'bg-slate-400', 'bg-orange-400']
-                const rankColor = rankColors[idx] || 'bg-dark-500'
-                return (
-                  <div key={post.id} className="p-5 flex gap-4 hover:bg-white/[0.04] transition-colors">
-                    <div className={`w-8 h-8 rounded-full ${rankColor} flex items-center justify-center flex-shrink-0`}>
-                      <span className="text-xs font-bold text-white">{idx + 1}</span>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm text-slate-300 line-clamp-2 mb-2 font-medium">{post.content}</p>
-                      <div className="flex items-center gap-3 flex-wrap">
-                        <span className={`badge ${statusColors[post.status] || statusColors.draft} capitalize`}>
-                          {post.status}
-                        </span>
-                        <span className="text-xs text-slate-500 capitalize">
-                          {post.platforms?.join(', ')}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="flex-shrink-0 text-right space-y-1">
-                      <div className="flex items-center gap-3 text-xs text-slate-400">
-                        <span className="flex items-center gap-1">
-                          <ThumbsUp className="w-3 h-3 text-pink-500" />
-                          {(post.engagement?.likes || 0).toLocaleString()}
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <MessageSquare className="w-3 h-3 text-blue-500" />
-                          {(post.engagement?.comments || 0).toLocaleString()}
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <Share2 className="w-3 h-3 text-emerald-500" />
-                          {(post.engagement?.shares || 0).toLocaleString()}
-                        </span>
-                      </div>
-                      <p className="text-xs text-slate-500">
-                        Total: {post.totalEngagement?.toLocaleString()}
-                      </p>
+            <div>
+              {topPosts.map((post, idx) => (
+                <div
+                  key={post.id}
+                  className="flex gap-4 hover:bg-[#1f1f1f] transition-colors cursor-pointer"
+                  style={{ padding: '16px 24px', borderBottom: idx < topPosts.length - 1 ? '1px solid #2a2a2a' : 'none' }}
+                >
+                  <div style={{ width: 28, height: 28, background: idx === 0 ? '#e63000' : '#2a2a2a', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <span style={{ fontSize: 11, fontWeight: 700, color: '#fff' }}>{idx + 1}</span>
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <p style={{ fontSize: 13, color: '#ffffff', fontWeight: 500, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', marginBottom: 8 }}>{post.content}</p>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                      <span className="platform-tag">{post.status}</span>
+                      <span style={{ fontSize: 11, color: '#6b6b6b' }}>{post.platforms?.join(', ')}</span>
                     </div>
                   </div>
-                )
-              })}
+                  <div style={{ flexShrink: 0, textAlign: 'right' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 11, color: '#6b6b6b' }}>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                        <ThumbsUp style={{ width: 11, height: 11, color: '#e63000' }} />
+                        {(post.engagement?.likes || 0).toLocaleString()}
+                      </span>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                        <MessageSquare style={{ width: 11, height: 11 }} />
+                        {(post.engagement?.comments || 0).toLocaleString()}
+                      </span>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                        <Share2 style={{ width: 11, height: 11 }} />
+                        {(post.engagement?.shares || 0).toLocaleString()}
+                      </span>
+                    </div>
+                    <p style={{ fontSize: 11, color: '#3a3a3a', marginTop: 4 }}>
+                      Total: {post.totalEngagement?.toLocaleString()}
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
           ) : (
-            <div className="flex items-center justify-center h-48 text-slate-500">
-              <p className="text-sm">No published posts yet.</p>
+            <div className="flex items-center justify-center h-48" style={{ color: '#6b6b6b' }}>
+              <p style={{ fontSize: 13 }}>No published posts yet.</p>
             </div>
           )}
         </div>
